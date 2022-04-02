@@ -5,11 +5,11 @@ namespace Modules\Account\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 
-class LedgerSetting extends Model
+class TransactionStatusType extends Model
 {
 
     protected $fillable = [];
-    protected $table = "account_ledger_setting";
+    protected $table = "account_transaction_status_type";
 
     /**
      * List of fields for managing postings.
