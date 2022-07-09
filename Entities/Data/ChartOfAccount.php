@@ -35,6 +35,5 @@ class ChartOfAccount
             "name" => "Expense",
             "slug" => "expense",
         ]);
-
     }
 }
