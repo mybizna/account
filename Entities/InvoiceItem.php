@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Invoice\Entities;
+namespace Modules\Account\Entities;
 
 use Modules\Base\Entities\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
