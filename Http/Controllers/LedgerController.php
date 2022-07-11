@@ -6,14 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Modules\Base\Http\Controllers\BaseController;
 
-class ChartOfAccountController extends BaseController
+class LedgerController extends BaseController
 {
 
     public function recordselect(Request $request)
     {
         $type =  $request->get('type');
 
-        $query = DB::table('account_chart_of_account');
+        $query = DB::table('account_ledger');
 
         if ($type == 'right') {
             $query->where('slug', 'asset')
