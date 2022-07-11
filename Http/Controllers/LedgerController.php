@@ -11,24 +11,19 @@ class LedgerController extends BaseController
 
     public function recordselect(Request $request)
     {
-        $type =  $request->get('type');
+        $chart_of_account_id =  $request->get('chart_of_account_id');
 
         $query = DB::table('account_ledger');
 
-        if ($type == 'right') {
-            $query->where('slug', 'asset')
-                ->orWhere('slug', 'income');
+        if ($chart_of_account_id) {
+            $query->where('chart_id', $chart_of_account_id);
         } else {
-            $query->where('slug', 'liability')
-                ->orWhere('slug', 'equity')
-                ->orWhere('slug', 'expense');
+            $query->where('1', '-1');
         }
-
-        //print($query->toSql()); exit;
 
         $records = $query->get();
         $list = collect();
-        $list->push(['value' => '', 'label' => 'Please Select']);
+        $list->push(['value' => '', 'label' => '--- Please Select ---']);
 
         foreach ($records as $key => $record) {
             $list->push(['value' => $record->id, 'label' => $record->name]);

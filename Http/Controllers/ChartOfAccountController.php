@@ -28,7 +28,7 @@ class ChartOfAccountController extends BaseController
 
         $records = $query->get();
         $list = collect();
-        $list->push(['value' => '', 'label' => 'Please Select']);
+        $list->push(['value' => '', 'label' => '--- Please Select ---']);
 
         foreach ($records as $key => $record) {
             $list->push(['value' => $record->id, 'label' => $record->name]);

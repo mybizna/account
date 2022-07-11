@@ -11,14 +11,14 @@
                     <FormKit label="Left Chart of Account" id="left_chart_of_account_id" type="recordselect"
                         comp_url="chart_of_account/recordselect?type=left"  v-model="model.left_chart_of_account_id" validation="required" />
                     <FormKit label="Left Ledger" id="left_ledger_id" type="recordselect"  v-model="model.left_ledger_id"
-                        comp_url="ledger/recordselect?type=left" :filter="model.left_chart_of_account_id" validation="required" />
+                        comp_url="ledger/recordselect?chart_of_account_id=" :filter="model.left_chart_of_account_id" validation="required" />
                 </div>
                 <div class="border border-gray rounded p-2 mb-2">
                     <label class="text-gray-700 fs-12">Right Move</label>
                     <FormKit label="Right Chart of Account" id="right_chart_of_account_id" type="recordselect"
                         comp_url="chart_of_account/recordselect?type=right" v-model="model.right_chart_of_account_id" validation="required" />
                     <FormKit label="Right Ledger" id="right_ledger_id" type="recordselect"  v-model="model.right_ledger_id"
-                        comp_url="ledger/recordselect?type=right" :filter="model.right_chart_of_account_id" validation="required" />
+                        comp_url="ledger/recordselect?chart_of_account_id=" :filter="model.right_chart_of_account_id" validation="required" />
                 </div>
             </div>
             <div class="col-md-6">
