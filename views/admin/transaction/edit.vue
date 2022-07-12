@@ -4,7 +4,7 @@
             <div class="col-md-6">
                 <FormKit label="Id" id="id" type="hidden" v-model="model.id" validation="required" />
                 <FormKit label="Amount" id="amount" type="text" v-model="model.amount" validation="required" />
-                <FormKit label="Partner" id="partner_id" type="recordpicker" v-model="model.partner_id" validation="required" />
+                <FormKit label="Partner" id="partner_id" type="recordpicker" comp_url="partner/admin/" v-model="model.partner_id" validation="required" />
 
                 <div class="border border-gray rounded p-2 mb-2">
                     <label class="text-gray-700 fs-12">Left Move</label>
