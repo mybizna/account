@@ -1,11 +1,11 @@
 <template>
-    <table-edit :path_param="path_param" :model="model">
+    <table-edit :path_param="path_param" :model="model" :recordpicker="recordpicker">
         <div class="row">
             <div class="col-md-6">
                 <FormKit label="Id" id="id" type="hidden" v-model="model.id" validation="required" />
                 <FormKit label="Amount" id="amount" type="text" v-model="model.amount" validation="required" />
-                <FormKit label="Partner" id="partner_id" type="recordpicker" comp_url="partner/admin/"
-                    v-model="model.partner_id" validation="required" />
+                <FormKit label="Partner" id="partner_id" type="recordpicker" comp_url="partner/admin/partner/list.vue"
+                    :setting="recordpicker.partner_id" v-model="model.partner_id" validation="required" />
 
                 <div class="border border-gray rounded p-2 mb-2">
                     <label class="text-gray-700 fs-12">Left Move</label>
@@ -50,9 +50,9 @@ export default {
             path_param: ["account", "transaction"],
             recordpicker: {
                 partner_id: {
-                    fields: ['partner__first_name','partner__last_name','partner__email'],
-                    template: ['[partner__first_name] [partner__last_name] - [partner__email]'],
-
+                    path_param: ["partner", "partner"],
+                    fields: ['first_name', 'plast_name', 'email'],
+                    template: ['[first_name] [last_name] - [email]'],
                 }
             },
             model: {
