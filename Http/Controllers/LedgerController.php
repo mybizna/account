@@ -18,7 +18,7 @@ class LedgerController extends BaseController
         if ($chart_of_account_id) {
             $query->where('chart_id', $chart_of_account_id);
         } else {
-            $query->where('1', '-1');
+            $query->where(DB::raw('1=-1'));
         }
 
         $records = $query->get();
