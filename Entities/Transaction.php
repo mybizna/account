@@ -10,7 +10,7 @@ class Transaction extends BaseModel
 {
 
     protected $fillable = [
-        'amount', 'description', 'partner_id', 'left_ledger_id',
+        'amount', 'description', 'partner_id', 'left_chart_of_account_id', 'left_ledger_id',
         'right_chart_of_account_id', 'right_ledger_id', 'type', 'is_processed'
     ];
     public $migrationDependancy = ['partner', 'account_payment', 'account_rate'];
@@ -28,6 +28,7 @@ class Transaction extends BaseModel
         $table->decimal('amount', 20, 2)->default(0.00);
         $table->string('description');
         $table->integer('partner_id');
+        $table->integer('left_chart_of_account_id')->nullable();
         $table->integer('left_ledger_id')->nullable();
         $table->integer('right_chart_of_account_id')->nullable();
         $table->integer('right_ledger_id')->nullable();

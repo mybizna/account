@@ -16,25 +16,26 @@ export default {
             model: {
                 title: "",
                 slug: "",
+                left_chart_of_account_id:"",
                 left_ledger_id: "",
                 right_chart_of_account_id: "",
                 right_ledger_id: "",
             },
-
-
             search_fields: [
                 { type: "text", name: "title", label: "title", ope: "", },
                 { type: "text", name: "slug", label: "slug", ope: "", },
+                { type: "text", name: "left_chart_of_account_id", label: "left_chart_of_account_id", ope: "", },
                 { type: "text", name: "left_ledger_id", label: "left_ledger_id", ope: "", },
                 { type: "text", name: "right_chart_of_account_id", label: "right_chart_of_account_id", ope: "", },
                 { type: "text", name: "right_ledger_id", label: "right_ledger_id", ope: "", },
             ],
             table_fields: [
-                { text: "title", prop: "title", name: "title", },
-                { text: "slug", prop: "slug", name: "slug", },
-                { text: "Short", prop: "left_ledger_id", name: "left_ledger_id", },
-                { text: "Short", prop: "right_chart_of_account_id", name: "right_chart_of_account_id", },
-                { text: "Short", prop: "right_ledger_id", name: "right_ledger_id", },
+                { text: "Title", prop: "title", name: "title", },
+                { text: "Slug", prop: "slug", name: "slug", },
+                { text: "Ceft Chart of Account", prop: "left_chart_of_account_id", name: "left_chart_of_account_id", },
+                { text: "Left Ledger", prop: "left_ledger_id", name: "left_ledger_id", },
+                { text: "Right Chart of Account", prop: "right_chart_of_account_id", name: "right_chart_of_account_id", },
+                { text: "Right Ledger", prop: "right_ledger_id", name: "right_ledger_id", },
             ],
         };
     },

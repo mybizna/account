@@ -9,7 +9,7 @@ use Modules\Base\Classes\Migration;
 class LedgerSetting extends BaseModel
 {
 
-    protected $fillable = ['title', 'slug', 'left_ledger_id', 'right_chart_of_account_id', 'right_ledger_id'];
+    protected $fillable = ['title', 'slug','left_chart_of_account_id', 'left_ledger_id', 'right_chart_of_account_id', 'right_ledger_id'];
     public $migrationDependancy = ['account_ledger'];
     protected $table = "account_ledger_setting";
 
@@ -25,6 +25,7 @@ class LedgerSetting extends BaseModel
         $table->increments('id');
         $table->string('title')->nullable();
         $table->string('slug')->nullable();
+        $table->integer('left_chart_of_account_id')->nullable();
         $table->integer('left_ledger_id')->nullable();
         $table->integer('right_chart_of_account_id')->nullable();
         $table->integer('right_ledger_id')->nullable();
@@ -32,6 +33,11 @@ class LedgerSetting extends BaseModel
 
     public function post_migration(Blueprint $table)
     {
+
+        if (Migration::checkKeyExist('account_chart_of_account', 'left_chart_of_account_id')) {
+            $table->foreign('left_chart_of_account_id')->references('id')->on('account_chart_of_account')->nullOnDelete();
+        }
+
         if (Migration::checkKeyExist('account_ledger', 'left_ledger_id')) {
             $table->foreign('left_ledger_id')->references('id')->on('account_ledger')->nullOnDelete();
         }
