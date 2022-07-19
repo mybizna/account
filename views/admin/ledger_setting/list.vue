@@ -16,7 +16,7 @@ export default {
             model: {
                 title: "",
                 slug: "",
-                left_chart_of_account_id:"",
+                left_chart_of_account_id: "",
                 left_ledger_id: "",
                 right_chart_of_account_id: "",
                 right_ledger_id: "",
@@ -32,10 +32,31 @@ export default {
             table_fields: [
                 { text: "Title", prop: "title", name: "title", },
                 { text: "Slug", prop: "slug", name: "slug", },
-                { text: "Ceft Chart of Account", prop: "left_chart_of_account_id", name: "left_chart_of_account_id", },
-                { text: "Left Ledger", prop: "left_ledger_id", name: "left_ledger_id", },
-                { text: "Right Chart of Account", prop: "right_chart_of_account_id", name: "right_chart_of_account_id", },
-                { text: "Right Ledger", prop: "right_ledger_id", name: "right_ledger_id", },
+
+                {
+                    text: "Left Chart of Account",
+                    prop: "[account_chart_of_account__name]",
+                    name: "left_chart_of_account_id",
+                    foreign: ['account_chart_of_account__name'],
+                },
+                {
+                    text: "Left Ledger",
+                    prop: "[account_ledger__name]",
+                    name: "left_ledger_id",
+                    foreign: ['account_ledger__name'],
+                },
+                {
+                    text: "Right Chart of Account",
+                    prop: "[account_chart_of_account__name]",
+                    name: "right_chart_of_account_id",
+                    foreign: ['account_chart_of_account__name'],
+                },
+                {
+                    text: "Right Ledger",
+                    prop: "[account_ledger__name]",
+                    name: "right_ledger_id",
+                    foreign: ['account_ledger__name'],
+                },
             ],
         };
     },
