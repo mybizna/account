@@ -28,11 +28,11 @@ class GatewayAllowedin extends BaseModel
 
     public function post_migration(Blueprint $table)
     {
-        if (Migration::checkKeyExist('account_gateway_disallowedin', 'country_id')) {
+        if (Migration::checkKeyExist('account_gateway_allowedin', 'country_id')) {
             $table->foreign('country_id')->references('id')->on('core_country')->nullOnDelete();
         }
 
-        if (Migration::checkKeyExist('account_gateway_disallowedin', 'gateway_id')) {
+        if (Migration::checkKeyExist('account_gateway_allowedin', 'gateway_id')) {
             $table->foreign('gateway_id')->references('id')->on('account_gateway')->nullOnDelete();
         }
     }

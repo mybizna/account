@@ -34,19 +34,19 @@ class LedgerSetting extends BaseModel
     public function post_migration(Blueprint $table)
     {
 
-        if (Migration::checkKeyExist('account_chart_of_account', 'left_chart_of_account_id')) {
+        if (Migration::checkKeyExist('account_ledger_setting', 'left_chart_of_account_id')) {
             $table->foreign('left_chart_of_account_id')->references('id')->on('account_chart_of_account')->nullOnDelete();
         }
 
-        if (Migration::checkKeyExist('account_ledger', 'left_ledger_id')) {
+        if (Migration::checkKeyExist('account_ledger_setting', 'left_ledger_id')) {
             $table->foreign('left_ledger_id')->references('id')->on('account_ledger')->nullOnDelete();
         }
 
-        if (Migration::checkKeyExist('account_chart_of_account', 'right_chart_of_account_id')) {
+        if (Migration::checkKeyExist('account_ledger_setting', 'right_chart_of_account_id')) {
             $table->foreign('right_chart_of_account_id')->references('id')->on('account_chart_of_account')->nullOnDelete();
         }
 
-        if (Migration::checkKeyExist('account_ledger', 'right_ledger_id')) {
+        if (Migration::checkKeyExist('account_ledger_setting', 'right_ledger_id')) {
             $table->foreign('right_ledger_id')->references('id')->on('account_ledger')->nullOnDelete();
         }
     }

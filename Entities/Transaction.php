@@ -11,7 +11,7 @@ class Transaction extends BaseModel
 
     protected $fillable = [
         'amount', 'description', 'partner_id', 'left_chart_of_account_id', 'left_ledger_id',
-        'right_chart_of_account_id', 'right_ledger_id', 'type', 'is_processed'
+        'right_chart_of_account_id', 'right_ledger_id', 'ledger_setting_id', 'is_processed'
     ];
     public $migrationDependancy = ['partner', 'account_payment', 'account_rate'];
     protected $table = "account_transaction";
@@ -32,7 +32,7 @@ class Transaction extends BaseModel
         $table->integer('left_ledger_id')->nullable();
         $table->integer('right_chart_of_account_id')->nullable();
         $table->integer('right_ledger_id')->nullable();
-        $table->string('type')->nullable();
+        $table->string('ledger_setting_id')->nullable();
         $table->tinyInteger('is_processed')->nullable();
     }
 
@@ -54,5 +54,11 @@ class Transaction extends BaseModel
         if (Migration::checkKeyExist('account_transaction', 'right_ledger_id')) {
             $table->foreign('right_ledger_id')->references('id')->on('account_ledger')->nullOnDelete();
         }
+
+        if (Migration::checkKeyExist('account_transaction', 'ledger_setting_id')) {
+            $table->foreign('ledger_setting_id')->references('id')->on('account_ledger_setting')->nullOnDelete();
+        }
+
+
     }
 }
