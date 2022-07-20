@@ -14,8 +14,8 @@ class ChartOfAccountController extends BaseController
         $type =  $request->get('type');
 
         $result = [
-            'module'  => $this->module,
-            'model'   => $this->model,
+            'module'  => 'account',
+            'model'   => 'chart_of_account',
             'status'  => 0,
             'total'   => 0,
             'error'   => 1,

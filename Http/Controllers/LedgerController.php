@@ -14,8 +14,8 @@ class LedgerController extends BaseController
         $chart_of_account_id =  $request->get('chart_of_account_id');
 
         $result = [
-            'module'  => $this->module,
-            'model'   => $this->model,
+            'module'  => 'account',
+            'model'   => 'ledger',
             'status'  => 0,
             'total'   => 0,
             'error'   => 1,

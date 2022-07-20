@@ -10,7 +10,8 @@
                         v-model="model.left_chart_of_account_id" :setting="setting.left_chart_of_account_id"
                         validation="required" />
                     <FormKit label="Left Ledger" id="left_ledger_id" type="recordselect" v-model="model.left_ledger_id"
-                        :setting="setting.left_ledger_id" validation="required" />
+                        :filter="model.left_chart_of_account_id" :setting="setting.left_ledger_id"
+                        validation="required" />
                 </div>
             </div>
             <div class="col-md-6">
@@ -21,7 +22,8 @@
                         :setting="setting.right_chart_of_account_id" v-model="model.right_chart_of_account_id"
                         validation="required" />
                     <FormKit label="Right Ledger" id="right_ledger_id" type="recordselect"
-                        v-model="model.right_ledger_id" :setting="setting.right_ledger_id" validation="required" />
+                        v-model="model.right_ledger_id" :filter="model.right_chart_of_account_id"
+                        :setting="setting.right_ledger_id" validation="required" />
 
                 </div>
             </div>
