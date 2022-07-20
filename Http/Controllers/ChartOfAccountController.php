@@ -13,6 +13,16 @@ class ChartOfAccountController extends BaseController
     {
         $type =  $request->get('type');
 
+        $result = [
+            'module'  => $this->module,
+            'model'   => $this->model,
+            'status'  => 0,
+            'total'   => 0,
+            'error'   => 1,
+            'records'    => [],
+            'message' => 'No Records'
+        ];
+
         $query = DB::table('account_chart_of_account');
 
         if ($type == 'right') {
@@ -24,17 +34,23 @@ class ChartOfAccountController extends BaseController
                 ->orWhere('slug', 'expense');
         }
 
-        //print($query->toSql()); exit;
+        try {
+            $records = $query->get();
+            $list = collect();
+            $list->push(['value' => '', 'label' => '--- Please Select ---']);
 
-        $records = $query->get();
-        $list = collect();
-        $list->push(['value' => '', 'label' => '--- Please Select ---']);
+            foreach ($records as $key => $record) {
+                $list->push(['value' => $record->id, 'label' => $record->name]);
+            }
 
-        foreach ($records as $key => $record) {
-            $list->push(['value' => $record->id, 'label' => $record->name]);
+            $result['error'] = 0;
+            $result['status'] = 1;
+            $result['records'] = $list;
+            $result['message'] = 'Records Found Successfully.';
+        } catch (\Throwable $th) {
+            //throw $th;
         }
 
-
-        return response()->json($list);
+        return response()->json($result);
     }
 }
