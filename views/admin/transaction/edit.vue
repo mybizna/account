@@ -20,17 +20,17 @@
                     <FormKit label="Left Chart of Account" id="left_chart_of_account_id" type="recordselect"
                         v-model="model.left_chart_of_account_id" :setting="setting.left_chart_of_account_id"
                         validation="required" />
-                    <FormKit label="Left Ledger" id="left_ledger_id" type="recordselect" v-model="model.left_ledger_id"
-                        :filter="model.left_chart_of_account_id" :setting="setting.left_ledger_id"
-                        validation="required" />
+                    <FormKit :disabled="!model.left_chart_of_account_id" label="Left Ledger" id="left_ledger_id"
+                        type="recordselect" v-model="model.left_ledger_id" :filter="model.left_chart_of_account_id"
+                        :setting="setting.left_ledger_id" validation="required" />
                 </div>
                 <div class="border border-gray rounded p-2 mb-2">
                     <label class="text-gray-700 fs-12">Right Move</label>
                     <FormKit label="Right Chart of Account" id="right_chart_of_account_id" type="recordselect"
                         :setting="setting.right_chart_of_account_id" v-model="model.right_chart_of_account_id"
                         validation="required" />
-                    <FormKit label="Right Ledger" id="right_ledger_id" type="recordselect"
-                        v-model="model.right_ledger_id" :filter="model.right_chart_of_account_id"
+                    <FormKit :disabled="!model.right_chart_of_account_id" label="Right Ledger" id="right_ledger_id"
+                        type="recordselect" v-model="model.right_ledger_id" :filter="model.right_chart_of_account_id"
                         :setting="setting.right_ledger_id" validation="required" />
                 </div>
 
