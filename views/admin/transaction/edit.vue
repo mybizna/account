@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div v-if="!model.ledger_setting_id" class="row">
             <div class="col-md-6">
                 <div class="border border-gray rounded p-2 mb-2">
                     <label class="text-gray-700 fs-12">Left Move</label>
@@ -68,10 +68,10 @@ export default {
                     fields: ['title'],
                     template: '[title]',
                 },
-                left_chart_of_account_id: { url: "chart_of_account/recordselect?type=left" },
-                left_ledger_id: { url: "ledger/recordselect?chart_of_account_id=", },
-                right_chart_of_account_id: { url: "chart_of_account/recordselect?type=right" },
-                right_ledger_id: { url: "ledger/recordselect?chart_of_account_id=", },
+                left_chart_of_account_id: { url: "chart_of_account/recordselect", params: { type: 'left' } },
+                left_ledger_id: { url: "ledger/recordselect", filter_field: 'chart_of_account_id' },
+                right_chart_of_account_id: { url: "chart_of_account/recordselect", params: { type: 'right' } },
+                right_ledger_id: { url: "ledger/recordselect", filter_field: 'chart_of_account_id' },
             },
             model: {
                 id: "",
