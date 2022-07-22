@@ -28,7 +28,6 @@ $this->add_submenu("account", "setting", "", "", 5);
 $this->add_submenu("account", "setting", "Rate", "/account/admin/rate", 5);
 $this->add_submenu("account", "setting", "Ledger", "/account/admin/ledger", 5);
 $this->add_submenu("account", "setting", "Ledger Category", "/account/admin/ledger_category", 5);
-$this->add_submenu("account", "setting", "Ledger Setting", "/account/admin/ledger_setting", 5);
 
 $this->add_submenu("account", "reports", "Balance Sheet", "/account/reports/balance-sheet", 5);
 $this->add_submenu("account", "reports", "Income Statement", "/account/reports/balance-sheet", 5);
