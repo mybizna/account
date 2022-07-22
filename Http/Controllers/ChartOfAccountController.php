@@ -25,7 +25,7 @@ class ChartOfAccountController extends BaseController
 
         $query = DB::table('account_chart_of_account');
 
-        if ($type == 'right') {
+        if ($type == 'left') {
             $query->where('slug', 'asset')
                 ->orWhere('slug', 'income');
         } else {
