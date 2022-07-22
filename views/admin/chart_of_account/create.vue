@@ -1,11 +1,11 @@
 <template>
-    <vueform></vueform>
+    <customform></customform>
 </template>
 
 <script>
 export default {
     components: {
-        vueform: window.$func.fetchComponent(["account", "transaction", "form.vue"])
+        customform: window.$func.fetchComponent(["account", "chart_of_account", "form.vue"])
     },
 };
 </script>
