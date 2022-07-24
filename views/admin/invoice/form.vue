@@ -30,7 +30,6 @@
             <div class="col-md-4">
                 <b>Invoice #007612</b><br>
                 <br>
-                <b>Order ID:</b> 4F3S8J<br>
                 <b>Payment Due:</b> 2/22/2014<br>
             </div>
         </div>
@@ -55,16 +54,17 @@
                         <FormKit id="lerger" type="select" v-model="item.lerger" validation="required" />
                     </td>
                     <td class="w-28">
-                        <FormKit id="quantity" type="number" v-model="item.quantity" validation="required" min="0" />
+                        <FormKit id="quantity" type="number" v-model="item.quantity" @blur="addCalculate(rate)"
+                            validation="required" min="0" />
                     </td>
                     <td>
-                        <FormKit id="price" type="number" v-model="item.price" @blur="addRate(rate)" validation="required" min="0"
-                            step="0.01" />
+                        <FormKit id="price" type="number" v-model="item.price" @blur="addCalculate(rate)"
+                            validation="required" min="0" step="0.01" />
                     </td>
                     <td>
                         <span v-for="( rate, rate_index) in item.rates" :key="rate_index"
                             class="badge bg-secondary mr-1">{{ rate.title }}</span>
-                        <a class="badge bg-blue-700 text-white" href="#" @click="addRate(rate)">
+                        <a class="badge bg-blue-700 text-white cursor-pointer" @click="addRate(rate)">
                             <i class="fa-solid fa-plus"></i> Add Rate
                         </a>
                     </td>
@@ -74,7 +74,7 @@
         </table>
 
         <div class="text-center mt-2">
-            <a class="btn btn-primary btn-sm" @click="addRow()">
+            <a class="btn btn-primary btn-sm cursor-pointer" @click="addRow()">
                 <i class="fa-solid fa-plus"></i> Add Row
             </a>
         </div>
@@ -104,10 +104,6 @@
                             <tr v-for="( rate, index) in rates" :key="index">
                                 <th>{{ rate.title }} ({{ rate.value }}<span v-if="rate.is_percent">%</span>)</th>
                                 <td class="text-right font-semibold">{{ this.$func.money(rate.total) }}</td>
-                            </tr>
-                            <tr>
-                                <th>Shipping:</th>
-                                <td class="text-right font-semibold">5.80</td>
                             </tr>
                             <tr>
                                 <th>Total:</th>
@@ -144,7 +140,7 @@ export default {
                     template: '[first_name] [last_name] - [email]',
                 },
             },
-            rates:[],
+            rates: [],
             model: {
                 total: 0.00,
                 items: [{
@@ -159,10 +155,17 @@ export default {
             },
         };
     },
+    async created () {
+        var comp_url = 'rate/recordselect';
+        var t = this;
+        await window.axios.get(comp_url, { params: { f: t.context.attrs.setting.fields } })
+            .then(
+                response => {
+                    t.rates = response.data.record;
+                });
+    },
     methods: {
         addRow () {
-
-            console.log(this.model.items);
 
             this.model.items.push({
                 id: "",
@@ -174,20 +177,24 @@ export default {
                 total: 0.00,
             });
 
-            alert(this.model.items[0].total);
+            this.addCalculate();
+
         },
         addRate () {
-            alert('Good');
+            console.log('addRate');
+            this.addCalculate();
         },
-         addRow () {
+        addCalculate () {
             var total = 0;
 
             this.model.items.forEach(item => {
-                total  = total + parseFloat(item.total);
+
+                item.total = item.quantity * item.price;
+                total = total + parseFloat(item.total);
             });
 
             this.model.total = total;
-         }
+        }
     }
 };
 </script>
