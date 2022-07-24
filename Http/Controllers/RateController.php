@@ -25,16 +25,10 @@ class RateController extends BaseController
 
         try {
             $records = $query->get();
-            $list = collect();
-            $list->push(['value' => '', 'label' => '--- Please Select ---']);
-
-            foreach ($records as $key => $record) {
-                $list->push(['value' => $record->id, 'label' => $record->title]);
-            }
 
             $result['error'] = 0;
             $result['status'] = 1;
-            $result['records'] = $list;
+            $result['records'] = $records;
             $result['message'] = 'Records Found Successfully.';
         } catch (\Throwable $th) {
             //throw $th;

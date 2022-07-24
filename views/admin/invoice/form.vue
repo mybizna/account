@@ -62,11 +62,56 @@
                             validation="required" min="0" step="0.01" />
                     </td>
                     <td>
-                        <span v-for="( rate, rate_index) in item.rates" :key="rate_index"
-                            class="badge bg-secondary mr-1">{{ rate.title }}</span>
-                        <a class="badge bg-blue-700 text-white cursor-pointer" @click="addRate(rate)">
+                        <span v-for="( item_rate, rate_index) in item.rates" :key="rate_index"
+                            class="badge bg-secondary mr-1">{{ item_rate.title }} ({{ item_rate.value }}<span
+                                v-if="item_rate.is_percent">%</span>)</span>
+                        <a class="badge bg-blue-700 text-white cursor-pointer" data-bs-toggle="modal"
+                            :data-bs-target="'#' + 'Modal' + index">
                             <i class="fa-solid fa-plus"></i> Add Rate
                         </a>
+
+                        <div class="modal fade" :id="'Modal' + index" tabindex="-1"
+                            :aria-labelledby="index + 'ModalLabel'" aria-hidden="true">
+                            <div class="modal-dialog ">
+                                <div class="modal-content shadow-2xl shadow-indigo-500/50">
+                                    <div class="modal-header p-2">
+                                        <h5 class="modal-title font-semibold" :id="index + 'ModalLabel'">Select
+                                            Rate</h5>
+                                        <button type="button" class="" data-bs-dismiss="modal" aria-label="Close">
+                                            <i class="fa-solid fa-circle-xmark text-2xl	text-red"></i>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body p-0">
+                                        <table class="table m-0 p-0">
+                                            <thead>
+                                                <tr class="bg-slate-100 px-7">
+                                                    <th class="uppercase" scope="col"></th>
+                                                    <th class="uppercase" scope="col">Title</th>
+                                                    <th class="uppercase" scope="col">Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="( rate, r_index) in rates" :key="r_index">
+                                                    <td>
+                                                        <a v-if="item.rate_ids.includes(rate.id)"
+                                                            class="btn btn-danger btn-sm">Remove</a>
+                                                        <a v-else class="btn btn-primary btn-sm"
+                                                            @click="addRate(index, item, rate)">Add</a>
+                                                    </td>
+                                                    <td>
+                                                        {{ rate.title }}
+                                                    </td>
+                                                    <td>
+                                                        {{ rate.value }} <span v-if="rate.is_percent">%</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                     <td class="font-semibold fs-16 text-right">{{ this.$func.money(item.total) }}</td>
                 </tr>
@@ -99,7 +144,7 @@
                         <tbody>
                             <tr>
                                 <th style="width:60%">Subtotal:</th>
-                                <td class="text-right font-semibold">{{ this.$func.money(model.total) }}</td>
+                                <td class="text-right font-semibold">{{ this.$func.money(model.subtotal) }}</td>
                             </tr>
                             <tr v-for="( rate, index) in rates" :key="index">
                                 <th>{{ rate.title }} ({{ rate.value }}<span v-if="rate.is_percent">%</span>)</th>
@@ -143,6 +188,7 @@ export default {
             rates: [],
             model: {
                 total: 0.00,
+                subtotal: 0.00,
                 items: [{
                     id: "",
                     title: "",
@@ -150,19 +196,26 @@ export default {
                     quantity: 1,
                     price: 0.00,
                     rates: [],
+                    rate_ids: [],
                     total: 0.00,
                 }],
             },
         };
     },
-    async created () {
+    created () {
         var comp_url = 'rate/recordselect';
-        var t = this;
-        await window.axios.get(comp_url, { params: { f: t.context.attrs.setting.fields } })
-            .then(
-                response => {
-                    t.rates = response.data.record;
-                });
+
+        const getdata = async (t) => {
+
+            await window.axios.get(comp_url)
+                .then(
+                    response => {
+                        t.rates = response.data.records;
+                    });
+        };
+
+        getdata(this);
+
     },
     methods: {
         addRow () {
@@ -174,26 +227,53 @@ export default {
                 quantity: 1,
                 price: 0.00,
                 rates: [],
+                rate_ids: [],
                 total: 0.00,
             });
 
             this.addCalculate();
 
         },
-        addRate () {
-            console.log('addRate');
+        addRate (r_index, item, rate) {
+            window.$Modal.getOrCreateInstance(document.getElementById('Modal' + r_index)).hide()
+
+            item.rates.push(rate);
+            item.rate_ids.push(rate.id);
+
             this.addCalculate();
         },
         addCalculate () {
-            var total = 0;
+            this.model.total = 0;
+            this.model.subtotal = 0;
 
             this.model.items.forEach(item => {
-
                 item.total = item.quantity * item.price;
-                total = total + parseFloat(item.total);
+
+                this.model.subtotal = this.model.subtotal + parseFloat(item.total);
+
+                item.rates.forEach(rate => {
+                    var new_val = rate.value;
+                    var operation = '+';
+
+                    if (rate.is_percent) {
+                        new_val = item.total * rate.value / 100;
+                    }
+
+                    this.rates.forEach(main_rate => {
+                        if (main_rate.id == rate.id) {
+                            main_rate.total = (Object.prototype.hasOwnProperty.call(main_rate, "total"))
+                                ? main_rate.total + new_val
+                                : new_val;
+                        }
+                    });
+
+                    item.total = (operation == '-') ? item.total - new_val : item.total + new_val;
+
+                });
+
+                this.model.total = this.model.total + parseFloat(item.total);
             });
 
-            this.model.total = total;
         }
     }
 };
