@@ -203,7 +203,7 @@ export default {
         };
     },
     created () {
-        var comp_url = 'invoice/datafetch';
+        var comp_url = 'invoice/fetchdata';
 
         const getdata = async (t) => {
 
@@ -211,6 +211,8 @@ export default {
                 .then(
                     response => {
                         t.rates = response.data.records;
+                        t.ledgers = response.data.ledgers;
+                        t.partner = response.data.partner;
                     });
         };
 
@@ -227,6 +229,8 @@ export default {
                 quantity: 1,
                 price: 0.00,
                 rates: [],
+                ledgers: [],
+                partner: {},
                 rate_ids: [],
                 total: 0.00,
             });

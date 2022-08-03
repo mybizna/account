@@ -9,7 +9,7 @@ use Modules\Base\Http\Controllers\BaseController;
 class InvoiceController extends BaseController
 {
 
-    public function recordselect(Request $request)
+    public function fetchData(Request $request)
     {
         $result = [
             'module'  => 'account',
@@ -23,12 +23,11 @@ class InvoiceController extends BaseController
 
         $partner_id = $request->get('partner_id');
 
-
         try {
             $rates = DB::table('account_rate')->get();
             $partner = DB::table('partner')->where('id', $partner_id)->first();
             $ledgers = DB::table('account_ledger AS l')
-                ->join('account_chart_of_account as c', 'c.id', '=', 'l.chart_id')
+                ->join('account_chart_of_account AS c', 'c.id', '=', 'l.chart_id')
                 ->where('c.slug', 'income')->get();
 
             $result['error'] = 0;
