@@ -19,18 +19,21 @@
             <div class="col-md-4">
                 <span class="underline">To</span>
                 <address>
-                    <strong>John Doe</strong><br>
-                    P.O Box 767 - 00618<br>
-                    Nairobi, Kenya<br>
-                    Phone: +254 713 034 569<br>
-                    Email: info@mybizna.com
+                    <strong>{{ partner.first_name }} {{ partner.first_name }}</strong><br>
+                    <strong>{{ partner.company }} </strong><br>
+                    {{ partner.address }} {{ partner.postal_code }}<br>
+                    {{ partner.city }}, {{ partner.country }}<br>
+                    Phone: {{ partner.phone }} &nbsp; {{ partner.mobile }}<br>
+                    Email: {{ partner.email }}
                 </address>
 
             </div>
             <div class="col-md-4">
-                <b>Invoice #007612</b><br>
+                <b v-if="partner.date_created">Invoice #{{ partner.date_created }}</b>
+                <b v-else>Invoice #NEW</b>
                 <br>
-                <b>Payment Due:</b> 2/22/2014<br>
+                <br>
+                <b>Payment Due:</b> {{ timestamp }}<br>
             </div>
         </div>
 
@@ -51,7 +54,8 @@
                         <FormKit id="title" type="text" v-model="item.title" validation="required" />
                     </td>
                     <td>
-                        <FormKit id="lerger" type="select" v-model="item.lerger" validation="required" />
+                        <FormKit id="lerger" type="select" v-model="item.lerger" :options="ledgers"
+                            validation="required" />
                     </td>
                     <td class="w-28">
                         <FormKit id="quantity" type="number" v-model="item.quantity" @blur="addCalculate(rate)"
@@ -177,6 +181,7 @@ export default {
     data () {
         return {
             id: null,
+            timestamp: "",
             path_param: ["account", "invoice"],
             setting: {
                 partner_id: {
@@ -185,6 +190,9 @@ export default {
                     template: '[first_name] [last_name] - [email]',
                 },
             },
+            invoice: {},
+            ledgers: [],
+            partner: {},
             rates: [],
             model: {
                 total: 0.00,
@@ -205,6 +213,8 @@ export default {
     created () {
         var comp_url = 'invoice/fetchdata';
 
+        setInterval(this.getNow, 1000);
+
         const getdata = async (t) => {
 
             await window.axios.get(comp_url)
@@ -220,6 +230,13 @@ export default {
 
     },
     methods: {
+        getNow: function () {
+            const today = new Date();
+            const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+            const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            const dateTime = date + ' ' + time;
+            this.timestamp = dateTime;
+        },
         addRow () {
 
             this.model.items.push({
@@ -229,8 +246,6 @@ export default {
                 quantity: 1,
                 price: 0.00,
                 rates: [],
-                ledgers: [],
-                partner: {},
                 rate_ids: [],
                 total: 0.00,
             });

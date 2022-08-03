@@ -30,10 +30,17 @@ class InvoiceController extends BaseController
                 ->join('account_chart_of_account AS c', 'c.id', '=', 'l.chart_id')
                 ->where('c.slug', 'income')->get();
 
+            $list = collect();
+            $list->push(['value' => '', 'label' => '--- Please Select ---']);
+
+            foreach ($ledgers as $key => $ledger) {
+                $list->push(['value' => $ledger->id, 'label' => $ledger->name]);
+            }
+
             $result['error'] = 0;
             $result['status'] = 1;
             $result['rates'] = $rates;
-            $result['ledgers'] = $ledgers;
+            $result['ledgers'] = $list;
             $result['partner'] = $partner;
             $result['message'] = 'Records Found Successfully.';
         } catch (\Throwable $th) {
