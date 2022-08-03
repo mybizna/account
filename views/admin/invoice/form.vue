@@ -203,7 +203,7 @@ export default {
         };
     },
     created () {
-        var comp_url = 'rate/recordselect';
+        var comp_url = 'invoice/datafetch';
 
         const getdata = async (t) => {
 
