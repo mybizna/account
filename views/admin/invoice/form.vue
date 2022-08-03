@@ -9,16 +9,16 @@
             <div class="col-md-4">
                 <span class="underline">From</span>
                 <address>
-                    <strong>Mybizna, Inc.</strong><br>
-                    P.O Box 767 - 00618<br>
-                    Nairobi, Kenya<br>
-                    Phone: +254 713 034 569<br>
-                    Email: info@mybizna.com
+                    <strong>{{ company.name }} </strong><br>
+                    {{ company.address }} {{ company.postal_code }}<br>
+                    {{ company.city }}, {{ company.country }}<br>
+                    Phone: {{ company.phone }} &nbsp; {{ company.mobile }}<br>
+                    Email: {{ company.email }}
                 </address>
             </div>
             <div class="col-md-4">
                 <span class="underline">To</span>
-                <address>
+                <address v-if="partner">
                     <strong>{{ partner.first_name }} {{ partner.first_name }}</strong><br>
                     <strong>{{ partner.company }} </strong><br>
                     {{ partner.address }} {{ partner.postal_code }}<br>
@@ -193,6 +193,15 @@ export default {
             invoice: {},
             ledgers: [],
             partner: {},
+            company: {
+                name: "Mybizna, Inc.",
+                address: "P.O Box 767 - 00618",
+                city: "Nairobi",
+                country: "Kenya",
+                phone: "+254 713 034 569",
+                email: "info@mybizna.com",
+            },
+
             rates: [],
             model: {
                 total: 0.00,
