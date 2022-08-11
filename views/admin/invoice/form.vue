@@ -20,7 +20,7 @@
                 <div class="col-md-4">
                     <span class="underline">To</span>
                     <address v-if="partner">
-                        <strong>{{ partner.first_name }} {{ partner.first_name }}</strong><br>
+                        <strong>{{ partner.first_name }} {{ partner.last_name }}</strong><br>
                         <strong>{{ partner.company }} </strong><br>
                         {{ partner.address }} {{ partner.postal_code }}<br>
                         {{ partner.city }}, {{ partner.country }}<br>
@@ -134,9 +134,11 @@
                 <div class="col-6">
                     <p class="lead">Payment Methods:</p>
 
-                    <FormKit label="Methods" id="methods" type="select" validation="required" />
+                    <FormKit label="Methods" id="methods" type="select" validation="required"
+                        v-model="model.payment_method" :options="gateways" />
                     <div class="mb-1"></div>
-                    <FormKit label="Amount" id="methods" type="number" validation="required" />
+                    <FormKit label="Amount" id="methods" type="number" validation="required"
+                        v-model="model.paid_amount" />
 
                     <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
                         Payment instructions goes here.
@@ -167,7 +169,8 @@
 
             <div class="row mt-7">
                 <div class="col-md-12">
-                    <FormKit label="Notations" id="description" type="textarea" validation="required" />
+                    <FormKit label="Notations" id="description" type="textarea" validation="required"
+                        v-model="model.notation" />
                 </div>
             </div>
 
@@ -204,6 +207,8 @@ export default {
                 },
             },
             invoice: {},
+            gateways: [],
+            rates: [],
             ledgers: [],
             partner: {},
             has_partner: false,
@@ -216,8 +221,8 @@ export default {
                 email: "info@mybizna.com",
             },
 
-            rates: [],
             model: {
+                partner_id: '',
                 total: 0.00,
                 subtotal: 0.00,
                 items: [{
@@ -230,21 +235,32 @@ export default {
                     rate_ids: [],
                     total: 0.00,
                 }],
+                payment_method: '',
+                paid_amount: 0.00,
+                notation: '',
             },
         };
     },
     created () {
+        var t = this;
 
         this.invoice = {
             id: 'New',
             date_created: '',
         };
 
+        setInterval(function () {
+            t.getNow();
+        }, 1000);
+
         this.fetchData();
     },
     watch: {
         // whenever question changes, this function will run
         'model.partner_id' (newQuestion, oldQuestion) {
+
+            console.log(this.model);
+
             this.has_partner = true;
 
             this.fetchData();
@@ -261,14 +277,15 @@ export default {
 
         fetchData () {
 
-            var comp_url = 'invoice/fetchdata';
+            var comp_url = 'invoice/fetchdata/';
 
             const getdata = async (t) => {
 
-                await window.axios.get(comp_url)
+                await window.axios.get(comp_url, { params: { partner_id: this.model.partner_id } })
                     .then(
                         response => {
-                            t.rates = response.data.records;
+                            t.gateways = response.data.gateways;
+                            t.rates = response.data.rates;
                             t.ledgers = response.data.ledgers;
                             t.partner = response.data.partner;
                         });
