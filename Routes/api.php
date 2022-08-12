@@ -6,3 +6,4 @@ Route::get('chart_of_account/recordselect', 'ChartOfAccountController@recordsele
 Route::get('ledger/recordselect', 'LedgerController@recordselect');
 Route::get('rate/recordselect', 'RateController@recordselect');
 Route::get('invoice/fetchdata', 'InvoiceController@fetchData');
+Route::post('invoice/savedata', 'InvoiceController@saveData');

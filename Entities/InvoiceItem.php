@@ -10,7 +10,7 @@ class InvoiceItem extends BaseModel
 {
 
     protected $fillable = [
-        'invoice_id', 'transaction_id', 'amount', 'description', 'quantity',
+        'invoice_id', 'transaction_id', 'ledger_id', 'price', 'amount', 'description', 'quantity',
     ];
     public $migrationDependancy = ['account_invoice', 'account_transaction'];
     protected $table = "account_invoice_item";
@@ -26,6 +26,8 @@ class InvoiceItem extends BaseModel
         $table->increments('id');
         $table->integer('invoice_id');
         $table->integer('transaction_id')->nullable();
+        $table->integer('ledger_id')->nullable();
+        $table->decimal('price', 20, 2)->default(0.00);
         $table->decimal('amount', 20, 2)->default(0.00);
         $table->string('description')->nullable();
         $table->integer('quantity')->nullable();
@@ -39,6 +41,10 @@ class InvoiceItem extends BaseModel
 
         if (Migration::checkKeyExist('account_invoice_item', 'transaction_id')) {
             $table->foreign('transaction_id')->references('id')->on('account_transaction')->nullOnDelete();
+        }
+
+        if (Migration::checkKeyExist('account_invoice_item', 'ledger_id')) {
+            $table->foreign('ledger_id')->references('id')->on('account_ledger')->nullOnDelete();
         }
     }
 }

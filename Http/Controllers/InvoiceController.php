@@ -40,7 +40,7 @@ class InvoiceController extends BaseController
             $gateway_list = collect();
             $gateway_list->push(['value' => '', 'label' => '--- Please Select ---']);
             foreach ($gateways as $key => $gateway) {
-                $gateway_list->push(['value' => $gateway->id, 'label' => $gateway->name]);
+                $gateway_list->push(['value' => $gateway->id, 'label' => $gateway->title]);
             }
 
             $result['error'] = 0;
@@ -59,5 +59,55 @@ class InvoiceController extends BaseController
         }
 
         return response()->json($result);
+    }
+
+    public function saveData(Request $request)
+    {
+
+        $result = [
+            'module'  => 'account',
+            'model'   => 'invoice',
+            'status'  => 0,
+            'total'   => 0,
+            'error'   => 1,
+            'records'    => [],
+            'message' => 'No Records'
+        ];
+
+        $data = $request->all();
+
+        $invoice_id = DB::table('account_invoice')->insertGetId(
+            [
+                'partner_id' => $data['partner_id'],
+                'description' => $data['notation'] ?? 'Invoice #',
+                'status' => 'draft',
+            ]
+        );
+
+        foreach ($data['items'] as $item_key => $item) {
+            $invoice_item_id = DB::table('account_invoice_item')->insertGetId(
+                [
+                    'invoice_id' => $invoice_id,
+                    'lerger_id' => $item['lerger_id'],
+                    'price' => $item['price'],
+                    'amount' => $item['total'],
+                    'description' => $item['title'],
+                    'quantity' => $item['quantity'],
+                ]
+            );
+
+            foreach ($item['rates'] as $rate_key => $rate) {
+                DB::table('account_invoice_item_rate')->insert(
+                    [
+                        'invoice_item_id' => $invoice_item_id,
+                        'rate_id' => $rate['id'],
+                        'title' => $rate['title'],
+                        'slug' => $rate['slug'],
+                        'value' => $rate['value'],
+                        'is_percent' => $rate['is_percent'],
+                    ]
+                );
+            }
+        }
     }
 }
