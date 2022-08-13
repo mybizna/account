@@ -79,13 +79,22 @@ class InvoiceController extends BaseController
 
         $data = $request->all();
 
-
         $partner_id =  $data['partner_id'];
         $payment_method =  $data['payment_method'];
         $description =  $data['notation'] ?? 'Invoice #';
         $paid_amount =  $data['paid_amount'] ?? 0.00;
         $items =  $data['items'] ?? [];
 
-        $invoice->generateInvoice($description, $partner_id, $items, $paid_amount, $payment_method);
+        try {
+            $invoice->generateInvoice($description, $partner_id, $items, $paid_amount, $payment_method);
+        } catch (\Throwable $th) {
+            #throw $th;
+
+            $result['error'] = 1;
+            $result['status'] = 0;
+            $result['message'] = 'Error While Adding new Generate Invoices.';
+        }
+
+        return response()->json($result);
     }
 }
