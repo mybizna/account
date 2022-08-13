@@ -5,6 +5,7 @@ namespace Modules\Account\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Modules\Base\Http\Controllers\BaseController;
+use Modules\Account\Classes\Invoice;
 
 class InvoiceController extends BaseController
 {
@@ -64,6 +65,8 @@ class InvoiceController extends BaseController
     public function saveData(Request $request)
     {
 
+        $invoice = new Invoice();
+
         $result = [
             'module'  => 'account',
             'model'   => 'invoice',
@@ -76,38 +79,13 @@ class InvoiceController extends BaseController
 
         $data = $request->all();
 
-        $invoice_id = DB::table('account_invoice')->insertGetId(
-            [
-                'partner_id' => $data['partner_id'],
-                'description' => $data['notation'] ?? 'Invoice #',
-                'status' => 'draft',
-            ]
-        );
 
-        foreach ($data['items'] as $item_key => $item) {
-            $invoice_item_id = DB::table('account_invoice_item')->insertGetId(
-                [
-                    'invoice_id' => $invoice_id,
-                    'lerger_id' => $item['lerger_id'],
-                    'price' => $item['price'],
-                    'amount' => $item['total'],
-                    'description' => $item['title'],
-                    'quantity' => $item['quantity'],
-                ]
-            );
+        $partner_id =  $data['partner_id'];
+        $payment_method =  $data['payment_method'];
+        $description =  $data['notation'] ?? 'Invoice #';
+        $paid_amount =  $data['paid_amount'] ?? 0.00;
+        $items =  $data['items'] ?? [];
 
-            foreach ($item['rates'] as $rate_key => $rate) {
-                DB::table('account_invoice_item_rate')->insert(
-                    [
-                        'invoice_item_id' => $invoice_item_id,
-                        'rate_id' => $rate['id'],
-                        'title' => $rate['title'],
-                        'slug' => $rate['slug'],
-                        'value' => $rate['value'],
-                        'is_percent' => $rate['is_percent'],
-                    ]
-                );
-            }
-        }
+        $invoice->generateInvoice($description, $partner_id, $items, $paid_amount, $payment_method);
     }
 }
