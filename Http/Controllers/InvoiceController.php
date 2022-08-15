@@ -86,7 +86,7 @@ class InvoiceController extends BaseController
         $items =  $data['items'] ?? [];
 
         try {
-            $invoice->generateInvoice($description, $partner_id, $items, $paid_amount, $payment_method);
+            $invoice->generateInvoice($partner_id, $items, $description, $paid_amount, $payment_method);
         } catch (\Throwable $th) {
             #throw $th;
 
