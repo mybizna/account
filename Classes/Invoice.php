@@ -28,17 +28,18 @@ class Invoice
             );
 
             foreach ($items as $item_key => $item) {
+
+
                 $invoice_item_id = DB::table('account_invoice_item')->insertGetId(
                     [
                         'invoice_id' => $invoice_id,
-                        'lerger_id' => $item['lerger_id'],
+                        'ledger_id' => $item['ledger_id'],
                         'price' => $item['price'],
                         'amount' => $item['total'],
                         'description' => $item['title'],
                         'quantity' => $item['quantity'],
                     ]
                 );
-
                 foreach ($item['rates'] as $rate_key => $rate) {
                     DB::table('account_invoice_item_rate')->insert(
                         [
@@ -52,7 +53,8 @@ class Invoice
                     );
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $th) {
+            throw $th;
             DB::rollback();
         }
     }

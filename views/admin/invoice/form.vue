@@ -55,7 +55,7 @@
                             <FormKit id="title" type="text" v-model="item.title" validation="required" />
                         </td>
                         <td>
-                            <FormKit id="lerger_id" type="select" v-model="item.lerger_id" :options="ledgers"
+                            <FormKit id="ledger_id" type="select" v-model="item.ledger_id" :options="ledgers"
                                 validation="required" />
                         </td>
                         <td class="w-28">
@@ -228,7 +228,7 @@ export default {
                 items: [{
                     id: "",
                     title: "",
-                    lerger_id: "",
+                    ledger_id: "",
                     quantity: 1,
                     price: 0.00,
                     rates: [],
@@ -299,7 +299,7 @@ export default {
             this.model.items.push({
                 id: "",
                 title: "",
-                lerger_id: "",
+                ledger_id: "",
                 quantity: 1,
                 price: 0.00,
                 rates: [],

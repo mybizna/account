@@ -88,7 +88,7 @@ class InvoiceController extends BaseController
         try {
             $invoice->generateInvoice($partner_id, $items, $description, $paid_amount, $payment_method);
         } catch (\Throwable $th) {
-            #throw $th;
+            throw $th;
 
             $result['error'] = 1;
             $result['status'] = 0;
