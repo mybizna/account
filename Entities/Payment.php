@@ -30,8 +30,8 @@ class Payment extends BaseModel
         $table->string('description')->nullable();
         $table->string('receipt_no')->nullable();
         $table->string('code')->nullable();
-        $table->tinyInteger('completed')->nullable();
-        $table->tinyInteger('successful')->nullable();
+        $table->enum('type', ['in', 'out'])->default('in')->nullable();
+        $table->tinyInteger('is_reconciled')->nullable();
         $table->tinyInteger('canceled')->nullable();
     }
 

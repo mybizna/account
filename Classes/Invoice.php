@@ -3,27 +3,23 @@
 namespace Modules\Account\Classes;
 
 use Illuminate\Support\Facades\DB;
+use Modules\Account\Classes\Payment;
 
 class Invoice
 {
-    /**
-     * Get all sales transactions
-     *
-     * @param array $args Transaction Filters
-     *
-     * @return mixed
-     */
-    public function generateInvoice($partner_id, $items = [], $description = 'Invoice #', $amount_paid = 0.00, $payment_method = '')
+    public function generateInvoice($partner_id, $items = [], $description = 'Invoice #', $amount_paid = 0.00, $gateway_id = '')
     {
 
+        $payment = new Payment();
         DB::beginTransaction();
 
         try {
+            $status = ($amount_paid > 0) ? 'pending' : 'draft';
             $invoice_id = DB::table('account_invoice')->insertGetId(
                 [
                     'partner_id' => $partner_id,
                     'description' => $description,
-                    'status' => 'draft',
+                    'status' => $status,
                 ]
             );
 
@@ -51,10 +47,40 @@ class Invoice
                     );
                 }
             }
+
+            if ($amount_paid > 0) {
+                $description = "Invoice#$invoice_id Payment.";
+                $payment->makePayment($partner_id, $description, $amount_paid, $gateway_id);
+            }
+
             DB::commit();
+
+            $this->reconcileInvoices($partner_id);
         } catch (\Throwable $th) {
             throw $th;
             DB::rollback();
+        }
+    }
+
+    public function reconcileInvoices($partner_id)
+    {
+
+        $payments =  DB::table('account_payment')
+            ->where('partner_id', $partner_id)
+            ->where('is_reconciled', false)
+            ->where('type', 'in');
+
+
+        foreach ($payments as $payment_key => $payment) {
+            $invoices =  DB::table('account_invoice')
+                ->where('partner_id', $partner_id)
+                ->where('status', 'pending')
+                ->orWhere('status', 'partial')
+                ->orderByDesc('id');
+
+            foreach ($invoices as $payment_key => $invoice) {
+
+            }
         }
     }
 }
