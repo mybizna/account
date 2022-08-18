@@ -12,10 +12,18 @@ class Gateway
     public function data(Datasetter $datasetter)
     {
         $datasetter->add_data('account', 'gateway', 'slug', [
-            "title" => "Manual",
-            "slug" => "manual",
+            "title" => "Cash",
+            "slug" => "cash",
             "ordering" => 0,
             "is_default" => true,
+            "published" => true
+        ]);
+
+        $datasetter->add_data('account', 'gateway', 'slug', [
+            "title" => "Bank",
+            "slug" => "bank",
+            "ordering" => 0,
+            "is_default" => false,
             "published" => true
         ]);
     }

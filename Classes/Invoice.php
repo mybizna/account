@@ -28,8 +28,6 @@ class Invoice
             );
 
             foreach ($items as $item_key => $item) {
-
-
                 $invoice_item_id = DB::table('account_invoice_item')->insertGetId(
                     [
                         'invoice_id' => $invoice_id,
@@ -53,6 +51,7 @@ class Invoice
                     );
                 }
             }
+            DB::commit();
         } catch (\Throwable $th) {
             throw $th;
             DB::rollback();
