@@ -28,8 +28,8 @@ class Gateway extends BaseModel
         $table->increments('id');
         $table->string('title');
         $table->string('slug');
+        $table->integer('ledger_id');
         $table->integer('currency_id')->nullable();
-        $table->integer('ledger_id')->nullable();
         $table->string('image')->nullable();
         $table->string('url')->nullable();
         $table->integer('ordering')->nullable();

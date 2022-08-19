@@ -29,18 +29,10 @@ class Rate extends BaseModel
         $table->increments('id');
         $table->string('title');
         $table->string('slug');
-        $table->decimal('value', 20, 2)->default(0.00);
-        $table->decimal('start_amount', 20, 2)->default(0.00);
-        $table->decimal('end_amount', 20, 2)->default(0.00);
-        $table->integer('ledger_id')->nullable();
-
-        $table->integer('file_limit')->nullable();
-        $table->string('file_type')->nullable();
-        $table->string('file_structure')->nullable();
-        $table->string('file_suffix')->nullable();
-
-        $table->tinyInteger('is_percent')->nullable();
-        $table->tinyInteger('is_visible')->nullable();
+        $table->integer('ledger_id');
+        $table->decimal('value', 20, 2);
+        $table->enum('method', ['+', '%+', '-', '%-'])->default('+')->nullable();
+        $table->string('params')->nullable();
         $table->tinyInteger('published')->nullable();
     }
 

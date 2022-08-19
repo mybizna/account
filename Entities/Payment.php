@@ -25,13 +25,14 @@ class Payment extends BaseModel
     public function migration(Blueprint $table)
     {
         $table->increments('id');
+        $table->string('title');
+        $table->decimal('amount', 20, 2);
+        $table->integer('partner_id');
         $table->integer('gateway_id');
-        $table->decimal('amount', 20, 2)->default(0.00);
-        $table->string('description')->nullable();
         $table->string('receipt_no')->nullable();
         $table->string('code')->nullable();
         $table->enum('type', ['in', 'out'])->default('in')->nullable();
-        $table->tinyInteger('is_reconciled')->nullable();
+        $table->tinyInteger('is_posted')->nullable();
         $table->tinyInteger('canceled')->nullable();
     }
 

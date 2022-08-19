@@ -27,6 +27,8 @@ class Invoice extends BaseModel
         $table->integer('partner_id');
         $table->string('description')->nullable();
         $table->enum('status', ['draft', 'pending', 'partial', 'paid', 'closed', 'void'])->default('draft')->nullable();
+        $table->tinyInteger('is_posted')->nullable();
+        $table->tinyInteger('is_paid')->nullable();
     }
 
 

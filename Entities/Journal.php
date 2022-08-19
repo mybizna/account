@@ -10,7 +10,7 @@ class Journal extends BaseModel
 {
 
     protected $fillable = ['transaction_id', 'debit', 'credit', 'note', 'particulars'];
-    public $migrationDependancy = [];
+    public $migrationDependancy = ['partner', 'account_ledger'];
     protected $table = "account_journal";
 
     /**
@@ -22,17 +22,22 @@ class Journal extends BaseModel
     public function migration(Blueprint $table)
     {
         $table->increments('id');
-        $table->integer('transaction_id')->nullable();
-        $table->decimal('debit', 20, 2)->default(0.00);
-        $table->decimal('credit', 20, 2)->default(0.00);
-        $table->string('note')->nullable();
-        $table->string('particulars')->nullable();
+        $table->string('title');
+        $table->integer('partner_id');
+        $table->integer('ledger_id');
+        $table->decimal('debit', 20, 2)->nullable();
+        $table->decimal('credit', 20, 2)->nullable();
+        $table->string('params')->nullable();
     }
 
     public function post_migration(Blueprint $table)
     {
-        if (Migration::checkKeyExist('account_journal', 'transaction_id')) {
-            $table->foreign('transaction_id')->references('id')->on('account_transaction')->nullOnDelete();
+        if (Migration::checkKeyExist('account_journal', 'partner_id')) {
+            $table->foreign('partner_id')->references('id')->on('partner')->nullOnDelete();
+        }
+
+        if (Migration::checkKeyExist('account_journal', 'ledger_id')) {
+            $table->foreign('ledger_id')->references('id')->on('account_ledger')->nullOnDelete();
         }
     }
 }

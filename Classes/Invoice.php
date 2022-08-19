@@ -4,7 +4,7 @@ namespace Modules\Account\Classes;
 
 use Illuminate\Support\Facades\DB;
 use Modules\Account\Classes\Payment;
-use Modules\Account\Classes\Transactions;
+use Modules\Account\Classes\Journal;
 
 class Invoice
 {
@@ -49,9 +49,6 @@ class Invoice
                 }
             }
 
-            if ($status == 'pending') {
-                $this->postInvoice($invoice_id);
-            }
             if ($amount_paid > 0) {
                 $description = "Invoice#$invoice_id Payment.";
                 $payment->makePayment($partner_id, $description, $amount_paid, $gateway_id);
@@ -80,33 +77,68 @@ class Invoice
             $left_ledger_id = $ledger->id;
             $right_ledger_id = $item->ledger_id;
 
-            $transaction->postTransaction($amount, $description, $partner_id, $left_ledger_id, $right_ledger_id);
 
 
-            $rates = DB::table('account_invoice_item_rate')->where('invoice_item_id', $item->invoice_item_id)->get();
-            foreach ($rates as $key => $rate) {
+
+            $item_rates = DB::table('account_invoice_item_rate')->where('invoice_item_id', $item->invoice_item_id)->get();
+            foreach ($item_rates as $key => $item_rate) {
+                $invoice = DB::table('account_invoice')->where('id', $item_rate->rate_id)->get();
+                $amount = ($item_rate->value) ? $item_rate->value : 0;
+                $description = ($item_rate->title) ? $item_rate->title : "Item ID:$item->id Rate ID:$rate->id";
+                $partner_id = $invoice->partner_id;
+                $left_ledger_id = $ledger->id;
+                $right_ledger_id = $item_rate->ledger_id;
             }
             # code...
         }
     }
     public function reconcileInvoices($partner_id)
     {
+        $journal = new Journal();
+        $payments_total = 0;
 
-        $payments =  DB::table('account_payment')
-            ->where('partner_id', $partner_id)
-            ->where('is_reconciled', false)
-            ->where('type', 'in');
-
+        $payments =  DB::table('account_payment AS ap, ag.ledger_id')
+            ->leftJoin('account_gateway AS ag', 'ag.id', '=', 'ap.gateway_id')
+            ->where('ap.partner_id', $partner_id)
+            ->where('ap.is_posted', false)
+            ->where('ap.type', 'in')->get();
 
         foreach ($payments as $payment_key => $payment) {
-            $invoices =  DB::table('account_invoice')
-                ->where('partner_id', $partner_id)
-                ->where('status', 'pending')
-                ->orWhere('status', 'partial')
-                ->orderByDesc('id');
-
-            foreach ($invoices as $payment_key => $invoice) {
-            }
+            $payments_total = $payments_total + $payment->amount;
+            $journal->journalEntry($payment->title, $payment->amount, $payment->partner_id, $payment->ledger_id);
         }
+
+        $invoices =  DB::table('account_invoice')
+            ->where('partner_id', $partner_id)
+            ->where('status', 'pending')
+            ->orWhere('status', 'partial')
+            ->orderByDesc('id');
+
+
+        foreach ($invoices as $payment_key => $invoice) {
+            if ($invoice->is_posted = false) {
+                $items = DB::table('account_invoice_item')->where('invoice_id', $invoice->id)->get();
+                foreach ($items as $key => $item) {
+                    $amount = ($item->quantity) ? $item->price * $item->quantity : $item->price;
+                    $title = ($item->description) ? $item->description : "Item ID:$item->id";
+                    $journal->journalEntry($title, $amount, $invoice->partner_id, $item->ledger_id);
+
+
+                    $item_rates = DB::table('account_invoice_item_rate AS air, at.ledger_id AS rate_ledger_id, at.title AS rate_title')
+                        ->leftJoin('account_rate AS at', 'at.id', '=', 'air.rate_id')
+                        ->where('invoice_item_id', $item->invoice_item_id)->get();
+                    foreach ($item_rates as $key => $item_rate) {
+                        $amount = ($item_rate->value) ? $item_rate->value : 0;
+                        $title =  ($item_rate->title) ? $item_rate->title : "Item ID:$item->id Rate:$item_rate->rate_title";
+                        $journal->journalEntry($title, $amount, $invoice->partner_id, $item_rate->rate_ledger_id);
+                    }
+                }
+            }
+
+            DB::table('account_invoice')->where('invoice_id', $invoice->id)->update(['is_posted' => true]);
+        }
+
+
+        $accounts_receivable = DB::table('account_ledger')->where('slug', 'accounts_receivable')->get();
     }
 }
