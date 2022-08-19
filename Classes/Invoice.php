@@ -4,6 +4,7 @@ namespace Modules\Account\Classes;
 
 use Illuminate\Support\Facades\DB;
 use Modules\Account\Classes\Payment;
+use Modules\Account\Classes\Transactions;
 
 class Invoice
 {
@@ -48,6 +49,9 @@ class Invoice
                 }
             }
 
+            if ($status == 'pending') {
+                $this->postInvoice($invoice_id);
+            }
             if ($amount_paid > 0) {
                 $description = "Invoice#$invoice_id Payment.";
                 $payment->makePayment($partner_id, $description, $amount_paid, $gateway_id);
@@ -61,7 +65,30 @@ class Invoice
             DB::rollback();
         }
     }
+    public function postInvoice($invoice_id)
+    {
+        $transaction = new Transactions();
 
+        $invoice = DB::table('account_invoice')->where('id', $invoice_id)->get();
+        $ledger = DB::table('account_ledger')->where('slug', 'accounts_receivable')->get();
+        $items = DB::table('account_invoice_item')->where('invoice_id', $invoice_id)->get();
+
+        foreach ($items as $key => $item) {
+            $amount = ($item->quantity) ? $item->price * $item->quantity : $item->price;
+            $description = ($item->description) ? $item->description : "Item ID:$item->id";
+            $partner_id = $invoice->partner_id;
+            $left_ledger_id = $ledger->id;
+            $right_ledger_id = $item->ledger_id;
+
+            $transaction->postTransaction($amount, $description, $partner_id, $left_ledger_id, $right_ledger_id);
+
+
+            $rates = DB::table('account_invoice_item_rate')->where('invoice_item_id', $item->invoice_item_id)->get();
+            foreach ($rates as $key => $rate) {
+            }
+            # code...
+        }
+    }
     public function reconcileInvoices($partner_id)
     {
 
@@ -79,7 +106,6 @@ class Invoice
                 ->orderByDesc('id');
 
             foreach ($invoices as $payment_key => $invoice) {
-
             }
         }
     }

@@ -10,11 +10,11 @@ class Gateway extends BaseModel
 {
 
     protected $fillable = [
-        'title', 'slug', 'currency_id', 'image', 'url',
+        'title', 'slug', 'currency_id', 'image', 'url', 'ledger_id',
         'ordering', 'is_default', 'is_hidden', 'published'
 
     ];
-    public $migrationDependancy = ['core_currency'];
+    public $migrationDependancy = ['core_currency', 'account_ledger'];
     protected $table = "account_gateway";
 
     /**
@@ -29,6 +29,7 @@ class Gateway extends BaseModel
         $table->string('title');
         $table->string('slug');
         $table->integer('currency_id')->nullable();
+        $table->integer('ledger_id')->nullable();
         $table->string('image')->nullable();
         $table->string('url')->nullable();
         $table->integer('ordering')->nullable();
@@ -42,6 +43,10 @@ class Gateway extends BaseModel
     {
         if (Migration::checkKeyExist('account_gateway', 'currency_id')) {
             $table->foreign('currency_id')->references('id')->on('core_currency')->nullOnDelete();
+        }
+
+        if (Migration::checkKeyExist('account_gateway', 'ledger_id')) {
+            $table->foreign('ledger_id')->references('id')->on('account_ledger')->nullOnDelete();
         }
     }
 }
