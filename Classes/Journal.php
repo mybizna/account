@@ -14,7 +14,12 @@ class Journal
             ->where('id', $ledger_id)->first();
 
         $chart = $ledger->chart_slug;
+
         $credit_debit = ($chart == 'asset' || $chart == 'expense') ? 'debit' : 'credit';
+
+        if ($amount < 0) {
+            $credit_debit = ($chart == 'asset' || $chart == 'expense') ? 'credit' : 'debit';
+        }
 
         DB::table('account_journal')->insert(
             [

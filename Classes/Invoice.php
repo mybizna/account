@@ -96,6 +96,8 @@ class Invoice
     {
         $journal = new Journal();
         $payments_total = 0;
+        $payments_title = '';
+
 
         $payments =  DB::table('account_payment AS ap, ag.ledger_id')
             ->leftJoin('account_gateway AS ag', 'ag.id', '=', 'ap.gateway_id')
@@ -137,6 +139,12 @@ class Invoice
 
             DB::table('account_invoice')->where('invoice_id', $invoice->id)->update(['is_posted' => true]);
         }
+
+
+
+        $ledger = DB::table('account_ledger')->where('slug', 'accounts_receivable')->get();
+        //$journal->journalEntry(, $payment->amount, $payment->partner_id, $payment->ledger_id);
+
 
 
         $accounts_receivable = DB::table('account_ledger')->where('slug', 'accounts_receivable')->get();
