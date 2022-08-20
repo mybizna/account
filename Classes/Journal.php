@@ -2,7 +2,6 @@
 
 namespace Modules\Account\Classes;
 
-
 use Illuminate\Support\Facades\DB;
 
 class Journal

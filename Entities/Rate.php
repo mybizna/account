@@ -31,7 +31,7 @@ class Rate extends BaseModel
         $table->string('slug');
         $table->integer('ledger_id');
         $table->decimal('value', 20, 2);
-        $table->enum('method', ['+', '%+', '-', '%-'])->default('+')->nullable();
+        $table->enum('method', ['+', '+%', '-', '-%'])->default('+')->nullable();
         $table->string('params')->nullable();
         $table->tinyInteger('published')->nullable();
     }

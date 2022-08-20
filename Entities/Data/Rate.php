@@ -28,7 +28,7 @@ class Rate
             "slug" => "discount_3",
             "ledger_id" => $ledger_id,
             "value" => 3,
-            "method" => '%+',
+            "method" => '+%',
             "published" => true
         ]);
         $datasetter->add_data('account', 'rate', 'slug', [
@@ -36,7 +36,7 @@ class Rate
             "slug" => "discount_5",
             "ledger_id" => $ledger_id,
             "value" => 5,
-            "method" => '%+',
+            "method" => '+%',
             "published" => true
         ]);
         $datasetter->add_data('account', 'rate', 'slug', [
@@ -44,7 +44,7 @@ class Rate
             "slug" => "discount_10",
             "ledger_id" => $ledger_id,
             "value" => 10,
-            "method" => '%+',
+            "method" => '+%',
             "published" => true
         ]);
     }
