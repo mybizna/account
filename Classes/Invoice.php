@@ -5,6 +5,7 @@ namespace Modules\Account\Classes;
 use Illuminate\Support\Facades\DB;
 use Modules\Account\Classes\Payment;
 use Modules\Account\Classes\Journal;
+use Modules\Account\Classes\Ledger;
 
 class Invoice
 {
@@ -54,9 +55,10 @@ class Invoice
                 $payment->makePayment($partner_id, $description, $amount_paid, $gateway_id);
             }
 
-            DB::commit();
 
             $this->reconcileInvoices($partner_id);
+
+            DB::commit();
         } catch (\Throwable $th) {
             throw $th;
             DB::rollback();
@@ -66,28 +68,35 @@ class Invoice
     public function reconcileInvoices($partner_id)
     {
         $journal = new Journal();
-        $payments_total = 0;
+        $ledger = new Ledger();
         $invoices_total = 0;
+        $payments_total = 0;
+        $deposit_overpayment_total = 0;
         $payments_title = '';
 
+        // Add all payments to journal entry
         $payments =  DB::table('account_payment AS ap')
             ->select('ap.*', 'ag.ledger_id')
             ->leftJoin('account_gateway AS ag', 'ag.id', '=', 'ap.gateway_id')
             ->where('ap.partner_id', $partner_id)
             ->where('ap.is_posted', false)
             ->where('ap.type', 'in')->get();
-
         foreach ($payments as $payment_key => $payment) {
             $payments_total = $payments_total + $payment->amount;
             $journal->journalEntry($payment->title, $payment->amount, $payment->partner_id, $payment->ledger_id);
         }
+
+        // Get overpayment and deposits
+        $deposit_n_over_payment_id = $ledger->getLedgerId('deposit_n_over_payment');
+        $deposit_overpayment_ledger = $ledger->getLedgerTotal($deposit_n_over_payment_id);
+        $deposit_overpayment_total = $deposit_overpayment_ledger['total'];
+
 
         $invoices =  DB::table('account_invoice')
             ->where('partner_id', $partner_id)
             ->where('status', 'pending')
             ->orWhere('status', 'partial')
             ->orderByDesc('id');
-
 
         foreach ($invoices as $payment_key => $invoice) {
             if ($invoice->is_posted = false) {
@@ -96,7 +105,6 @@ class Invoice
                     $amount = $item_total = ($item->quantity) ? $item->price * $item->quantity : $item->price;
                     $title = ($item->description) ? $item->description : "Item ID:$item->id";
                     $journal->journalEntry($title, $amount, $invoice->partner_id, $item->ledger_id);
-
 
                     $item_rates = DB::table('account_invoice_item_rate AS air')
                         ->select('air.*', 'at.ledger_id AS rate_ledger_id', 'at.title AS rate_title', 'at.method AS rate_method')
@@ -129,19 +137,26 @@ class Invoice
             DB::table('account_invoice')->where('invoice_id', $invoice->id)->update(['is_posted' => true]);
         }
 
+        if ($deposit_overpayment_total) {
+            if ($deposit_overpayment_total == $invoices_total) {
+                $deposit_n_over_payment_id = $ledger->getLedgerId('deposit_n_over_payment');
+                $journal->journalEntry('Payment By deposit & over payment'+ $payments_title, $deposit_overpayment_total, $invoice->partner_id, $deposit_n_over_payment_id);
+            }
+        }
+
 
 
         if ($payments_total == $invoices_total) {
-            $accounts_receivable = DB::table('account_ledger')->where('slug', 'accounts_receivable')->get();
+            $accounts_receivable = $ledger->getLedgerId('accounts_receivable');
         }
 
         if ($payments_total > $invoices_total) {
-            $journal->journalEntry($title, $calc_amount, $invoice->partner_id, $item_rate->rate_ledger_id);
+            $journal->journalEntry('Payment from Wallet:' + $payments_title, $calc_amount, $invoice->partner_id, $item_rate->rate_ledger_id);
 
-            $accounts_receivable = DB::table('account_ledger')->where('slug', 'accounts_receivable')->get();
+            $accounts_receivable = $ledger->getLedgerId('accounts_receivable');
         }
         if ($payments_total < $invoices_total) {
-            $accounts_receivable = DB::table('account_ledger')->where('slug', 'accounts_receivable')->get();
+            $accounts_receivable = $ledger->getLedgerId('accounts_receivable');
         }
     }
 }
