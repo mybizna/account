@@ -71,7 +71,8 @@ class Invoice
         $ledger = new Ledger();
         $invoices_total = 0;
         $payments_total = 0;
-        $deposit_overpayment_total = 0;
+        $wallet_total = 0;
+        $receivable_total = 0;
         $payments_title = '';
 
         // Add all payments to journal entry
@@ -86,12 +87,31 @@ class Invoice
             $journal->journalEntry($payment->title, $payment->amount, $payment->partner_id, $payment->ledger_id);
         }
 
-        // Get overpayment and deposits
-        $deposit_n_over_payment_id = $ledger->getLedgerId('deposit_n_over_payment');
-        $deposit_overpayment_ledger = $ledger->getLedgerTotal($deposit_n_over_payment_id);
-        $deposit_overpayment_total = $deposit_overpayment_ledger['total'];
+        $wallet_id = $ledger->getLedgerId('wallet');
+        $receivable_id = $ledger->getLedgerId('accounts_receivable');
+
+        // Get wallet total
+        $wallet_ledger = $ledger->getLedgerTotal($wallet_id);
+        $wallet_total = $wallet_ledger['total'];
 
 
+        // Get receivable total
+        $receivable_ledger = $ledger->getLedgerTotal($receivable_id);
+        $receivable_total = $receivable_ledger['total'];
+
+        //Process receivable first
+        if ($receivable_total) {
+            $balance = $payments_total - $receivable_total;
+            if ($balance <= 0) {
+                $journal->journalEntry('Repayment of past debt', -1 * abs($payments_total), $partner_id, $receivable_id);
+                $payments_total = 0;
+            } else {
+                $payments_total = $balance;
+                $journal->journalEntry('Repayment of past debt', -1 * abs($receivable_total), $partner_id, $receivable_id);
+            }
+        }
+
+        // process invoices
         $invoices =  DB::table('account_invoice')
             ->where('partner_id', $partner_id)
             ->where('status', 'pending')
@@ -137,26 +157,28 @@ class Invoice
             DB::table('account_invoice')->where('invoice_id', $invoice->id)->update(['is_posted' => true]);
         }
 
-        if ($deposit_overpayment_total) {
-            if ($deposit_overpayment_total == $invoices_total) {
-                $deposit_n_over_payment_id = $ledger->getLedgerId('deposit_n_over_payment');
-                $journal->journalEntry('Payment By deposit & over payment'+ $payments_title, $deposit_overpayment_total, $invoice->partner_id, $deposit_n_over_payment_id);
+        if ($invoices_total) {
+            $wallet_id = $ledger->getLedgerId('wallet');
+            $receivable_id = $ledger->getLedgerId('accounts_receivable');
+
+            if ($wallet_total) {
+                $balance = $wallet_total - $invoices_total;
+                if ($balance >= 0) {
+                    $journal->journalEntry('Payment By wallet worth ' + abs($invoices_total), -1 * abs($invoices_total), $partner_id, $wallet_id);
+                    $invoices_total = 0;
+                } else {
+                    $invoices_total = $invoices_total - $wallet_total;
+                    $journal->journalEntry('Payment By wallet worth' + abs($wallet_total), -1 * abs($wallet_total), $partner_id, $wallet_id);
+                }
             }
-        }
 
+            $balance = $payments_total - $invoices_total;
 
-
-        if ($payments_total == $invoices_total) {
-            $accounts_receivable = $ledger->getLedgerId('accounts_receivable');
-        }
-
-        if ($payments_total > $invoices_total) {
-            $journal->journalEntry('Payment from Wallet:' + $payments_title, $calc_amount, $invoice->partner_id, $item_rate->rate_ledger_id);
-
-            $accounts_receivable = $ledger->getLedgerId('accounts_receivable');
-        }
-        if ($payments_total < $invoices_total) {
-            $accounts_receivable = $ledger->getLedgerId('accounts_receivable');
+            if ($balance > 0) {
+                $journal->journalEntry('Credit to wallet worth ' + abs($balance), abs($balance), $partner_id, $wallet_id);
+            } elseif ($balance < 0) {
+                $journal->journalEntry('Partner Debt of ' + abs($balance), abs($balance), $partner_id, $receivable_id);
+            }
         }
     }
 }

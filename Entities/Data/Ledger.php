@@ -840,8 +840,8 @@ class Ledger
         ]);
         $datasetter->add_data('account', 'ledger',  'slug', [
             "chart_id" =>  $liability_chart_id,
-            "name" => "Deposits & Over Payment",
-            "slug" => "deposit_n_over_payment",
+            "name" => "Wallet, Deposits & Over Payment",
+            "slug" => "wallet",
             "code" => "1510",
             "system" => "1"
         ]);
