@@ -69,8 +69,10 @@ class Invoice
     {
         $journal = new Journal();
         $ledger = new Ledger();
+
         $invoices_total = 0;
         $payments_total = 0;
+        $tmp_payments_total = 0;
         $wallet_total = 0;
         $receivable_total = 0;
         $payments_title = '';
@@ -94,7 +96,6 @@ class Invoice
         $wallet_ledger = $ledger->getLedgerTotal($wallet_id);
         $wallet_total = $wallet_ledger['total'];
 
-
         // Get receivable total
         $receivable_ledger = $ledger->getLedgerTotal($receivable_id);
         $receivable_total = $receivable_ledger['total'];
@@ -111,6 +112,8 @@ class Invoice
             }
         }
 
+        $tmp_payments_total = $payments_total;
+
         // process invoices
         $invoices =  DB::table('account_invoice')
             ->where('partner_id', $partner_id)
@@ -119,8 +122,12 @@ class Invoice
             ->orderByDesc('id');
 
         foreach ($invoices as $payment_key => $invoice) {
+            $invoice_data = [];
+            $single_invoice_total = 0;
+
             if ($invoice->is_posted = false) {
                 $items = DB::table('account_invoice_item')->where('invoice_id', $invoice->id)->get();
+
                 foreach ($items as $key => $item) {
                     $amount = $item_total = ($item->quantity) ? $item->price * $item->quantity : $item->price;
                     $title = ($item->description) ? $item->description : "Item ID:$item->id";
@@ -150,11 +157,25 @@ class Invoice
 
                         $journal->journalEntry($title, $calc_amount, $invoice->partner_id, $item_rate->rate_ledger_id);
                     }
-                    $invoices_total = $invoices_total + $item_total;
+
+                    $single_invoice_total = $single_invoice_total + $item_total;
                 }
+
+                $invoice_data = ['is_posted' => true, 'total' => $single_invoice_total];
+            } else {
+                $single_invoice_total = $invoice->total;
             }
 
-            DB::table('account_invoice')->where('invoice_id', $invoice->id)->update(['is_posted' => true]);
+
+            if ($tmp_payments_total > $single_invoice_total) {
+                $invoice_data['status'] = 'paid';
+            } elseif ($tmp_payments_total > 0) {
+                $invoice_data['status'] = 'partial';
+            }
+
+            $tmp_payments_total = $tmp_payments_total -  $single_invoice_total;
+
+            DB::table('account_invoice')->where('invoice_id', $invoice->id)->update($invoice_data);
         }
 
         if ($invoices_total) {
