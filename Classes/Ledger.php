@@ -9,23 +9,24 @@ class Ledger
 {
     public function getLedger($ledger_id)
     {
-
-        $ledger = Cache::get("account_ledger_" + $ledger_id);
-
-        try {
-            if (!$ledger) {
+        if (Cache::has("account_ledger_" + $ledger_id)) {
+            $ledger = Cache::get("account_ledger_" + $ledger_id);
+            return $ledger;
+        } else {
+            try {
                 $query = $this->getLedgerQuery();
-                $query->where('al.id', $ledger_id)->first();
+                $ledger = $query->where('al.id', $ledger_id)->first();
 
-                Cache::set("account_ledger_" + $ledger_id, $ledger);
+                Cache::put("account_ledger_" + $ledger_id, $ledger);
+                //code...
+                return $ledger;
+            } catch (\Throwable $th) {
+                return false;
+                //throw $th;
             }
-            //code...
-        } catch (\Throwable $th) {
-            return false;
-            //throw $th;
         }
 
-        return $ledger;
+        return false;
     }
 
     public function getLedgerById($ledger_id)
@@ -35,27 +36,27 @@ class Ledger
 
     public function getLedgerBySlug($ledger_slug)
     {
-        $ledger = Cache::get("account_ledger_" + $ledger_slug);
-
-        try {
-            if (!$ledger) {
+        if (Cache::has("account_ledger_" + $ledger_slug)) {
+            $ledger = Cache::get("account_ledger_" + $ledger_slug);
+            return $ledger;
+        } else {
+            try {
                 $query = $this->getLedgerQuery();
-                $query->where('al.slug', $ledger_slug)->first();
-
-                Cache::set("account_ledger_" + $ledger_slug, $ledger);
+                $ledger = $query->where('al.slug', $ledger_slug)->first();
+                $ledger = Cache::put("account_ledger_" + $ledger_slug, $ledger);
+                return $ledger;
+                //code...
+            } catch (\Throwable $th) {
+                return false;
+                //throw $th;
             }
-            //code...
-        } catch (\Throwable $th) {
-            return false;
-            //throw $th;
-        }
 
-        return $ledger;
+            return false;
+        }
     }
 
     public function getLedgerQuery()
     {
-
         return DB::table('account_ledger AS al')
             ->select('al.*, ac.slug AS chart_slug')
             ->leftJoin('account_chart_of_account AS ac', 'ac.id', '=', 'al.chart_id');
@@ -64,55 +65,57 @@ class Ledger
 
     public function getLedgerId($ledger_slug)
     {
-
-        $ledger_id = Cache::get("account_ledger_" + $ledger_slug + "_id");
-
-        try {
-            if (!$ledger_id) {
+        if (Cache::has("account_ledger_" + $ledger_slug + "_id")) {
+            $ledger_id = Cache::get("account_ledger_" + $ledger_slug + "_id");
+        } else {
+            try {
                 $ledger = DB::table('account_ledger')->where('slug', $ledger_slug)->first();
-
                 $ledger_id = $ledger->id;
-                Cache::set("account_ledger_" + $ledger_slug + "_id", $ledger->id);
-            }
-            //code...
-        } catch (\Throwable $th) {
-            throw $th;
-        }
+                Cache::put("account_ledger_" + $ledger_slug + "_id", $ledger->id);
 
-        return $ledger_id;
+                return $ledger_id;
+                //code...
+            } catch (\Throwable $th) {
+                throw $th;
+            }
+        }
+        return false;
     }
 
     public function getLedgerTotal($ledger_id, $partner_id = '')
     {
-        $ledger_total = Cache::get("account_ledger_total_" + $ledger_id + '_' + $partner_id);
 
-        try {
-            $ledger = $this->getLedger($ledger_id);
-            $query =  DB::table('account_journal');
+        if (Cache::has("account_ledger_total_" + $ledger_id + '_' + $partner_id)) {
+            $ledger_total = Cache::get("account_ledger_total_" + $ledger_id + '_' + $partner_id);
+        } else {
+            try {
+                $ledger = $this->getLedger($ledger_id);
+                $query =  DB::table('account_journal');
 
-            $query->where('ledger_id', $ledger_id);
+                $query->where('ledger_id', $ledger_id);
 
-            if ($partner_id) {
-                $query->where('partner_id', $partner_id);
+                if ($partner_id) {
+                    $query->where('partner_id', $partner_id);
+                }
+
+                $debit = $query->sum('debit');
+                $credit = $query->sum('credit');
+                $total =   $credit - $debit;
+
+                if ($ledger->chart_slug == 'asset' || $ledger->chart_slug == 'expense') {
+                    $total = $debit - $credit;
+                }
+
+                Cache::put("account_ledger_total_" + $ledger_id + '_' + $partner_id, [
+                    'debit' => $debit,
+                    'credit' => $credit,
+                    'total' => $total,
+                ]);
+            } catch (\Throwable $th) {
+                throw $th;
             }
-
-            $debit = $query->sum('debit');
-            $credit = $query->sum('credit');
-            $total =   $credit - $debit;
-
-            if ($ledger->chart_slug == 'asset' || $ledger->chart_slug == 'expense') {
-                $total = $debit - $credit;
-            }
-
-            Cache::set("account_ledger_total_" + $ledger_id + '_' + $partner_id, [
-                'debit' => $debit,
-                'credit' => $credit,
-                'total' => $total,
-            ]);
-        } catch (\Throwable $th) {
-            throw $th;
         }
 
-        return  $ledger_total;
+        return false;
     }
 }
