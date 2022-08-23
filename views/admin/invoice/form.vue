@@ -318,9 +318,7 @@ export default {
             item.rate_ids.push(rate.id);
             this.model.rates_used.push(rate.id);
 
-            console.log(item.rates);
-
-            item.rates.sort(function (a, b) { return a.is_tax ? 1 : 0; });
+            item.rates.sort(function (a, b) { return a.ordering - b.ordering; });
             this.model.rates_used = [...new Set(this.model.rates_used)];
 
             this.addCalculate();
@@ -329,13 +327,14 @@ export default {
             this.model.total = 0;
             this.model.subtotal = 0;
 
+            this.rates.forEach(main_rate => {
+                main_rate.total = 0.00;
+            });
+
             this.model.items.forEach(item => {
                 item.total = item.quantity * item.price;
 
                 this.model.subtotal = this.model.subtotal + parseFloat(item.total);
-
-                console.log('item.rates');
-                console.log(item.rates);
 
                 item.rates.forEach(rate => {
                     var new_val = rate.value;
@@ -351,9 +350,10 @@ export default {
                         }
                     }
 
-
                     this.rates.forEach(main_rate => {
-                        if (main_rate.id == rate.id) {
+                        //main_rate.total = 0.00;
+                        if (main_rate.id === rate.id) {
+                            console.log(main_rate.id + '' + rate.id);
                             main_rate.total = (Object.prototype.hasOwnProperty.call(main_rate, "total"))
                                 ? main_rate.total + new_val
                                 : new_val;
