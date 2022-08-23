@@ -236,6 +236,7 @@ export default {
                     total: 0.00,
                 }],
                 payment_method: '',
+                rates_used: [],
                 paid_amount: 0.00,
                 notation: '',
             },
@@ -315,6 +316,12 @@ export default {
 
             item.rates.push(rate);
             item.rate_ids.push(rate.id);
+            this.model.rates_used.push(rate.id);
+
+            console.log(item.rates);
+
+            item.rates.sort(function (a, b) { return a.is_tax ? 1 : 0; });
+            this.model.rates_used = [...new Set(this.model.rates_used)];
 
             this.addCalculate();
         },
@@ -327,13 +334,23 @@ export default {
 
                 this.model.subtotal = this.model.subtotal + parseFloat(item.total);
 
+                console.log('item.rates');
+                console.log(item.rates);
+
                 item.rates.forEach(rate => {
                     var new_val = rate.value;
-                    var operation = '+';
+                    var operation = rate.method;
 
-                    if (rate.is_percent) {
-                        new_val = item.total * rate.value / 100;
+                    if (new_val != 0) {
+                        if (operation == '-') {
+                            new_val = -1 * new_val;
+                        } else if (operation == '-%') {
+                            new_val = -1 * item.total * new_val / 100;
+                        } else if (operation == '+%') {
+                            new_val = item.total * new_val / 100;
+                        }
                     }
+
 
                     this.rates.forEach(main_rate => {
                         if (main_rate.id == rate.id) {
@@ -343,7 +360,7 @@ export default {
                         }
                     });
 
-                    item.total = (operation == '-') ? item.total - new_val : item.total + new_val;
+                    item.total = item.total + new_val;
 
                 });
 

@@ -19,6 +19,8 @@ class Rate
             "ledger_id" => $ledger_id,
             "value" => 16,
             "method" => '+',
+            "ordering" => 100,
+            "on_total" => false,
             "published" => true
         ]);
 
@@ -29,6 +31,8 @@ class Rate
             "ledger_id" => $ledger_id,
             "value" => 3,
             "method" => '+%',
+            "ordering" => 10,
+            "on_total" => false,
             "published" => true
         ]);
         $datasetter->add_data('account', 'rate', 'slug', [
@@ -37,6 +41,8 @@ class Rate
             "ledger_id" => $ledger_id,
             "value" => 5,
             "method" => '+%',
+            "ordering" => 11,
+            "on_total" => false,
             "published" => true
         ]);
         $datasetter->add_data('account', 'rate', 'slug', [
@@ -45,6 +51,8 @@ class Rate
             "ledger_id" => $ledger_id,
             "value" => 10,
             "method" => '+%',
+            "ordering" => 12,
+            "on_total" => false,
             "published" => true
         ]);
     }

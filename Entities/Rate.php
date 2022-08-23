@@ -33,6 +33,8 @@ class Rate extends BaseModel
         $table->decimal('value', 20, 2);
         $table->enum('method', ['+', '+%', '-', '-%'])->default('+')->nullable();
         $table->string('params')->nullable();
+        $table->tinyInteger('ordering')->nullable();
+        $table->tinyInteger('on_total')->nullable();
         $table->tinyInteger('published')->nullable();
     }
 

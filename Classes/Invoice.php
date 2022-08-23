@@ -138,6 +138,7 @@ class Invoice
                         ->leftJoin('account_rate AS at', 'at.id', '=', 'air.rate_id')
                         ->where('invoice_item_id', $item->invoice_item_id)
                         ->orderBy('method')
+                        ->orderBy('ordering')
                         ->get();
                     foreach ($item_rates as $item_key => $item_rate) {
                         $value = $calc_amount = ($item_rate->value) ? $item_rate->value : 0;
