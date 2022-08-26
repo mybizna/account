@@ -1,18 +1,20 @@
 <template>
     <table-edit :path_param="path_param" :model="model" passed_form_url="invoice/savedata">
 
-        <div class="row">
+        <div class="row mb-2">
             <div class="col-sm-6">
-                <FormKit id="title" type="text" v-model="model.title" validation="required" />
+                <FormKit id="title" type="text" v-model="model.title" validation="required"
+                    inner-class="$reset formkit-inner" wrapper-class="$reset formkit-wrapper" input-class="h-10" />
             </div>
             <div class="col-sm-6">
                 <FormKit button_label="Select Customer" id="partner_id" type="recordpicker"
                     comp_url="partner/admin/partner/list.vue" :setting="setting.partner_id" v-model="model.partner_id"
-                    validation="required" />
+                    validation="required" inner-class="$reset formkit-inner" wrapper-class="$reset formkit-wrapper" />
             </div>
+
         </div>
 
-        <div v-if="has_partner" class="invoice-form">
+        <div v-if="has_partner" class="invoice-form p-1 border border-dotted border-dashed border-green-600 rounded">
             <div class="row">
                 <div class="col-md-4">
                     <span class="underline">From</span>
@@ -37,6 +39,9 @@
 
                 </div>
                 <div class="col-md-4">
+                    <div :class="model.status == 'paid' ? 'bg-green' : (model.status == 'draft' ? 'bg-grey' : 'bg-red')">
+                        <h3 class="text-center p-2 uppercase font-semibold text-white"> {{ model.status }} </h3>
+                    </div>
                     <b v-if="invoice.date_created">Invoice #{{ invoice.date_created }}</b>
                     <b v-else>Invoice #{{ invoice.id }}</b>
                     <br>
@@ -243,7 +248,7 @@
 
         </div>
         <div v-else class="no-partner">
-            <div class=" text-center border-dashed p-5 rounded-sm border border-red-600">
+            <div class=" text-center border-dashed p-5 rounded border border-red-600">
                 <span class="fa-stack text-red-400 " style="vertical-align: top; font-size:36px;">
                     <i class="far fa-circle fa-stack-2x"></i>
                     <i class="fas fa-file-alt fa-stack-1x"></i>
@@ -301,7 +306,7 @@ export default {
                     rate_ids: [],
                     total: 0.00,
                 }],
-                title: 'Invoice #',
+                title: 'Invoice Title',
                 rates_used: [],
                 paid_amount: 0.00,
                 balance: 0.00,
