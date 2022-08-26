@@ -39,7 +39,8 @@
 
                 </div>
                 <div class="col-md-4">
-                    <div :class="model.status == 'paid' ? 'bg-green' : (model.status == 'draft' ? 'bg-grey' : 'bg-red')">
+                    <div
+                        :class="model.status == 'paid' ? 'bg-green' : (model.status == 'draft' ? 'bg-grey' : 'bg-red')">
                         <h3 class="text-center p-2 uppercase font-semibold text-white"> {{ model.status }} </h3>
                     </div>
                     <b v-if="invoice.date_created">Invoice #{{ invoice.date_created }}</b>
@@ -306,7 +307,7 @@ export default {
                     rate_ids: [],
                     total: 0.00,
                 }],
-                title: 'Invoice Title',
+                title: '',
                 rates_used: [],
                 paid_amount: 0.00,
                 balance: 0.00,
@@ -357,14 +358,19 @@ export default {
                 paid_amount = parseFloat(paid_amount) + parseFloat(gateway.paid_amount);
             });
 
-            if (paid_amount > 0) {
-                this.model.status = 'pending';
-            }
-
             this.model.paid_amount = paid_amount;
 
             this.model.balance = this.model.total - this.model.paid_amount;
 
+            if (paid_amount > 0) {
+                this.model.status = 'pending';
+            } else {
+                this.model.status = 'draft';
+            }
+
+            if (this.model.balance <= 0) {
+                this.model.status = 'paid';
+            }
 
         },
 

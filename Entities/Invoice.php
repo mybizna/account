@@ -10,7 +10,7 @@ class Invoice extends BaseModel
 {
 
     protected $fillable = [
-        'title', 'partner_id', 'status', 'is_posted', 'total'
+        'title', 'partner_id', 'status', 'description', 'is_posted', 'total'
     ];
     public $migrationDependancy = ['partner'];
     protected $table = "account_invoice";
@@ -27,6 +27,7 @@ class Invoice extends BaseModel
         $table->string('title');
         $table->integer('partner_id');
         $table->enum('status', ['draft', 'pending', 'partial', 'paid', 'closed', 'void'])->default('draft')->nullable();
+        $table->string('description')->nullable();
         $table->tinyInteger('is_posted')->nullable();
         $table->decimal('total', 20, 2)->nullable();
     }
