@@ -10,7 +10,7 @@ class Invoice extends BaseModel
 {
 
     protected $fillable = [
-        'partner_id', 'description', 'status', 'completed', 'successful'
+        'title', 'partner_id', 'status', 'is_posted', 'total'
     ];
     public $migrationDependancy = ['partner'];
     protected $table = "account_invoice";
@@ -24,8 +24,8 @@ class Invoice extends BaseModel
     public function migration(Blueprint $table)
     {
         $table->increments('id');
+        $table->string('title');
         $table->integer('partner_id');
-        $table->string('description')->nullable();
         $table->enum('status', ['draft', 'pending', 'partial', 'paid', 'closed', 'void'])->default('draft')->nullable();
         $table->tinyInteger('is_posted')->nullable();
         $table->decimal('total', 20, 2)->nullable();

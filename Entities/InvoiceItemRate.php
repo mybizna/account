@@ -10,7 +10,7 @@ class InvoiceItemRate extends BaseModel
 {
 
     protected $fillable = [
-        'invoice_item_id', 'rate_id','title', 'slug', 'value','is_percent',
+        'title', 'slug', 'rate_id', 'invoice_item_id', 'method', 'value', 'params', 'ordering', 'on_total',
     ];
     public $migrationDependancy = ['account_invoice_item', 'account_rate'];
     protected $table = "account_invoice_item_rate";
@@ -24,13 +24,15 @@ class InvoiceItemRate extends BaseModel
     public function migration(Blueprint $table)
     {
         $table->increments('id');
-        $table->integer('invoice_item_id');
+        $table->integer('title');
+        $table->integer('slug');
         $table->integer('rate_id');
-        $table->integer('title')->nullable();
-        $table->integer('slug')->nullable();
+        $table->integer('invoice_item_id');
+        $table->enum('method', ['+', '+%', '-', '-%'])->default('+')->nullable();
         $table->decimal('value', 20, 2)->default(0.00);
-        $table->tinyInteger('is_percent')->nullable();
-
+        $table->string('params')->nullable();
+        $table->tinyInteger('ordering')->nullable();
+        $table->tinyInteger('on_total')->nullable();
     }
 
     public function post_migration(Blueprint $table)

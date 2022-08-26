@@ -14,6 +14,7 @@ class Gateway
         $datasetter->add_data('account', 'gateway', 'slug', [
             "title" => "Cash",
             "slug" => "cash",
+            "instruction" => "",
             "ordering" => 0,
             "is_default" => true,
             "published" => true
@@ -22,6 +23,7 @@ class Gateway
         $datasetter->add_data('account', 'gateway', 'slug', [
             "title" => "Bank",
             "slug" => "bank",
+            "instruction" => "Enter Reference as cheque no. or bank transaction reference no.",
             "ordering" => 0,
             "is_default" => false,
             "published" => true

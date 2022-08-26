@@ -7,7 +7,7 @@ use Modules\Account\Classes\Invoice;
 
 class Payment
 {
-    public function makePayment($partner_id, $description, $amount_paid = 0.00, $gateway_id = '', $do_reconcile_invoices = false)
+    public function makePayment($partner_id, $title, $amount_paid = 0.00, $gateway_id = '', $do_reconcile_invoices = false)
     {
         $invoice = new Invoice();
         DB::beginTransaction();
@@ -20,7 +20,7 @@ class Payment
                     'partner_id' => $partner_id,
                     'gateway_id' => $gateway_id,
                     'amount' => $amount_paid,
-                    'description' => $description,
+                    'title' => $title,
                     'receipt_no' => $receipt_no,
                     'code' => $code,
                 ]);

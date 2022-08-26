@@ -38,15 +38,13 @@ class InvoiceController extends BaseController
                 $ledger_list->push(['value' => $ledger->id, 'label' => $ledger->name]);
             }
 
-            $gateway_list = collect();
-            $gateway_list->push(['value' => '', 'label' => '--- Please Select ---']);
             foreach ($gateways as $key => $gateway) {
-                $gateway_list->push(['value' => $gateway->id, 'label' => $gateway->title]);
+                $gateways[$key]->paid_amount = 0.00;
             }
 
             $result['error'] = 0;
             $result['status'] = 1;
-            $result['gateways'] = $gateway_list;
+            $result['gateways'] = $gateways;
             $result['rates'] = $rates;
             $result['ledgers'] = $ledger_list;
             $result['partner'] = $partner;
@@ -80,13 +78,14 @@ class InvoiceController extends BaseController
         $data = $request->all();
 
         $partner_id =  $data['partner_id'];
-        $payment_method =  $data['payment_method'];
-        $description =  $data['notation'] ?? 'Invoice #';
-        $paid_amount =  $data['paid_amount'] ?? 0.00;
         $items =  $data['items'] ?? [];
+        $status =  $data['status'];
+        $title =  $data['title'] ?? 'Invoice #';
+        $description =  $data['notation'];
+        $gateways =  $data['gateways'];
 
         try {
-            $invoice->generateInvoice($partner_id, $items, $description, $paid_amount, $payment_method);
+            $invoice->generateInvoice($title, $partner_id, $items, $status, $gateways, $description);
         } catch (\Throwable $th) {
             throw $th;
 

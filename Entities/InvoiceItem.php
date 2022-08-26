@@ -10,7 +10,7 @@ class InvoiceItem extends BaseModel
 {
 
     protected $fillable = [
-        'invoice_id', 'transaction_id', 'ledger_id', 'price', 'amount', 'description', 'quantity',
+        'title', 'invoice_id', 'ledger_id', 'price', 'amount', 'quantity',
     ];
     public $migrationDependancy = ['account_invoice', 'account_transaction'];
     protected $table = "account_invoice_item";
@@ -24,12 +24,11 @@ class InvoiceItem extends BaseModel
     public function migration(Blueprint $table)
     {
         $table->increments('id');
+        $table->string('title');
         $table->integer('invoice_id');
-        $table->integer('transaction_id')->nullable();
-        $table->integer('ledger_id')->nullable();
+        $table->integer('ledger_id');
         $table->decimal('price', 20, 2)->default(0.00);
         $table->decimal('amount', 20, 2)->default(0.00);
-        $table->string('description')->nullable();
         $table->integer('quantity')->nullable();
     }
 

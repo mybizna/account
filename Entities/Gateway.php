@@ -10,8 +10,8 @@ class Gateway extends BaseModel
 {
 
     protected $fillable = [
-        'title', 'slug', 'currency_id', 'image', 'url', 'ledger_id',
-        'ordering', 'is_default', 'is_hidden', 'published'
+        'title', 'slug', 'ledger_id', 'currency_id', 'image', 'url',
+        'instruction', 'ordering', 'is_default', 'is_hidden', 'published'
 
     ];
     public $migrationDependancy = ['core_currency', 'account_ledger'];
@@ -32,6 +32,7 @@ class Gateway extends BaseModel
         $table->integer('currency_id')->nullable();
         $table->string('image')->nullable();
         $table->string('url')->nullable();
+        $table->string('instruction')->nullable();
         $table->integer('ordering')->nullable();
         $table->tinyInteger('is_default')->nullable();
         $table->tinyInteger('is_hidden')->nullable();
