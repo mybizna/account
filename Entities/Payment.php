@@ -31,9 +31,9 @@ class Payment extends BaseModel
         $table->integer('gateway_id');
         $table->string('receipt_no')->nullable();
         $table->string('code')->nullable();
-        $table->enum('type', ['in', 'out'])->default('in')->nullable();
-        $table->tinyInteger('is_posted')->nullable();
-        $table->tinyInteger('canceled')->nullable();
+        $table->enum('type', ['in', 'out'])->default('in');
+        $table->tinyInteger('is_posted')->default(false);
+        $table->tinyInteger('canceled')->default(false);
     }
 
     public function post_migration(Blueprint $table)

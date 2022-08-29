@@ -8,7 +8,7 @@ use Modules\Account\Classes\Ledger;
 class Journal
 {
 
-    public function journalEntry($amount, $title, $partner_id, $ledger_id)
+    public function journalEntry($title, $amount, $partner_id, $ledger_id)
     {
         $ledger_cls = new Ledger();
 

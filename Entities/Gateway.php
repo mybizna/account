@@ -34,9 +34,9 @@ class Gateway extends BaseModel
         $table->string('url')->nullable();
         $table->string('instruction')->nullable();
         $table->integer('ordering')->nullable();
-        $table->tinyInteger('is_default')->nullable();
-        $table->tinyInteger('is_hidden')->nullable();
-        $table->tinyInteger('published')->nullable();
+        $table->tinyInteger('is_default')->default(false);
+        $table->tinyInteger('is_hidden')->default(false);
+        $table->tinyInteger('published')->default(false);
     }
 
 

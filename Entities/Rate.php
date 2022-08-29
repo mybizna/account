@@ -31,11 +31,11 @@ class Rate extends BaseModel
         $table->string('slug');
         $table->integer('ledger_id');
         $table->decimal('value', 20, 2);
-        $table->enum('method', ['+', '+%', '-', '-%'])->default('+')->nullable();
+        $table->enum('method', ['+', '+%', '-', '-%'])->default('+');
         $table->string('params')->nullable();
         $table->tinyInteger('ordering')->nullable();
-        $table->tinyInteger('on_total')->nullable();
-        $table->tinyInteger('published')->nullable();
+        $table->tinyInteger('on_total')->default(false);
+        $table->tinyInteger('published')->default(false);
     }
 
     public function post_migration(Blueprint $table)

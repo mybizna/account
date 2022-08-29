@@ -28,11 +28,11 @@ class InvoiceItemRate extends BaseModel
         $table->integer('slug');
         $table->integer('rate_id');
         $table->integer('invoice_item_id');
-        $table->enum('method', ['+', '+%', '-', '-%'])->default('+')->nullable();
+        $table->enum('method', ['+', '+%', '-', '-%'])->default('+');
         $table->decimal('value', 20, 2)->default(0.00);
         $table->string('params')->nullable();
         $table->tinyInteger('ordering')->nullable();
-        $table->tinyInteger('on_total')->nullable();
+        $table->tinyInteger('on_total')->default(false);
     }
 
     public function post_migration(Blueprint $table)

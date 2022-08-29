@@ -96,4 +96,13 @@ class InvoiceController extends BaseController
 
         return response()->json($result);
     }
+
+    public function reconcileInvoices(Request $request)
+    {
+        $invoice = new Invoice();
+
+        $invoice->processInvoices();
+
+        echo 'Invoice reconcilation Complete.';
+    }
 }

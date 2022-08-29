@@ -845,5 +845,13 @@ class Ledger
             "code" => "1510",
             "system" => "1"
         ]);
+
+        $datasetter->add_data('account', 'ledger',  'slug', [
+            "chart_id" =>  $asset_chart_id,
+            "name" => "Bank",
+            "slug" => "bank",
+            "code" => "90",
+            "system" => "0"
+        ]);
     }
 }

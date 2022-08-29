@@ -12,6 +12,7 @@ class Invoice
     public function generateInvoice($title, $partner_id, $items = [], $status = 'draft', $gateways = [], $description = "")
     {
 
+        $ledger = new Ledger();
         $payment = new Payment();
         DB::beginTransaction();
 
@@ -25,12 +26,14 @@ class Invoice
                 ]
             );
 
+            $sales_revenue_id = $ledger->getLedgerId('sales_revenue');
+
             foreach ($items as $item_key => $item) {
                 $invoice_item_id = DB::table('account_invoice_item')->insertGetId(
                     [
                         'title' => $item['title'],
                         'invoice_id' => $invoice_id,
-                        'ledger_id' => $item['ledger_id'],
+                        'ledger_id' => $item['ledger_id'] ? $item['ledger_id'] : $sales_revenue_id,
                         'price' => $item['price'],
                         'amount' => $item['total'],
                         'quantity' => $item['quantity'],
@@ -101,10 +104,14 @@ class Invoice
             ->leftJoin('account_gateway AS ag', 'ag.id', '=', 'ap.gateway_id')
             ->where('ap.partner_id', $partner_id)
             ->where('ap.is_posted', false)
-            ->where('ap.type', 'in')->get();
+            ->where('ap.type', 'in')
+            ->get();
+
         foreach ($payments as $payment_key => $payment) {
             $payments_total = $payments_total + $payment->amount;
             $journal->journalEntry($payment->title, $payment->amount, $payment->partner_id, $payment->ledger_id);
+
+            DB::table('account_payment')->where('id', $payment->id)->update(['is_posted' => true]);
         }
 
         $wallet_id = $ledger->getLedgerId('wallet');
@@ -135,8 +142,8 @@ class Invoice
         // process invoices
         $invoices =  DB::table('account_invoice')
             ->where('partner_id', $partner_id)
-            ->where('status', 'pending')
-            ->orWhere('status', 'partial')
+            ->where('status', '<>', 'draft')
+            ->where('is_posted', false)
             ->orderByDesc('id')->get();
 
         foreach ($invoices as $payment_key => $invoice) {
@@ -222,6 +229,15 @@ class Invoice
             } elseif ($balance < 0) {
                 $journal->journalEntry('Partner Debt of ' . abs($balance), abs($balance), $partner_id, $receivable_id);
             }
+        }
+    }
+
+    public function processInvoices()
+    {
+        $partners = DB::table('partner')->get();
+
+        foreach ($partners as $partner_key => $partner) {
+            $this->reconcileInvoices($partner->id);
         }
     }
 }

@@ -7,3 +7,4 @@ Route::get('ledger/recordselect', 'LedgerController@recordselect');
 Route::get('rate/recordselect', 'RateController@recordselect');
 Route::get('invoice/fetchdata', 'InvoiceController@fetchData');
 Route::post('invoice/savedata', 'InvoiceController@saveData');
+Route::get('invoice/reconcileinvoices', 'InvoiceController@reconcileInvoices');
