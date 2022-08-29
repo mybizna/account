@@ -6,6 +6,8 @@ use Modules\Base\Entities\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
 
+use Wildside\Userstamps\Userstamps;
+
 class Invoice extends BaseModel
 {
 
