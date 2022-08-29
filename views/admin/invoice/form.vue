@@ -316,13 +316,18 @@ export default {
             },
         };
     },
-    created () {
+    updated () {
         var t = this;
 
         this.invoice = {
             id: 'New',
             date_created: '',
         };
+
+        if (Object.prototype.hasOwnProperty.call(t.$router, "params") && Object.prototype.hasOwnProperty.call(t.$router.params, "id")) {
+            alert(t.$router.params.id);
+        }
+
 
         setInterval(function () {
             t.getNow();

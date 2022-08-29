@@ -148,7 +148,7 @@ class Invoice
 
                 foreach ($items as $key => $item) {
                     $amount = $item_total = ($item->quantity) ? $item->price * $item->quantity : $item->price;
-                    $title = ($item->description) ? $item->description : "Item ID:$item->id";
+                    $title = ($item->title) ? $item->title : "Item ID:$item->id";
                     $journal->journalEntry($title, $amount, $invoice->partner_id, $item->ledger_id);
 
                     $item_rates = DB::table('account_invoice_item_rate AS air')
@@ -180,7 +180,8 @@ class Invoice
                     $single_invoice_total = $single_invoice_total + $item_total;
                 }
 
-                $invoice_data = ['is_posted' => true, 'total' => $single_invoice_total];
+                $invoice_data['is_posted'] = true;
+                $invoice_data['total'] =  $single_invoice_total;
             } else {
                 $single_invoice_total = $invoice->total;
             }
@@ -194,7 +195,9 @@ class Invoice
 
             $tmp_payments_total = $tmp_payments_total -  $single_invoice_total;
 
-            DB::table('account_invoice')->where('id', $invoice->id)->update($invoice_data);
+            if (!empty($invoice_data)) {
+                DB::table('account_invoice')->where('id', $invoice->id)->update($invoice_data);
+            }
         }
 
         if ($invoices_total) {
