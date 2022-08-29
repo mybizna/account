@@ -9,7 +9,7 @@ use Modules\Base\Classes\Migration;
 class Journal extends BaseModel
 {
 
-    protected $fillable = ['transaction_id', 'debit', 'credit', 'note', 'particulars'];
+    protected $fillable = ['title', 'partner_id','ledger_id', 'debit', 'credit', 'params'];
     public $migrationDependancy = ['partner', 'account_ledger'];
     protected $table = "account_journal";
 

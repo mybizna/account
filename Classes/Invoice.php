@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\DB;
 use Modules\Account\Classes\Payment;
 use Modules\Account\Classes\Journal;
 use Modules\Account\Classes\Ledger;
+use Modules\Partner\Entities\Partner as DBPartner;
+use Modules\Account\Entities\Invoice as DBInvoice;
+use Modules\Account\Entities\Payment as DBPayment;
+use Modules\Account\Entities\InvoiceItem as DBInvoiceItem;
+use Modules\Account\Entities\InvoiceItemRate as DBInvoiceItemRate;
 
 class Invoice
 {
@@ -17,7 +22,7 @@ class Invoice
         DB::beginTransaction();
 
         try {
-            $invoice_id = DB::table('account_invoice')->insertGetId(
+            $invoice = DBInvoice::create(
                 [
                     'title' => $title,
                     'partner_id' => $partner_id,
@@ -29,10 +34,10 @@ class Invoice
             $sales_revenue_id = $ledger->getLedgerId('sales_revenue');
 
             foreach ($items as $item_key => $item) {
-                $invoice_item_id = DB::table('account_invoice_item')->insertGetId(
+                $invoice_item = DBInvoiceItem::create(
                     [
                         'title' => $item['title'],
-                        'invoice_id' => $invoice_id,
+                        'invoice_id' => $invoice->id,
                         'ledger_id' => $item['ledger_id'] ? $item['ledger_id'] : $sales_revenue_id,
                         'price' => $item['price'],
                         'amount' => $item['total'],
@@ -40,12 +45,12 @@ class Invoice
                     ]
                 );
                 foreach ($item['rates'] as $rate_key => $rate) {
-                    DB::table('account_invoice_item_rate')->insert(
+                    DBInvoiceItemRate::create(
                         [
                             'title' => $rate['title'],
                             'slug' => $rate['slug'],
                             'rate_id' => $rate['id'],
-                            'invoice_item_id' => $invoice_item_id,
+                            'invoice_item_id' => $invoice_item->id,
                             'method' => $rate['method'],
                             'value' => $rate['value'],
                             'params' => $rate['params'],
@@ -66,9 +71,8 @@ class Invoice
             }
 
             if ($description == 'Invoice #') {
-                $description = "Invoice #$invoice_id.";
-                DB::table('account_invoice')
-                    ->where('id', $invoice_id)
+                $description = "Invoice #$invoice->id.";
+                DBInvoice::where('id', $invoice->id)
                     ->update(
                         [
                             'description' => $description,
@@ -81,8 +85,8 @@ class Invoice
 
             DB::commit();
         } catch (\Throwable $th) {
-            throw $th;
             DB::rollback();
+            throw $th;
         }
     }
 
@@ -99,7 +103,7 @@ class Invoice
         $payments_title = '';
 
         // Add all payments to journal entry
-        $payments =  DB::table('account_payment AS ap')
+        $payments =  DBPayment::from('account_payment AS ap')
             ->select('ap.*', 'ag.ledger_id')
             ->leftJoin('account_gateway AS ag', 'ag.id', '=', 'ap.gateway_id')
             ->where('ap.partner_id', $partner_id)
@@ -111,7 +115,7 @@ class Invoice
             $payments_total = $payments_total + $payment->amount;
             $journal->journalEntry($payment->title, $payment->amount, $payment->partner_id, $payment->ledger_id);
 
-            DB::table('account_payment')->where('id', $payment->id)->update(['is_posted' => true]);
+            DBPayment::where('id', $payment->id)->update(['is_posted' => true]);
         }
 
         $wallet_id = $ledger->getLedgerId('wallet');
@@ -140,8 +144,7 @@ class Invoice
         $tmp_payments_total = $payments_total;
 
         // process invoices
-        $invoices =  DB::table('account_invoice')
-            ->where('partner_id', $partner_id)
+        $invoices =  DBInvoice::where('partner_id', $partner_id)
             ->where('status', '<>', 'draft')
             ->where('is_posted', false)
             ->orderByDesc('id')->get();
@@ -151,14 +154,14 @@ class Invoice
             $single_invoice_total = 0;
 
             if ($invoice->is_posted == false) {
-                $items = DB::table('account_invoice_item')->where('invoice_id', $invoice->id)->get();
+                $items = DBInvoiceItem::where('invoice_id', $invoice->id)->get();
 
                 foreach ($items as $key => $item) {
                     $amount = $item_total = ($item->quantity) ? $item->price * $item->quantity : $item->price;
                     $title = ($item->title) ? $item->title : "Item ID:$item->id";
                     $journal->journalEntry($title, $amount, $invoice->partner_id, $item->ledger_id);
 
-                    $item_rates = DB::table('account_invoice_item_rate AS air')
+                    $item_rates = DBInvoiceItemRate::from('account_invoice_item_rate AS air')
                         ->select('air.*', 'at.ledger_id AS rate_ledger_id', 'at.title AS rate_title', 'at.method AS rate_method')
                         ->leftJoin('account_rate AS at', 'at.id', '=', 'air.rate_id')
                         ->where('invoice_item_id', $item->id)
@@ -203,7 +206,7 @@ class Invoice
             $tmp_payments_total = $tmp_payments_total -  $single_invoice_total;
 
             if (!empty($invoice_data)) {
-                DB::table('account_invoice')->where('id', $invoice->id)->update($invoice_data);
+                DBInvoice::where('id', $invoice->id)->update($invoice_data);
             }
         }
 
@@ -234,7 +237,7 @@ class Invoice
 
     public function processInvoices()
     {
-        $partners = DB::table('partner')->get();
+        $partners = DBPartner::take(100)->get();
 
         foreach ($partners as $partner_key => $partner) {
             $this->reconcileInvoices($partner->id);

@@ -4,24 +4,15 @@ namespace Modules\Account\Classes;
 
 
 use Illuminate\Support\Facades\DB;
+use Modules\Account\Classes\Journal;
 
 class Transactions
 {
-    public function postTransaction($amount, $description, $partner_id, $left_ledger_id, $right_ledger_id)
+    public function postTransaction($title, $amount, $partner_id, $left_ledger_id, $right_ledger_id)
     {
-        $left_ledger = DB::table('account_ledger')->where('left_ledger_id', $left_ledger_id)->get();
-        $right_ledger = DB::table('account_ledger')->where('right_ledger_id', $right_ledger_id)->get();
+        $journal = new Journal();
 
-        DB::table('account_invoice_item_rate')->insert(
-            [
-                'amount' => $amount,
-                'description' => $description,
-                'partner_id' => $partner_id,
-                'left_ledger_id' => $left_ledger_id,
-                'right_ledger_id' => $right_ledger_id,
-                'left_chart_of_account_id' => $left_ledger->chart_id,
-                'right_chart_of_account_id' => $right_ledger->chart_id,
-            ]
-        );
+        $journal->journalEntry($title, $amount, $partner_id, $left_ledger_id);
+        $journal->journalEntry($title, $amount, $partner_id, $right_ledger_id);
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Modules\Account\Classes;
 
-use Illuminate\Support\Facades\DB;
 use Modules\Account\Classes\Ledger;
+use Modules\Account\Entities\Journal as DBJournal;
 
 class Journal
 {
@@ -22,7 +22,7 @@ class Journal
             $credit_debit = ($chart == 'asset' || $chart == 'expense') ? 'credit' : 'debit';
         }
 
-        DB::table('account_journal')->insert(
+        DBJournal::create(
             [
                 'title' => $title,
                 'partner_id' => $partner_id,

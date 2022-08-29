@@ -4,6 +4,8 @@ namespace Modules\Account\Classes;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Modules\Account\Entities\Ledger as DBLedger;
+use Modules\Account\Entities\Journal as DBJournal;
 
 class Ledger
 {
@@ -55,7 +57,7 @@ class Ledger
 
     public function getLedgerQuery()
     {
-        return DB::table('account_ledger AS al')
+        return DBLedger::from('account_ledger AS al')
             ->select('al.*', 'ac.slug AS chart_slug')
             ->leftJoin('account_chart_of_account AS ac', 'ac.id', '=', 'al.chart_id');
     }
@@ -68,7 +70,7 @@ class Ledger
             return $ledger_id;
         } else {
             try {
-                $ledger = DB::table('account_ledger')->where('slug', $ledger_slug)->first();
+                $ledger = DBLedger::where('slug', $ledger_slug)->first();
                 $ledger_id = $ledger->id;
                 Cache::put("account_ledger_" . $ledger_slug . "_id", $ledger->id);
 
@@ -90,9 +92,7 @@ class Ledger
         } else {
             try {
                 $ledger = $this->getLedger($ledger_id);
-                $query =  DB::table('account_journal');
-
-                $query->where('ledger_id', $ledger_id);
+                $query =  DBJournal::where('ledger_id', $ledger_id);
 
                 if ($partner_id) {
                     $query->where('partner_id', $partner_id);
@@ -117,7 +117,6 @@ class Ledger
                     'credit' => $credit,
                     'total' => $total,
                 ];
-
             } catch (\Throwable $th) {
                 throw $th;
             }
