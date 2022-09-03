@@ -36,4 +36,3 @@ $this->add_submenu("account", "reports", "Trail Balance", "/account/reports/trai
 //$this->add_submenu("account", "settings", "Tax Rates", "/settings/taxes/tax-rates", 5);
 //$this->add_submenu("account", "settings", "Tax Payments", "/settings/taxes/tax-records", 5);
 //$this->add_submenu("account", "settings", "Tax Rates", "/settings/taxes/tax-rates", 5);
-
