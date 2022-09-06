@@ -12,15 +12,13 @@ $this->add_setting_category("account", "ledger", "Ledger", 1, ['icon' => "fas fa
 
 //$this->add_setting("module", "key", "title","path", "position");
 $this->add_setting("account", "ledger", "Sales Default Ledger", 5, [
-    "name" => "title",
-    "type" => "text",
-    "placeholder" => "Enter Title",
-    "value" => "My Title"
-]);
-
-$this->add_setting("account", "ledger", "Default Description", 5, [
-    "name" =>  "description",
-    "type" =>  "textarea",
-    "placeholder" =>  "Enter Description",
-    "value" =>  "Your Awesome Description is very Good."
+    "name" => "sales_default_ledger",
+    "type" => "recordpicker",
+    "value" => "My Title",
+    "comp_url" => "account/admin/ledger/list.vue",
+    "setting" => [
+        'path_param' => ["account", "ledger"],
+        'fields' => ['first_name', 'last_name', 'email'],
+        'template' => '[first_name] [last_name] - [email]',
+    ]
 ]);
