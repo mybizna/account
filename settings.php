@@ -8,6 +8,7 @@ $sales_revenue_id = $ledger->getLedgerId('sales_revenue');
 
 return [
     'sales_default_ledger' => [
+        "title"=>"Sales Default Ledger",
         "type" => "recordpicker",
         "value" => $sales_revenue_id,
         "comp_url" => "account/admin/ledger/list.vue",
