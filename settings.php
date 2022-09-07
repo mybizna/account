@@ -1,24 +1,21 @@
 <?php
 
-$this->add_module_info("account", [
-    'title' => 'Accounting',
-    'description' => 'Accounting',
-    'icon' => 'fas fa-funnel-dollar',
-    'class_str' => 'text-primary border-primary'
-]);
+use Modules\Account\Classes\Ledger;
 
-//$this->add_setting_category("module", "key", "title", "position", "params");
-$this->add_setting_category("account", "ledger", "Ledger", 1, ['icon' => "fas fa-cogs"]);
+$ledger = new Ledger();
 
-//$this->add_setting("module", "key", "title","path", "position");
-$this->add_setting("account", "ledger", "Sales Default Ledger", 5, [
-    "name" => "sales_default_ledger",
-    "type" => "recordpicker",
-    "value" => "My Title",
-    "comp_url" => "account/admin/ledger/list.vue",
-    "setting" => [
-        'path_param' => ["account", "ledger"],
-        'fields' => ['first_name', 'last_name', 'email'],
-        'template' => '[first_name] [last_name] - [email]',
+$sales_revenue_id = $ledger->getLedgerId('sales_revenue');
+
+return [
+    'sales_default_ledger' => [
+        "type" => "recordpicker",
+        "value" => $sales_revenue_id,
+        "comp_url" => "account/admin/ledger/list.vue",
+        "setting" => [
+            'path_param' => ["account", "ledger"],
+            'fields' => ['name', 'slug', 'chart_id', 'account_chart_of_account__name'],
+            'template' => '[name] ([slug]) - [chart_id.account_chart_of_account__name]',
+
+        ]
     ]
-]);
+];
