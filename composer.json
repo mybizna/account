@@ -12,7 +12,8 @@
     ],
 
     "require": {
-        "composer/installers": "~1.0"
+        "mybizna/core": "^0.5",
+        "mybizna/partner": "^0.5"
     },
     "extra": {
         "laravel": {
