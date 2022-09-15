@@ -4,7 +4,7 @@ $this->add_module_info("account", [
     'title' => 'Accounting',
     'description' => 'Accounting',
     'icon' => 'fas fa-funnel-dollar',
-    'path' => '/account/admin/invoice',
+    'path' => 'account.admin.invoice',
     'class_str'=> 'text-primary border-primary'
 ]);
 
