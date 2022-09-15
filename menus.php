@@ -8,6 +8,7 @@ $this->add_module_info("account", [
     'class_str'=> 'text-primary border-primary'
 ]);
 
+
 //$this->add_menu("module", "key", "title","path", "icon", "position");
 $this->add_menu("account", "invoice", "Invoice", "/account/admin/invoice", "fas fa-cogs", 1);
 $this->add_menu("account", "payment", "Payment", "/account/admin/payment", "fas fa-cogs", 1);
