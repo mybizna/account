@@ -3,20 +3,20 @@
 namespace Modules\Account\Classes;
 
 use Illuminate\Support\Facades\DB;
-use Modules\Account\Classes\Payment;
 use Modules\Account\Classes\Journal;
 use Modules\Account\Classes\Ledger;
-use Modules\Partner\Entities\Partner as DBPartner;
+use Modules\Account\Classes\Payment;
 use Modules\Account\Entities\Invoice as DBInvoice;
-use Modules\Account\Entities\Payment as DBPayment;
 use Modules\Account\Entities\InvoiceItem as DBInvoiceItem;
 use Modules\Account\Entities\InvoiceItemRate as DBInvoiceItemRate;
+use Modules\Account\Entities\Payment as DBPayment;
+use Modules\Partner\Entities\Partner as DBPartner;
 
 class Invoice
 {
     public function generateInvoice($title, $partner_id, $items = [], $status = 'draft', $gateways = [], $description = "")
     {
-
+        $total = 0;
         $ledger = new Ledger();
         $payment = new Payment();
         DB::beginTransaction();
@@ -34,30 +34,46 @@ class Invoice
             $sales_revenue_id = $ledger->getLedgerId('sales_revenue');
 
             foreach ($items as $item_key => $item) {
+                $tmp_total = isset($item['quantity']) && $item['quantity'] ? $item['total'] : $item['price'];
                 $invoice_item = DBInvoiceItem::create(
                     [
                         'title' => $item['title'],
                         'invoice_id' => $invoice->id,
-                        'ledger_id' => $item['ledger_id'] ? $item['ledger_id'] : $sales_revenue_id,
+                        'ledger_id' => isset($item['ledger_id']) && $item['ledger_id'] ? $item['ledger_id'] : $sales_revenue_id,
                         'price' => $item['price'],
-                        'amount' => $item['total'],
-                        'quantity' => $item['quantity'],
+                        'amount' => $total,
+                        'quantity' => isset($item['quantity']) && $item['quantity'] ? $item['quantity'] : 1,
                     ]
                 );
-                foreach ($item['rates'] as $rate_key => $rate) {
-                    DBInvoiceItemRate::create(
-                        [
-                            'title' => $rate['title'],
-                            'slug' => $rate['slug'],
-                            'rate_id' => $rate['id'],
-                            'invoice_item_id' => $invoice_item->id,
-                            'method' => $rate['method'],
-                            'value' => $rate['value'],
-                            'params' => $rate['params'],
-                            'ordering' => $rate['ordering'],
-                            'on_total' => $rate['on_total'],
-                        ]
-                    );
+                if (isset($item['rates'])) {
+                    foreach ($item['rates'] as $rate_key => $rate) {
+                        $value = $rate['value'];
+                        $method = $rate['method'];
+
+                        DBInvoiceItemRate::create(
+                            [
+                                'title' => $rate['title'],
+                                'slug' => $rate['slug'],
+                                'rate_id' => $rate['id'],
+                                'invoice_item_id' => $invoice_item->id,
+                                'method' => $rate['method'],
+                                'value' => $rate['value'],
+                                'params' => $rate['params'],
+                                'ordering' => $rate['ordering'],
+                                'on_total' => $rate['on_total'],
+                            ]
+                        );
+
+                        if ($value != 0) {
+                            if ($method == '-') {
+                                $tmp_total  = $tmp_total -1 * $value;
+                            } elseif ($method == '-%') {
+                                $tmp_total  = $tmp_total -1 * $item_total * $value / 100;
+                            } elseif ($method == '+%') {
+                                $tmp_total = $tmp_total + $item_total * $value / 100;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -81,13 +97,19 @@ class Invoice
                     );
             }
 
+            DBInvoice::where('id', $invoice->id)->update(['total' => $total]);
+
             $this->reconcileInvoices($partner_id);
 
             DB::commit();
-        } catch (\Throwable $th) {
+
+            return $invoice->id;
+            
+        } catch (\Throwable$th) {
             DB::rollback();
             throw $th;
         }
+
     }
 
     public function reconcileInvoices($partner_id)
@@ -103,7 +125,7 @@ class Invoice
         $payments_title = '';
 
         // Add all payments to journal entry
-        $payments =  DBPayment::from('account_payment AS ap')
+        $payments = DBPayment::from('account_payment AS ap')
             ->select('ap.*', 'ag.ledger_id')
             ->leftJoin('account_gateway AS ag', 'ag.id', '=', 'ap.gateway_id')
             ->where('ap.partner_id', $partner_id)
@@ -144,7 +166,7 @@ class Invoice
         $tmp_payments_total = $payments_total;
 
         // process invoices
-        $invoices =  DBInvoice::where('partner_id', $partner_id)
+        $invoices = DBInvoice::where('partner_id', $partner_id)
             ->where('status', '<>', 'draft')
             ->where('is_posted', false)
             ->orderByDesc('id')->get();
@@ -170,7 +192,7 @@ class Invoice
                         ->get();
                     foreach ($item_rates as $item_key => $item_rate) {
                         $value = $calc_amount = ($item_rate->value) ? $item_rate->value : 0;
-                        $title =  ($item_rate->title) ? $item_rate->title : "Item ID:$item->id Rate:$item_rate->rate_title";
+                        $title = ($item_rate->title) ? $item_rate->title : "Item ID:$item->id Rate:$item_rate->rate_title";
 
                         if ($value != 0) {
                             if ($item_rate->rate_method == '-') {
@@ -178,7 +200,7 @@ class Invoice
                             } elseif ($item_rate->rate_method == '-%') {
                                 $calc_amount = -1 * $item_total * $value / 100;
                             } elseif ($item_rate->rate_method == '+%') {
-                                $calc_amount =  $item_total * $value / 100;
+                                $calc_amount = $item_total * $value / 100;
                             }
                         }
 
@@ -191,11 +213,10 @@ class Invoice
                 }
 
                 $invoice_data['is_posted'] = true;
-                $invoice_data['total'] =  $single_invoice_total;
+                $invoice_data['total'] = $single_invoice_total;
             } else {
                 $single_invoice_total = $invoice->total;
             }
-
 
             if ($tmp_payments_total > $single_invoice_total) {
                 $invoice_data['status'] = 'paid';
@@ -203,7 +224,7 @@ class Invoice
                 $invoice_data['status'] = 'partial';
             }
 
-            $tmp_payments_total = $tmp_payments_total -  $single_invoice_total;
+            $tmp_payments_total = $tmp_payments_total - $single_invoice_total;
 
             if (!empty($invoice_data)) {
                 DBInvoice::where('id', $invoice->id)->update($invoice_data);
@@ -242,5 +263,11 @@ class Invoice
         foreach ($partners as $partner_key => $partner) {
             $this->reconcileInvoices($partner->id);
         }
+    }
+
+    public function deleteInvoices($invoice_id)
+    {
+        DBInvoice::where('id', $$invoice_id)->delete();
+        DBInvoiceItem::where('invoice_id', $invoice_id)->delete();
     }
 }
