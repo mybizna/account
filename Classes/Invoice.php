@@ -267,7 +267,7 @@ class Invoice
 
     public function deleteInvoices($invoice_id)
     {
-        DBInvoice::where('id', $$invoice_id)->delete();
+        DBInvoice::where('id', $invoice_id)->delete();
         DBInvoiceItem::where('invoice_id', $invoice_id)->delete();
     }
 }
