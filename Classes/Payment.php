@@ -3,11 +3,73 @@
 namespace Modules\Account\Classes;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Modules\Account\Classes\Invoice;
 use Modules\Account\Entities\Payment as DBPayment;
+use Modules\Account\Entities\Gateway;
 
 class Payment
 {
+    public function getGateway($gateway_id)
+    {
+        if (Cache::has("account_payment_" . $gateway_id)) {
+            $gateway = Cache::get("account_payment_" . $gateway_id);
+            return $gateway;
+        } else {
+            try {
+                $gateway = Gateway::where('id', $gateway_id)->first();
+
+                Cache::put("account_payment_" . $gateway_id, $gateway);
+                //code...
+                return $gateway;
+            } catch (\Throwable $th) {
+                throw $th;
+            }
+        }
+
+        return false;
+    }
+
+    public function getGatewayBySlug($gateway_slug)
+    {
+        if (Cache::has("account_payment_" . $gateway_slug)) {
+            $gateway = Cache::get("account_payment_" . $gateway_slug);
+            return $gateway;
+        } else {
+            try {
+                $gateway = Gateway::where('slug', $gateway_slug)->first();
+
+                Cache::put("account_payment_" . $gateway_slug, $gateway);
+                //code...
+                return $gateway;
+            } catch (\Throwable $th) {
+                throw $th;
+            }
+        }
+
+        return false;
+    }
+
+    public function getPayment($payment_id)
+    {
+        if (Cache::has("account_payment_" . $payment_id)) {
+            $payment = Cache::get("account_payment_" . $payment_id);
+            return $payment;
+        } else {
+            try {
+                $payment = DBPayment::where('al.id', $payment_id)->first();
+
+                Cache::put("account_payment_" . $payment_id, $payment);
+                //code...
+                return $payment;
+            } catch (\Throwable $th) {
+                throw $th;
+            }
+        }
+
+        return false;
+    }
+
     public function addPayment($partner_id, $title, $amount_paid = 0.00, $gateway_id = '', $do_reconcile_invoices = false)
     {
         DB::beginTransaction();
