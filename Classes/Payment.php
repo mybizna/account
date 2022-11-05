@@ -2,11 +2,11 @@
 
 namespace Modules\Account\Classes;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Modules\Account\Classes\Invoice;
-use Modules\Account\Entities\Payment as DBPayment;
 use Modules\Account\Entities\Gateway;
+use Modules\Account\Entities\Payment as DBPayment;
 
 class Payment
 {
@@ -22,7 +22,7 @@ class Payment
                 Cache::put("account_payment_" . $gateway_id, $gateway);
                 //code...
                 return $gateway;
-            } catch (\Throwable $th) {
+            } catch (\Throwable$th) {
                 throw $th;
             }
         }
@@ -42,7 +42,7 @@ class Payment
                 Cache::put("account_payment_" . $gateway_slug, $gateway);
                 //code...
                 return $gateway;
-            } catch (\Throwable $th) {
+            } catch (\Throwable$th) {
                 throw $th;
             }
         }
@@ -62,7 +62,7 @@ class Payment
                 Cache::put("account_payment_" . $payment_id, $payment);
                 //code...
                 return $payment;
-            } catch (\Throwable $th) {
+            } catch (\Throwable$th) {
                 throw $th;
             }
         }
@@ -70,39 +70,50 @@ class Payment
         return false;
     }
 
-    public function addPayment($partner_id, $title, $amount_paid = 0.00, $gateway_id = '', $do_reconcile_invoices = false)
+    public function addPayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $do_reconcile_invoices = false, $ledger_id = false, $invoice_id = false)
     {
         DB::beginTransaction();
         try {
-            $this->makePayment($partner_id, $title, $amount_paid, $gateway_id, $do_reconcile_invoices);
+            $this->makePayment($partner_id, $title, $amount, $gateway_id, $do_reconcile_invoices, $ledger_id, $invoice_id);
             DB::commit();
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             DB::rollback();
             throw $th;
         }
     }
-    public function makePayment($partner_id, $title, $amount_paid = 0.00, $gateway_id = '', $do_reconcile_invoices = false)
+    public function makePayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $do_reconcile_invoices = false, $ledger_id = false, $invoice_id = false)
     {
         $invoice = new Invoice();
 
         $receipt_no = $code = rand(1000, 9999) . substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyz"), 0, 6);
 
         try {
-            if ($amount_paid > 0) {
-                DBPayment::create([
+            if ($amount > 0) {
+                $data = [
                     'partner_id' => $partner_id,
                     'gateway_id' => $gateway_id,
-                    'amount' => $amount_paid,
+                    'amount' => $amount,
                     'title' => $title,
                     'receipt_no' => $receipt_no,
                     'code' => $code,
-                ]);
+                ];
+
+                if ($ledger_id) {
+                    $data['ledger_id'] = $ledger_id;
+                } else {
+                    $ledger_cls = new Ledger();
+
+                    $ledger = $ledger_cls->getLedgerBySlug('cash');
+                    $data['ledger_id'] = $ledger->id;
+                }
+
+                DBPayment::create();
             }
 
             if ($do_reconcile_invoices) {
-                $invoice->reconcileInvoices($partner_id);
+                $invoice->reconcileInvoices($partner_id, $invoice_id);
             }
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             throw $th;
         }
     }

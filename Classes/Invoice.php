@@ -34,7 +34,8 @@ class Invoice
             $sales_revenue_id = $ledger->getLedgerId('sales_revenue');
 
             foreach ($items as $item_key => $item) {
-                $tmp_total = isset($item['quantity']) && $item['quantity'] ? $item['total'] : $item['price'];
+                $tmp_total = isset($item['quantity']) && $item['quantity'] > 1 ? $item['total'] : $item['price'];
+
                 $invoice_item = DBInvoiceItem::create(
                     [
                         'title' => $item['title'],
@@ -45,6 +46,7 @@ class Invoice
                         'quantity' => isset($item['quantity']) && $item['quantity'] ? $item['quantity'] : 1,
                     ]
                 );
+
                 if (isset($item['rates'])) {
                     foreach ($item['rates'] as $rate_key => $rate) {
                         $value = $rate['value'];
@@ -66,15 +68,17 @@ class Invoice
 
                         if ($value != 0) {
                             if ($method == '-') {
-                                $tmp_total  = $tmp_total -1 * $value;
+                                $tmp_total = $tmp_total - 1 * $value;
                             } elseif ($method == '-%') {
-                                $tmp_total  = $tmp_total -1 * $item_total * $value / 100;
+                                $tmp_total = $tmp_total - 1 * $item_total * $value / 100;
                             } elseif ($method == '+%') {
                                 $tmp_total = $tmp_total + $item_total * $value / 100;
                             }
                         }
                     }
                 }
+
+                $total = $total + $tmp_total;
             }
 
             foreach ($gateways as $item_key => $gateway) {
@@ -99,12 +103,12 @@ class Invoice
 
             DBInvoice::where('id', $invoice->id)->update(['total' => $total]);
 
-            $this->reconcileInvoices($partner_id);
+            $this->reconcileInvoices($partner_id, $invoice->id);
 
             DB::commit();
 
             return $invoice->id;
-            
+
         } catch (\Throwable$th) {
             DB::rollback();
             throw $th;
@@ -112,7 +116,7 @@ class Invoice
 
     }
 
-    public function reconcileInvoices($partner_id)
+    public function reconcileInvoices($partner_id, $invoice_id = false)
     {
         $journal = new Journal();
         $ledger = new Ledger();
@@ -166,10 +170,7 @@ class Invoice
         $tmp_payments_total = $payments_total;
 
         // process invoices
-        $invoices = DBInvoice::where('partner_id', $partner_id)
-            ->where('status', '<>', 'draft')
-            ->where('is_posted', false)
-            ->orderByDesc('id')->get();
+        $invoices = $this->getInvoices($partner_id, $invoice_id);
 
         foreach ($invoices as $payment_key => $invoice) {
             $invoice_data = [];
@@ -229,6 +230,8 @@ class Invoice
             if (!empty($invoice_data)) {
                 DBInvoice::where('id', $invoice->id)->update($invoice_data);
             }
+
+            $invoices_total = $invoices_total + $single_invoice_total;
         }
 
         if ($invoices_total) {
@@ -248,12 +251,34 @@ class Invoice
 
             $balance = $payments_total - $invoices_total;
 
+            if ($invoice_id && $balance) {
+                $this->reconcileInvoices($partner_id);
+            }
+
             if ($balance > 0) {
                 $journal->journalEntry('Credit to wallet worth ' . abs($balance), abs($balance), $partner_id, $wallet_id);
             } elseif ($balance < 0) {
                 $journal->journalEntry('Partner Debt of ' . abs($balance), abs($balance), $partner_id, $receivable_id);
             }
         }
+    }
+    public function getInvoices($partner_id, $invoice_id = false)
+    {
+        if ($invoice_id) {
+            DBInvoice::where('id', $invoice_id)->update(['status' => 'pending']);
+        }
+
+        $invoices_qry = DBInvoice::where('partner_id', $partner_id)
+            ->where('status', '<>', 'draft')
+            ->where('is_posted', false);
+
+        if ($invoice_id) {
+            $invoices_qry->where('id', $invoice_id);
+        }
+
+        $invoices = $invoices_qry->orderByDesc('id')->get();
+
+        return $invoices;
     }
 
     public function processInvoices()
