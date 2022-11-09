@@ -2,7 +2,7 @@
     "name": "mybizna/account",
     "description": "",
     "type": "asgard-module",
-    "version": "0.8.7",
+    "version": "0.8.8",
     "authors": [ 
         {
             "name": "Dedan Irungu",
