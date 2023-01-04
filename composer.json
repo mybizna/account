@@ -1,0 +1,35 @@
+{
+  "name": "mybizna/base",
+  "description": "",
+  "type": "asgard-module",
+  "version": "1.0.7",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Mybizna",
+      "homepage": "https://mybizna.com",
+      "email": "info@mybizna.com"
+    },
+    {
+      "name": "Dedan Irungu",
+      "email": "dedanirungu@gmail.com"
+    }
+  ],
+  "require": {
+    "composer/installers": "~1.0",
+    "mybizna/lucid": "^1.0",
+    "nwidart/laravel-modules": "^8.3",
+    "wildside/userstamps": "^2.2"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [],
+      "aliases": {}
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Modules\\Base\\": ""
+    }
+  }
+}
