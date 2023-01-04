@@ -1,8 +1,8 @@
 {
-  "name": "mybizna/base",
+  "name": "mybizna/account",
   "description": "",
   "type": "asgard-module",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "license": "GPL-3.0-or-later",
   "authors": [
     {
@@ -16,10 +16,8 @@
     }
   ],
   "require": {
-    "composer/installers": "~1.0",
-    "mybizna/lucid": "^1.0",
-    "nwidart/laravel-modules": "^8.3",
-    "wildside/userstamps": "^2.2"
+    "mybizna/core": "^1.0.0",
+    "mybizna/partner": "^1.0.0"
   },
   "extra": {
     "laravel": {
@@ -29,7 +27,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Modules\\Base\\": ""
+      "Modules\\Account\\": ""
     }
   }
 }
