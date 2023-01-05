@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class Rate
 {
 
-    public $ordering = 7;
+    public $ordering = 4;
 
     public function data(Datasetter $datasetter)
     {

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class Gateway
 {
 
-    public $ordering = 1;
+    public $ordering = 3;
 
     public function data(Datasetter $datasetter)
     {
