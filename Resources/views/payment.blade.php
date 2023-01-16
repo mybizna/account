@@ -12,20 +12,19 @@
 
                 <ul
                     class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
-                    <li class="mr-2">
-                        <a href="#" onclick="openCity(event, 'STKPUSH')" aria-current="page"
-                            class="tablinks inline-block p-4 rounded-t-lg dark:hover:bg-gray-800 dark:hover:text-gray-300 text-blue-600 bg-gray-100 ">STK
-                            Push</a>
-                    </li>
-                    <li class="mr-2">
-                        <a href="#" onclick="openCity(event, 'TILLNO')"
-                            class="tablinks inline-block p-4 rounded-t-lg dark:hover:bg-gray-800 dark:hover:text-gray-300">Till
-                            No</a>
-                    </li>
-                    <li class="mr-2">
-                        <a href="#" onclick="openCity(event, 'PAYBILL')"
-                            class="tablinks inline-block p-4 rounded-t-lg dark:hover:bg-gray-800 dark:hover:text-gray-300">Paybill</a>
-                    </li>
+
+                    @foreach ($gateways as $gateway)
+                        @foreach ($gateway->tabs as $tab)
+                            <li class="mr-2">
+                                <a href="#" onclick="openCity(event, {{ $tab['slug'] }})" aria-current="page"
+                                    class="tablinks inline-block p-4 rounded-t-lg dark:hover:bg-gray-800 dark:hover:text-gray-300 text-blue-600 bg-gray-100 ">
+                                    {{ $tab['title'] }}
+                                </a>
+                            </li>
+                            <p>This is user {{ $user->id }}</p>
+                        @endforeach
+                    @endforeach
+                    
                 </ul>
 
 
@@ -34,7 +33,7 @@
                     <form method="POST" action="{{ url(route('isp_access_stkpush')) }}">
                         @csrf
 
-                        <h2 class="text-xl text-center pb-5">MPesa STK Push</h2>
+                        <h2 class="text-xl text-center pb-3">MPesa STK Push</h2>
 
                         <p class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Please Enter you <b
                                 class="text-green-500">Phone Number</b> that you would like us to send <b
@@ -77,7 +76,7 @@
                     <form method="POST" action="{{ url(route('isp_access_tillno')) }}">
                         @csrf
 
-                        <h2 class="text-xl text-center pb-5">TILL No</h2>
+                        <h2 class="text-xl text-center pb-3">TILL No</h2>
 
                         <p class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Please follow the steps shown
                             below to make your payment using MPesa:</p>
@@ -142,7 +141,7 @@
                     <form method="POST" action="{{ url(route('isp_access_paybill')) }}">
                         @csrf
 
-                        <h2 class="text-xl text-center pb-5">Paybill No</h2>
+                        <h2 class="text-xl text-center pb-3">Paybill No</h2>
 
                         <p class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Please follow the steps shown
                             below to make your payment using MPesa:</p>

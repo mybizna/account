@@ -26,26 +26,26 @@ class Payment
 
     public function getGateways($show_hidden = false)
     {
-        if (Cache::has("account_payment_gateways_" . (int) $show_hidden)) {
-            $gateways = Cache::get("account_payment_gateways" . (int) $show_hidden);
-            return $gateways;
-        } else {
-            try {
-                $gateways_qry = Gateway::where('published', true);
-                
-                if (!$show_hidden) {
-                    $gateways_qry->where('is_hidden', false);
-                }
-                
-                $gateways = $gateways_qry->get();
-                
-                Cache::put("account_payment_gateways" . (int) $show_hidden, $gateways);
-                //code...
-                return $gateways;
-            } catch (\Throwable$th) {
-                throw $th;
+        $gateways_qry = Gateway::where('published', true);
+
+        if (!$show_hidden) {
+            $gateways_qry->where('is_hidden', false);
+        }
+
+        $gateways = $gateways_qry->get();
+
+        foreach ($gateways as $key => $gateway) {
+            
+            $class_name = $this->getClassName($gateway->module);
+            $gateway->tabs = $class_name->getGatewayTab($gateway);
+
+            if(!isset($gateway->tabs)){
+                $gateway->tabs = [];
             }
         }
+
+        return $gateways;
+
     }
 
     public function getGateway($gateway_id)
@@ -154,5 +154,17 @@ class Payment
         } catch (\Throwable$th) {
             throw $th;
         }
+    }
+
+    private function getClassName($module)
+    {
+        $classname = 'Modules\\' . ucfirst($module) . '\Classes\Gateway';
+
+        if (class_exists($classname)) {
+            return new $classname();
+        } else {
+            throw new \Exception("class $classname not found.", 1);
+
+        };
     }
 }

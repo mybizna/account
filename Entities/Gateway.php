@@ -2,16 +2,16 @@
 
 namespace Modules\Account\Entities;
 
-use Modules\Base\Entities\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
+use Modules\Base\Entities\BaseModel;
 
 class Gateway extends BaseModel
 {
 
     protected $fillable = [
         'title', 'slug', 'ledger_id', 'currency_id', 'image', 'url',
-        'instruction', 'ordering', 'is_default', 'is_hidden', 'published'
+        'instruction', 'module', 'ordering', 'is_default', 'is_hidden', 'published',
 
     ];
     public $migrationDependancy = ['core_currency', 'account_ledger'];
@@ -32,13 +32,13 @@ class Gateway extends BaseModel
         $table->integer('currency_id')->nullable();
         $table->string('image')->nullable();
         $table->string('url')->nullable();
+        $table->string('module')->nullable();
         $table->string('instruction')->nullable();
         $table->integer('ordering')->nullable();
         $table->tinyInteger('is_default')->default(false);
         $table->tinyInteger('is_hidden')->default(false);
         $table->tinyInteger('published')->default(false);
     }
-
 
     public function post_migration(Blueprint $table)
     {
