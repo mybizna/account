@@ -280,6 +280,12 @@ class Invoice
 
         return $invoices;
     }
+    public function getInvoice($invoice_id)
+    {
+        $invoice = DBInvoice::where('id', $invoice_id)->first();
+
+        return $invoice;
+    }
 
     public function processInvoices()
     {

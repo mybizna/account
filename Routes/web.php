@@ -10,3 +10,5 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/payment/{invoice_id}', 'PaymentController@payment')->name('account_payment');

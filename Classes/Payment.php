@@ -2,6 +2,8 @@
 
 namespace Modules\Account\Classes;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Modules\Account\Classes\Invoice;
@@ -10,16 +12,52 @@ use Modules\Account\Entities\Payment as DBPayment;
 
 class Payment
 {
+    public function getUser($user_id = '')
+    {
+        if ($user_id) {
+            $user = User::where(['id' => $user_id])->first();
+            return $user;
+        }
+
+        $user = Auth::user();
+
+        return $user;
+    }
+
+    public function getGateways($show_hidden = false)
+    {
+        if (Cache::has("account_payment_gateways_" . (int) $show_hidden)) {
+            $gateways = Cache::get("account_payment_gateways" . (int) $show_hidden);
+            return $gateways;
+        } else {
+            try {
+                $gateways_qry = Gateway::where('published', true);
+                
+                if (!$show_hidden) {
+                    $gateways_qry->where('is_hidden', false);
+                }
+                
+                $gateways = $gateways_qry->get();
+                
+                Cache::put("account_payment_gateways" . (int) $show_hidden, $gateways);
+                //code...
+                return $gateways;
+            } catch (\Throwable$th) {
+                throw $th;
+            }
+        }
+    }
+
     public function getGateway($gateway_id)
     {
-        if (Cache::has("account_payment_" . $gateway_id)) {
-            $gateway = Cache::get("account_payment_" . $gateway_id);
+        if (Cache::has("account_payment_gateway_" . $gateway_id)) {
+            $gateway = Cache::get("account_payment_gateway_" . $gateway_id);
             return $gateway;
         } else {
             try {
                 $gateway = Gateway::where('id', $gateway_id)->first();
 
-                Cache::put("account_payment_" . $gateway_id, $gateway);
+                Cache::put("account_payment_gateway_" . $gateway_id, $gateway);
                 //code...
                 return $gateway;
             } catch (\Throwable$th) {
@@ -32,14 +70,14 @@ class Payment
 
     public function getGatewayBySlug($gateway_slug)
     {
-        if (Cache::has("account_payment_" . $gateway_slug)) {
-            $gateway = Cache::get("account_payment_" . $gateway_slug);
+        if (Cache::has("account_payment_gateway_" . $gateway_slug)) {
+            $gateway = Cache::get("account_payment_gateway_" . $gateway_slug);
             return $gateway;
         } else {
             try {
                 $gateway = Gateway::where('slug', $gateway_slug)->first();
 
-                Cache::put("account_payment_" . $gateway_slug, $gateway);
+                Cache::put("account_payment_gateway_" . $gateway_slug, $gateway);
                 //code...
                 return $gateway;
             } catch (\Throwable$th) {
