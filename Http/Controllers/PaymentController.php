@@ -18,7 +18,7 @@ class PaymentController extends BaseController
         $payment = new Payment();
 
         $data['invoice'] = $invoice->getInvoice($invoice_id);
-        $data['gateways'] = $payment->getGateways();
+        $data['gateways'] = $payment->getGateways(invoice:$data['invoice']);
         $data['user'] = $payment->getUser($data['invoice']->user_id);
         
         

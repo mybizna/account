@@ -28,6 +28,8 @@ class Invoice extends BaseModel
         $table->increments('id');
         $table->string('title');
         $table->integer('partner_id');
+        $table->string('module')->default('Account');
+        $table->string('model')->default('Invoice');
         $table->enum('status', ['draft', 'pending', 'partial', 'paid', 'closed', 'void'])->default('draft')->nullable();
         $table->string('description')->nullable();
         $table->tinyInteger('is_posted')->default(false);

@@ -24,7 +24,7 @@ class Payment
         return $user;
     }
 
-    public function getGateways($show_hidden = false)
+    public function getGateways($show_hidden = false, $invoice = false)
     {
         $gateways_qry = Gateway::where('published', true);
 
@@ -35,11 +35,14 @@ class Payment
         $gateways = $gateways_qry->get();
 
         foreach ($gateways as $key => $gateway) {
-            
-            $class_name = $this->getClassName($gateway->module);
-            $gateway->tabs = $class_name->getGatewayTab($gateway);
 
-            if(!isset($gateway->tabs)){
+            $class_name = $this->getClassName($gateway->module);
+
+            if ($invoice) {
+                $gateway->tabs = $class_name->getGatewayTab($gateway, $invoice);
+            }
+
+            if (!isset($gateway->tabs)) {
                 $gateway->tabs = [];
             }
         }
@@ -110,17 +113,23 @@ class Payment
 
     public function addPayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $do_reconcile_invoices = false, $ledger_id = false, $invoice_id = false)
     {
+        $payment = '';
+
         DB::beginTransaction();
         try {
-            $this->makePayment($partner_id, $title, $amount, $gateway_id, $do_reconcile_invoices, $ledger_id, $invoice_id);
+            $payment = $this->makePayment($partner_id, $title, $amount, $gateway_id, $do_reconcile_invoices, $ledger_id, $invoice_id);
             DB::commit();
         } catch (\Throwable$th) {
             DB::rollback();
             throw $th;
         }
+
+        return $payment;
     }
     public function makePayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $do_reconcile_invoices = false, $ledger_id = false, $invoice_id = false)
     {
+        $payment = '';
+
         $invoice = new Invoice();
 
         $receipt_no = $code = rand(1000, 9999) . substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyz"), 0, 6);
@@ -145,7 +154,7 @@ class Payment
                     $data['ledger_id'] = $ledger->id;
                 }
 
-                DBPayment::create();
+                $payment = DBPayment::create($data);
             }
 
             if ($do_reconcile_invoices) {
@@ -154,6 +163,8 @@ class Payment
         } catch (\Throwable$th) {
             throw $th;
         }
+
+        return $payment;
     }
 
     private function getClassName($module)

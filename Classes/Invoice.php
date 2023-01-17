@@ -14,7 +14,7 @@ use Modules\Partner\Entities\Partner as DBPartner;
 
 class Invoice
 {
-    public function generateInvoice($title, $partner_id, $items = [], $status = 'draft', $gateways = [], $description = "")
+    public function generateInvoice($title, $partner_id, $items = [], $status = 'draft', $gateways = [], $description = "", $module = "Account", $model = "invoice", $source_id = '')
     {
         $total = 0;
         $ledger = new Ledger();
@@ -44,7 +44,10 @@ class Invoice
                         'price' => $item['price'],
                         'amount' => $total,
                         'quantity' => isset($item['quantity']) && $item['quantity'] ? $item['quantity'] : 1,
-                    ]
+                        'module'=> $item['quantity'] ?? $module, 
+                        'model'=>$item['quantity'] ?? $model, 
+                        'source_id'=>$item['quantity'] ?? $source_id,
+                        ]
                 );
 
                 if (isset($item['rates'])) {
