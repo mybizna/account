@@ -38,6 +38,7 @@ class Ledger
 
     public function getLedgerBySlug($ledger_slug)
     {
+      
         if (Cache::has("account_ledger_" . $ledger_slug)) {
             $ledger = Cache::get("account_ledger_" . $ledger_slug);
             return $ledger;
