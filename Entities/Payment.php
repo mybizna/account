@@ -2,18 +2,18 @@
 
 namespace Modules\Account\Entities;
 
-use Modules\Base\Entities\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
+use Modules\Base\Entities\BaseModel;
 
 class Payment extends BaseModel
 {
 
     protected $fillable = [
         'title', 'amount', 'partner_id', 'gateway_id', 'receipt_no',
-        'code', "type", 'is_posted', 'canceled'
+        'code', "type", 'is_posted', 'canceled',
     ];
-    public $migrationDependancy = ['account_gateway'];
+    public $migrationDependancy = ['account_gateway', 'account_ledger', 'partner'];
     protected $table = "account_payment";
 
     /**
@@ -27,6 +27,7 @@ class Payment extends BaseModel
         $table->increments('id');
         $table->string('title');
         $table->decimal('amount', 20, 2);
+        $table->integer('ledger_id');
         $table->integer('partner_id');
         $table->integer('gateway_id');
         $table->string('receipt_no')->nullable();
@@ -42,8 +43,8 @@ class Payment extends BaseModel
             $table->foreign('gateway_id')->references('id')->on('account_gateway')->nullOnDelete();
         }
 
-        if (Migration::checkKeyExist('account_payment', 'transaction_id')) {
-            $table->foreign('transaction_id')->references('id')->on('account_transaction')->nullOnDelete();
+        if (Migration::checkKeyExist('account_payment', 'ledger_id')) {
+            $table->foreign('ledger_id')->references('id')->on('account_ledger')->nullOnDelete();
         }
 
         if (Migration::checkKeyExist('account_payment', 'invoice_id')) {

@@ -114,27 +114,21 @@ class Payment
     public function addPayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $do_reconcile_invoices = false, $ledger_id = false, $invoice_id = false)
     {
         $payment = '';
-
-        DB::beginTransaction();
-        try {
-            $payment = $this->makePayment($partner_id, $title, $amount, $gateway_id, $do_reconcile_invoices, $ledger_id, $invoice_id);
-            DB::commit();
-        } catch (\Throwable$th) {
-            DB::rollback();
-            throw $th;
-        }
+       
+        $payment = $this->makePayment($partner_id, $title, $amount, $gateway_id, $do_reconcile_invoices, $ledger_id, $invoice_id);
 
         return $payment;
     }
     public function makePayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $do_reconcile_invoices = false, $ledger_id = false, $invoice_id = false)
     {
         $payment = '';
-
+        
         $invoice = new Invoice();
 
         $receipt_no = $code = rand(1000, 9999) . substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyz"), 0, 6);
-
+       
         try {
+           
             if ($amount > 0) {
                 $data = [
                     'partner_id' => $partner_id,
@@ -154,6 +148,7 @@ class Payment
                     $data['ledger_id'] = $ledger->id;
                 }
 
+                
                 $payment = DBPayment::create($data);
             }
 

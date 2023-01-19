@@ -10,6 +10,8 @@ use Modules\Account\Entities\Invoice as DBInvoice;
 use Modules\Account\Entities\InvoiceItem as DBInvoiceItem;
 use Modules\Account\Entities\InvoiceItemRate as DBInvoiceItemRate;
 use Modules\Account\Entities\Payment as DBPayment;
+use Modules\Account\Events\InvoiceItemPaid;
+use Modules\Account\Events\InvoicePaid;
 use Modules\Partner\Entities\Partner as DBPartner;
 
 class Invoice
@@ -35,9 +37,9 @@ class Invoice
             $sales_revenue_id = $ledger->getLedgerId('sales_revenue');
 
             foreach ($items as $item_key => $item) {
-                
+
                 $tmp_total = isset($item['quantity']) && $item['quantity'] > 1 ? $item['total'] : $item['price'];
-                
+
                 $tmp_data = [
                     'title' => $item['title'],
                     'invoice_id' => $invoice->id,
@@ -47,19 +49,19 @@ class Invoice
                     'quantity' => isset($item['quantity']) && $item['quantity'] ? $item['quantity'] : 1,
                 ];
 
-                if($item['module']){
-                    $tmp_data['module']  = ucfirst($item['module']);
+                if ($item['module']) {
+                    $tmp_data['module'] = ucfirst($item['module']);
                 }
 
-                if($item['model']){
-                    $tmp_data['model']  = ucfirst($item['model']);
+                if ($item['model']) {
+                    $tmp_data['model'] = ucfirst($item['model']);
                 }
 
-                if($item['item_id']){
-                    $tmp_data['item_id']  = $item['item_id'];
+                if ($item['item_id']) {
+                    $tmp_data['item_id'] = $item['item_id'];
                 }
 
-                $invoice_item = DBInvoiceItem::create( $tmp_total);
+                $invoice_item = DBInvoiceItem::create($tmp_total);
 
                 if (isset($item['rates'])) {
                     foreach ($item['rates'] as $rate_key => $rate) {
@@ -190,8 +192,9 @@ class Invoice
             $invoice_data = [];
             $single_invoice_total = 0;
 
+            $items = DBInvoiceItem::where('invoice_id', $invoice->id)->get();
+
             if ($invoice->is_posted == false) {
-                $items = DBInvoiceItem::where('invoice_id', $invoice->id)->get();
 
                 foreach ($items as $key => $item) {
                     $amount = $item_total = ($item->quantity) ? $item->price * $item->quantity : $item->price;
@@ -243,6 +246,13 @@ class Invoice
 
             if (!empty($invoice_data)) {
                 DBInvoice::where('id', $invoice->id)->update($invoice_data);
+            }
+
+            if ($invoice_data['status'] == 'paid') {
+                event(new InvoicePaid($invoice));
+                foreach ($items as $key => $item) {
+                    event(new InvoiceItemPaid($invoice, $item));
+                }
             }
 
             $invoices_total = $invoices_total + $single_invoice_total;
