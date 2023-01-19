@@ -29,6 +29,9 @@ class InvoiceItem extends BaseModel
         $table->integer('ledger_id');
         $table->decimal('price', 20, 2)->default(0.00);
         $table->decimal('amount', 20, 2)->default(0.00);
+        $table->string('module')->nullable();
+        $table->string('model')->nullable();
+        $table->integer('item_id')->nullable();
         $table->integer('quantity')->nullable();
     }
 

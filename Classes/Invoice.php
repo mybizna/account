@@ -14,11 +14,12 @@ use Modules\Partner\Entities\Partner as DBPartner;
 
 class Invoice
 {
-    public function generateInvoice($title, $partner_id, $items = [], $status = 'draft', $gateways = [], $description = "", $module = "Account", $model = "invoice", $source_id = '')
+    public function generateInvoice($title, $partner_id, $items = [], $status = 'draft', $gateways = [], $description = "")
     {
         $total = 0;
         $ledger = new Ledger();
         $payment = new Payment();
+
         DB::beginTransaction();
 
         try {
@@ -34,21 +35,31 @@ class Invoice
             $sales_revenue_id = $ledger->getLedgerId('sales_revenue');
 
             foreach ($items as $item_key => $item) {
+                
                 $tmp_total = isset($item['quantity']) && $item['quantity'] > 1 ? $item['total'] : $item['price'];
+                
+                $tmp_data = [
+                    'title' => $item['title'],
+                    'invoice_id' => $invoice->id,
+                    'ledger_id' => isset($item['ledger_id']) && $item['ledger_id'] ? $item['ledger_id'] : $sales_revenue_id,
+                    'price' => $item['price'],
+                    'amount' => $total,
+                    'quantity' => isset($item['quantity']) && $item['quantity'] ? $item['quantity'] : 1,
+                ];
 
-                $invoice_item = DBInvoiceItem::create(
-                    [
-                        'title' => $item['title'],
-                        'invoice_id' => $invoice->id,
-                        'ledger_id' => isset($item['ledger_id']) && $item['ledger_id'] ? $item['ledger_id'] : $sales_revenue_id,
-                        'price' => $item['price'],
-                        'amount' => $total,
-                        'quantity' => isset($item['quantity']) && $item['quantity'] ? $item['quantity'] : 1,
-                        'module'=> $item['quantity'] ?? $module, 
-                        'model'=>$item['quantity'] ?? $model, 
-                        'source_id'=>$item['quantity'] ?? $source_id,
-                        ]
-                );
+                if($item['module']){
+                    $tmp_data['module']  = ucfirst($item['module']);
+                }
+
+                if($item['model']){
+                    $tmp_data['model']  = ucfirst($item['model']);
+                }
+
+                if($item['item_id']){
+                    $tmp_data['item_id']  = $item['item_id'];
+                }
+
+                $invoice_item = DBInvoiceItem::create( $tmp_total);
 
                 if (isset($item['rates'])) {
                     foreach ($item['rates'] as $rate_key => $rate) {
