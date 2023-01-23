@@ -2,11 +2,9 @@
 
 namespace Modules\Account\Classes;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
-use Modules\Account\Entities\Ledger as DBLedger;
 use Modules\Account\Entities\Journal as DBJournal;
-use Modules\Account\Classes\Payment;
+use Modules\Account\Entities\Ledger as DBLedger;
 
 class Ledger
 {
@@ -20,10 +18,10 @@ class Ledger
                 $query = $this->getLedgerQuery();
                 $ledger = $query->where('al.id', $ledger_id)->first();
 
-                Cache::put("account_ledger_" . $ledger_id, $ledger);
+                Cache::put("account_ledger_" . $ledger_id, $ledger, 3600);
                 //code...
                 return $ledger;
-            } catch (\Throwable $th) {
+            } catch (\Throwable$th) {
                 throw $th;
             }
         }
@@ -33,12 +31,12 @@ class Ledger
 
     public function getLedgerById($ledger_id)
     {
-        return  $this->getLedger($ledger_id);
+        return $this->getLedger($ledger_id);
     }
 
     public function getLedgerBySlug($ledger_slug)
     {
-      
+
         if (Cache::has("account_ledger_" . $ledger_slug)) {
             $ledger = Cache::get("account_ledger_" . $ledger_slug);
             return $ledger;
@@ -46,10 +44,10 @@ class Ledger
             try {
                 $query = $this->getLedgerQuery();
                 $ledger = $query->where('al.slug', $ledger_slug)->first();
-                $ledger = Cache::put("account_ledger_" . $ledger_slug, $ledger);
+                $ledger = Cache::put("account_ledger_" . $ledger_slug, $ledger, 3600);
                 return $ledger;
                 //code...
-            } catch (\Throwable $th) {
+            } catch (\Throwable$th) {
                 throw $th;
             }
 
@@ -64,7 +62,6 @@ class Ledger
             ->leftJoin('account_chart_of_account AS ac', 'ac.id', '=', 'al.chart_id');
     }
 
-
     public function getLedgerId($ledger_slug)
     {
         if (Cache::has("account_ledger_" . $ledger_slug . "_id")) {
@@ -74,11 +71,11 @@ class Ledger
             try {
                 $ledger = DBLedger::where('slug', $ledger_slug)->first();
                 $ledger_id = $ledger->id;
-                Cache::put("account_ledger_" . $ledger_slug . "_id", $ledger->id);
+                Cache::put("account_ledger_" . $ledger_slug . "_id", $ledger->id, 3600);
 
                 return $ledger_id;
                 //code...
-            } catch (\Throwable $th) {
+            } catch (\Throwable$th) {
                 throw $th;
             }
         }
@@ -94,7 +91,7 @@ class Ledger
         } else {
             try {
                 $ledger = $this->getLedger($ledger_id);
-                $query =  DBJournal::where('ledger_id', $ledger_id);
+                $query = DBJournal::where('ledger_id', $ledger_id);
 
                 if ($partner_id) {
                     $query->where('partner_id', $partner_id);
@@ -102,7 +99,7 @@ class Ledger
 
                 $debit = $query->sum('debit');
                 $credit = $query->sum('credit');
-                $total =   $credit - $debit;
+                $total = $credit - $debit;
 
                 if ($ledger->chart_slug == 'asset' || $ledger->chart_slug == 'expense') {
                     $total = $debit - $credit;
@@ -112,18 +109,39 @@ class Ledger
                     'debit' => $debit,
                     'credit' => $credit,
                     'total' => $total,
-                ]);
+                ], 3600);
 
                 return [
                     'debit' => $debit,
                     'credit' => $credit,
                     'total' => $total,
                 ];
-            } catch (\Throwable $th) {
+            } catch (\Throwable$th) {
                 throw $th;
             }
         }
 
         return false;
+    }
+
+    public function getAccountBalance($partner_id)
+    {
+        // Get wallet total
+        $wallet_id = $this->getLedgerId('wallet');
+        $wallet_ledger = $this->getLedgerTotal($wallet_id, $partner_id);
+        $wallet_total = (isset($wallet_ledger['total'])) ? $wallet_ledger['total'] : 0;
+
+        // Get receivable total
+        $receivable_id = $this->getLedgerId('accounts_receivable');
+        $receivable_ledger = $this->getLedgerTotal($receivable_id, $partner_id);
+        $receivable_total = (isset($receivable_ledger['total'])) ? $receivable_ledger['total'] : 0;
+
+        $balance = $wallet_total - $receivable_total;
+
+        return [
+            'receivable' => $receivable_total,
+            'wallet' => $wallet_total,
+            'balance' => $balance,
+        ];
     }
 }

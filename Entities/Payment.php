@@ -11,7 +11,7 @@ class Payment extends BaseModel
 
     protected $fillable = [
         'title', 'amount', 'partner_id', 'gateway_id', 'receipt_no',
-        'code', "type", 'is_posted', 'canceled',
+        'code', "type", 'is_posted', 'canceled', 'ledger_id',
     ];
     public $migrationDependancy = ['account_gateway', 'account_ledger', 'partner'];
     protected $table = "account_payment";

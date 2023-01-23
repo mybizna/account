@@ -147,7 +147,6 @@ class Payment
                     $ledger = $ledger_cls->getLedgerBySlug('cash');
                     $data['ledger_id'] = $ledger->id;
                 }
-
                 
                 $payment = DBPayment::create($data);
             }

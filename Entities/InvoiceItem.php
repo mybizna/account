@@ -2,15 +2,16 @@
 
 namespace Modules\Account\Entities;
 
-use Modules\Base\Entities\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
+use Modules\Base\Entities\BaseModel;
 
 class InvoiceItem extends BaseModel
 {
 
     protected $fillable = [
         'title', 'invoice_id', 'ledger_id', 'price', 'amount', 'quantity',
+        'module', 'model', 'item_id',
     ];
     public $migrationDependancy = ['account_invoice', 'account_transaction'];
     protected $table = "account_invoice_item";

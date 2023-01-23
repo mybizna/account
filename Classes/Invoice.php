@@ -2,6 +2,7 @@
 
 namespace Modules\Account\Classes;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Modules\Account\Classes\Journal;
 use Modules\Account\Classes\Ledger;
@@ -12,7 +13,6 @@ use Modules\Account\Entities\InvoiceItemRate as DBInvoiceItemRate;
 use Modules\Account\Entities\Payment as DBPayment;
 use Modules\Account\Events\InvoiceItemPaid;
 use Modules\Account\Events\InvoicePaid;
-use Modules\Partner\Entities\Partner as DBPartner;
 
 class Invoice
 {
@@ -45,23 +45,23 @@ class Invoice
                     'invoice_id' => $invoice->id,
                     'ledger_id' => isset($item['ledger_id']) && $item['ledger_id'] ? $item['ledger_id'] : $sales_revenue_id,
                     'price' => $item['price'],
-                    'amount' => $total,
+                    'amount' => $tmp_total,
                     'quantity' => isset($item['quantity']) && $item['quantity'] ? $item['quantity'] : 1,
                 ];
 
-                if ($item['module']) {
+                if (isset($item['module'])) {
                     $tmp_data['module'] = ucfirst($item['module']);
                 }
 
-                if ($item['model']) {
+                if (isset($item['model'])) {
                     $tmp_data['model'] = ucfirst($item['model']);
                 }
 
-                if ($item['item_id']) {
+                if (isset($item['item_id'])) {
                     $tmp_data['item_id'] = $item['item_id'];
                 }
 
-                $invoice_item = DBInvoiceItem::create($tmp_total);
+                $invoice_item = DBInvoiceItem::create($tmp_data);
 
                 if (isset($item['rates'])) {
                     foreach ($item['rates'] as $rate_key => $rate) {
@@ -123,7 +123,9 @@ class Invoice
 
             DB::commit();
 
-            return $invoice->id;
+            $invoice = $this->getInvoice($invoice->id);
+
+            return $invoice;
 
         } catch (\Throwable$th) {
             DB::rollback();
@@ -142,6 +144,7 @@ class Invoice
         $tmp_payments_total = 0;
         $wallet_total = 0;
         $receivable_total = 0;
+        $non_posted_total = 0;
         $payments_title = '';
 
         // Add all payments to journal entry
@@ -154,25 +157,33 @@ class Invoice
             ->get();
 
         foreach ($payments as $payment_key => $payment) {
-            $payments_total = $payments_total + $payment->amount;
-            $journal->journalEntry($payment->title, $payment->amount, $payment->partner_id, $payment->ledger_id);
 
-            DBPayment::where('id', $payment->id)->update(['is_posted' => true]);
+            if (!$payment->partner_id || !$payment->ledger_id) {
+                //TODO: Notification on payment with issues.
+            } else {
+                $payments_total = $payments_total + $payment->amount;
+
+                $journal->journalEntry($payment->title, $payment->amount, $payment->partner_id, $payment->ledger_id);
+
+                DBPayment::where('id', $payment->id)->update(['is_posted' => true]);
+            }
         }
 
         $wallet_id = $ledger->getLedgerId('wallet');
         $receivable_id = $ledger->getLedgerId('accounts_receivable');
 
         // Get wallet total
-        $wallet_ledger = $ledger->getLedgerTotal($wallet_id);
+        Cache::forget("account_ledger_total_" . $wallet_id . '_' . $partner_id);
+        $wallet_ledger = $ledger->getLedgerTotal($wallet_id, $partner_id);
         $wallet_total = (isset($wallet_ledger['total'])) ? $wallet_ledger['total'] : 0;
 
         // Get receivable total
-        $receivable_ledger = $ledger->getLedgerTotal($receivable_id);
+        Cache::forget("account_ledger_total_" . $receivable_id . '_' . $partner_id);
+        $receivable_ledger = $ledger->getLedgerTotal($receivable_id, $partner_id);
         $receivable_total = (isset($receivable_ledger['total'])) ? $receivable_ledger['total'] : 0;
 
-        //Process receivable first
-        if ($receivable_total) {
+          //Process receivable first
+        if ($payments_total && $receivable_total) {
             $balance = $payments_total - $receivable_total;
             if ($balance <= 0) {
                 $journal->journalEntry('Repayment of past debt', -1 * abs($payments_total), $partner_id, $receivable_id);
@@ -186,7 +197,7 @@ class Invoice
         $tmp_payments_total = $payments_total;
 
         // process invoices
-        $invoices = $this->getInvoices($partner_id, $invoice_id);
+        $invoices = $this->getPartnerInvoices($partner_id, $invoice_id);
 
         foreach ($invoices as $payment_key => $invoice) {
             $invoice_data = [];
@@ -208,6 +219,7 @@ class Invoice
                         ->orderBy('method')
                         ->orderBy('ordering')
                         ->get();
+
                     foreach ($item_rates as $item_key => $item_rate) {
                         $value = $calc_amount = ($item_rate->value) ? $item_rate->value : 0;
                         $title = ($item_rate->title) ? $item_rate->title : "Item ID:$item->id Rate:$item_rate->rate_title";
@@ -232,11 +244,12 @@ class Invoice
 
                 $invoice_data['is_posted'] = true;
                 $invoice_data['total'] = $single_invoice_total;
+                $non_posted_total = $non_posted_total + $single_invoice_total;
             } else {
                 $single_invoice_total = $invoice->total;
             }
 
-            if ($tmp_payments_total > $single_invoice_total) {
+            if ($tmp_payments_total >= $single_invoice_total) {
                 $invoice_data['status'] = 'paid';
             } elseif ($tmp_payments_total > 0) {
                 $invoice_data['status'] = 'partial';
@@ -248,7 +261,7 @@ class Invoice
                 DBInvoice::where('id', $invoice->id)->update($invoice_data);
             }
 
-            if ($invoice_data['status'] == 'paid') {
+            if (isset($invoice_data['status']) && $invoice_data['status'] == 'paid') {
                 event(new InvoicePaid($invoice));
                 foreach ($items as $key => $item) {
                     event(new InvoiceItemPaid($invoice, $item));
@@ -256,14 +269,14 @@ class Invoice
             }
 
             $invoices_total = $invoices_total + $single_invoice_total;
-        }
 
+        }
+        
         if ($invoices_total) {
-            $wallet_id = $ledger->getLedgerId('wallet');
-            $receivable_id = $ledger->getLedgerId('accounts_receivable');
 
             if ($wallet_total) {
                 $balance = $wallet_total - $invoices_total;
+              
                 if ($balance >= 0) {
                     $journal->journalEntry('Payment By wallet worth ' . abs($invoices_total), -1 * abs($invoices_total), $partner_id, $wallet_id);
                     $invoices_total = 0;
@@ -274,7 +287,7 @@ class Invoice
             }
 
             $balance = $payments_total - $invoices_total;
-
+           
             if ($invoice_id && $balance) {
                 $this->reconcileInvoices($partner_id);
             }
@@ -282,19 +295,41 @@ class Invoice
             if ($balance > 0) {
                 $journal->journalEntry('Credit to wallet worth ' . abs($balance), abs($balance), $partner_id, $wallet_id);
             } elseif ($balance < 0) {
-                $journal->journalEntry('Partner Debt of ' . abs($balance), abs($balance), $partner_id, $receivable_id);
+
+               $debt = abs($balance);
+
+                if($non_posted_total){
+                    $debt = ($debt < $non_posted_total) ? $debt : $non_posted_total;
+                }else{
+                    if($debt > $receivable_total){
+                        $debt = $debt - $receivable_total;
+                    }
+                }
+
+                $journal->journalEntry('Partner Debt of ' . $debt, $debt, $partner_id, $receivable_id);
             }
         }
     }
-    public function getInvoices($partner_id, $invoice_id = false)
+
+    public function getInvoices()
+    {
+        $invoices_qry = DBInvoice::where('status', 'pending')
+            ->where('status', 'partial');
+
+        $invoices = $invoices_qry->orderByDesc('id')->get();
+
+        return $invoices;
+    }
+
+    public function getPartnerInvoices($partner_id, $invoice_id = false)
     {
         if ($invoice_id) {
             DBInvoice::where('id', $invoice_id)->update(['status' => 'pending']);
         }
 
         $invoices_qry = DBInvoice::where('partner_id', $partner_id)
-            ->where('status', '<>', 'draft')
-            ->where('is_posted', false);
+            ->where('status', 'pending')
+            ->orWhere('status', 'partial');
 
         if ($invoice_id) {
             $invoices_qry->where('id', $invoice_id);
@@ -304,6 +339,7 @@ class Invoice
 
         return $invoices;
     }
+
     public function getInvoice($invoice_id)
     {
         $invoice = DBInvoice::where('id', $invoice_id)->first();
@@ -313,14 +349,15 @@ class Invoice
 
     public function processInvoices()
     {
-        $partners = DBPartner::take(100)->get();
+        $invoices = DBInvoice::select('partner_id')->distinct()->where('status', 'pending')
+            ->orWhere('status', 'partial')->orderByDesc('id')->get();
 
-        foreach ($partners as $partner_key => $partner) {
-            $this->reconcileInvoices($partner->id);
+        foreach ($invoices as $invoice_key => $invoice) {
+            $this->reconcileInvoices($invoice->partner_id);
         }
     }
 
-    public function deleteInvoices($invoice_id)
+    public function deleteInvoice($invoice_id)
     {
         try {
             DBInvoice::where('id', $invoice_id)->delete();

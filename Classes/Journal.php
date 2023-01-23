@@ -3,6 +3,7 @@
 namespace Modules\Account\Classes;
 
 use Modules\Account\Classes\Ledger;
+use Illuminate\Support\Facades\Cache;
 use Modules\Account\Entities\Journal as DBJournal;
 
 class Journal
@@ -30,5 +31,8 @@ class Journal
                 $credit_debit => abs($amount)
             ]
         );
+        
+        Cache::forget("account_ledger_total_" . $ledger_id . '_' . $partner_id);
+
     }
 }
