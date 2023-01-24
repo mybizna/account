@@ -4,7 +4,7 @@ use Modules\Account\Classes\Ledger;
 
 $ledger = new Ledger();
 
-$sales_revenue_id = $ledger->getLedgerId('sales_revenue');
+$sales_revenue_id = $ledger->getLedgerId('sales_revenue', true);
 
 return [
     'sales_default_ledger' => [
