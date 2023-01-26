@@ -44,6 +44,9 @@ export default {
                     name: "partner_id",
                     foreign: ['partner__first_name', 'partner__last_name'],
                 },
+            
+                { text: "Receipt", prop: "receipt_no", name: "receipt_no", },
+                { text: "Code", prop: "code", name: "code", },
                 {
                     text: "Gateway",
                     prop: "[account_gateway__title]",
@@ -52,15 +55,13 @@ export default {
                 },
                 {
                     text: "Ledger",
-                    prop: "[account_ledger__title]",
+                    prop: "[account_ledger__name]",
                     name: "ledger_id",
-                    foreign: ['account_ledger__title'],
+                    foreign: ['account_ledger__name'],
                 },
-                { text: "Amount", prop: "amount", name: "amount", },
-                { text: "Receipt No", prop: "receipt_no", name: "receipt_no", },
-                { text: "Code", prop: "code", name: "code", },
                 { text: "Status", prop: "status", name: "status", },
                 { text: "Type", prop: "type", name: "type", },
+                { text: "Amount", prop: "amount", name: "amount", },
             ],
         };
     },
