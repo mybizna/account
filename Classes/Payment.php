@@ -5,7 +5,6 @@ namespace Modules\Account\Classes;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Modules\Account\Classes\Invoice;
 use Modules\Account\Entities\Gateway;
 use Modules\Account\Entities\Payment as DBPayment;
@@ -111,24 +110,25 @@ class Payment
         return false;
     }
 
-    public function addPayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $do_reconcile_invoices = false, $ledger_id = false, $invoice_id = false)
+    public function addPayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $do_reconcile_invoices = false, $ledger_id = false, $invoice_id = false, $code = '')
     {
         $payment = '';
-       
-        $payment = $this->makePayment($partner_id, $title, $amount, $gateway_id, $do_reconcile_invoices, $ledger_id, $invoice_id);
+
+        $payment = $this->makePayment($partner_id, $title, $amount, $gateway_id, $do_reconcile_invoices, $ledger_id, $invoice_id, $code);
 
         return $payment;
     }
-    public function makePayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $do_reconcile_invoices = false, $ledger_id = false, $invoice_id = false)
+    public function makePayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $do_reconcile_invoices = false, $ledger_id = false, $invoice_id = false, $code = '')
     {
         $payment = '';
-        
+
         $invoice = new Invoice();
 
-        $receipt_no = $code = rand(1000, 9999) . substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyz"), 0, 6);
-       
+        $receipt_no = time() . strtoupper(substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyz"), 0, 5));
+        $code = ($code != '') ? $code : $receipt_no;
+
         try {
-           
+
             if ($amount > 0) {
                 $data = [
                     'partner_id' => $partner_id,
@@ -137,6 +137,7 @@ class Payment
                     'title' => $title,
                     'receipt_no' => $receipt_no,
                     'code' => $code,
+                    'status' => 'paid',
                 ];
 
                 if ($ledger_id) {
@@ -147,7 +148,7 @@ class Payment
                     $ledger = $ledger_cls->getLedgerBySlug('cash');
                     $data['ledger_id'] = $ledger->id;
                 }
-                
+
                 $payment = DBPayment::create($data);
             }
 
