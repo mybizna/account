@@ -2,17 +2,15 @@
 
 namespace Modules\Account\Entities;
 
-use Modules\Base\Entities\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
-
-use Wildside\Userstamps\Userstamps;
+use Modules\Base\Entities\BaseModel;
 
 class Invoice extends BaseModel
 {
 
     protected $fillable = [
-        'title', 'partner_id', 'status', 'description', 'is_posted', 'total'
+        'title', 'invoice_no', 'partner_id', 'status', 'description', 'is_posted', 'total',
     ];
     public $migrationDependancy = ['partner'];
     protected $table = "account_invoice";
@@ -27,6 +25,7 @@ class Invoice extends BaseModel
     {
         $table->increments('id');
         $table->string('title');
+        $table->char('invoice_no', 100);
         $table->integer('partner_id');
         $table->string('module')->default('Account');
         $table->string('model')->default('Invoice');
@@ -35,7 +34,6 @@ class Invoice extends BaseModel
         $table->tinyInteger('is_posted')->default(false);
         $table->decimal('total', 20, 2)->nullable();
     }
-
 
     public function post_migration(Blueprint $table)
     {

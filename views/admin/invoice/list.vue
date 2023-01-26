@@ -16,18 +16,21 @@ export default {
             model: {
                 title: "",
                 partner_id: "",
+                invoice_no: "",
                 status: "",
                 is_posted: "",
                 total: "",
             },
             search_fields: [
                 { type: "text", name: "title", label: "title", ope: "", },
+                { type: "text", name: "invoice_no", label: "invoice_no", ope: "", },
                 { type: "text", name: "partner_id", label: "partner_id", ope: "", },
                 { type: "text", name: "status", label: "status", ope: "", },
                 { type: "text", name: "is_posted", label: "is_posted", ope: "", },
             ],
             table_fields: [
                 { text: "title", prop: "title", name: "title", },
+                { text: "invoice_no", prop: "invoice_no", name: "invoice_no", },
                 {
                     text: "Partner",
                     prop: "[partner__first_name] [partner__last_name]",

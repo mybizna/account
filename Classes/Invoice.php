@@ -22,6 +22,8 @@ class Invoice
         $ledger = new Ledger();
         $payment = new Payment();
 
+        $invoice_no = $this->getInvoiceNumber();
+
         DB::beginTransaction();
 
         try {
@@ -30,6 +32,7 @@ class Invoice
                     'title' => $title,
                     'partner_id' => $partner_id,
                     'description' => $description,
+                    'invoice_no' => $invoice_no,
                     'status' => $status,
                 ]
             );
@@ -182,7 +185,7 @@ class Invoice
         $receivable_ledger = $ledger->getLedgerTotal($receivable_id, $partner_id);
         $receivable_total = (isset($receivable_ledger['total'])) ? $receivable_ledger['total'] : 0;
 
-          //Process receivable first
+        //Process receivable first
         if ($payments_total && $receivable_total) {
             $balance = $payments_total - $receivable_total;
             if ($balance <= 0) {
@@ -271,12 +274,12 @@ class Invoice
             $invoices_total = $invoices_total + $single_invoice_total;
 
         }
-        
+
         if ($invoices_total) {
 
             if ($wallet_total) {
                 $balance = $wallet_total - $invoices_total;
-              
+
                 if ($balance >= 0) {
                     $journal->journalEntry('Payment By wallet worth ' . abs($invoices_total), -1 * abs($invoices_total), $partner_id, $wallet_id);
                     $invoices_total = 0;
@@ -287,7 +290,7 @@ class Invoice
             }
 
             $balance = $payments_total - $invoices_total;
-           
+
             if ($invoice_id && $balance) {
                 $this->reconcileInvoices($partner_id);
             }
@@ -296,12 +299,12 @@ class Invoice
                 $journal->journalEntry('Credit to wallet worth ' . abs($balance), abs($balance), $partner_id, $wallet_id);
             } elseif ($balance < 0) {
 
-               $debt = abs($balance);
+                $debt = abs($balance);
 
-                if($non_posted_total){
+                if ($non_posted_total) {
                     $debt = ($debt < $non_posted_total) ? $debt : $non_posted_total;
-                }else{
-                    if($debt > $receivable_total){
+                } else {
+                    if ($debt > $receivable_total) {
                         $debt = $debt - $receivable_total;
                     }
                 }
@@ -345,6 +348,21 @@ class Invoice
         $invoice = DBInvoice::where('id', $invoice_id)->first();
 
         return $invoice;
+    }
+
+    public function getInvoiceNumber()
+    {
+
+        $padding = 7;
+        $prefix = 'Inv/' . date('Y') . '/';
+
+        $invoice_count = DBInvoice::where('invoice_no', '%' . $prefix . '%')->count() + 1;
+        $invoice_count_str = (string) $invoice_count;
+
+        $padding = $padding - strlen($invoice_count_str);
+
+        return $prefix . str_pad($invoice_count_str, $padding, "0", STR_PAD_LEFT);
+
     }
 
     public function processInvoices()
