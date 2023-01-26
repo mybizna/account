@@ -10,8 +10,8 @@ class Payment extends BaseModel
 {
 
     protected $fillable = [
-        'title', 'amount', 'partner_id', 'gateway_id', 'receipt_no',
-        'code', "type", 'is_posted', 'canceled', 'ledger_id',
+        'title', 'amount', 'ledger_id', 'partner_id', 'gateway_id', 'receipt_no',
+        'code', 'status', "type", 'is_posted',
     ];
     public $migrationDependancy = ['account_gateway', 'account_ledger', 'partner'];
     protected $table = "account_payment";
@@ -32,9 +32,9 @@ class Payment extends BaseModel
         $table->integer('gateway_id');
         $table->string('receipt_no')->nullable();
         $table->string('code')->nullable();
+        $table->enum('status', ['pending', 'paid', 'canceled'])->default('pending');
         $table->enum('type', ['in', 'out'])->default('in');
         $table->tinyInteger('is_posted')->default(false);
-        $table->tinyInteger('canceled')->default(false);
     }
 
     public function post_migration(Blueprint $table)
