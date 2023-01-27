@@ -150,6 +150,8 @@ class Invoice
         $non_posted_total = 0;
         $payments_title = '';
 
+        $grouping_id = $journal->getGroupingId();
+
         // Add all payments to journal entry
         $payments = DBPayment::from('account_payment AS ap')
             ->select('ap.*', 'ag.ledger_id')
@@ -166,7 +168,7 @@ class Invoice
             } else {
                 $payments_total = $payments_total + $payment->amount;
 
-                $journal->journalEntry($payment->title, $payment->amount, $payment->partner_id, $payment->ledger_id);
+                $journal->journalEntry($payment->title, $payment->amount, $payment->partner_id, $payment->ledger_id, grouping_id:$grouping_id);
 
                 DBPayment::where('id', $payment->id)->update(['is_posted' => true]);
             }
@@ -189,11 +191,11 @@ class Invoice
         if ($payments_total && $receivable_total) {
             $balance = $payments_total - $receivable_total;
             if ($balance <= 0) {
-                $journal->journalEntry('Repayment of past debt', -1 * abs($payments_total), $partner_id, $receivable_id);
+                $journal->journalEntry('Repayment of past debt', -1 * abs($payments_total), $partner_id, $receivable_id, grouping_id:$grouping_id);
                 $payments_total = 0;
             } else {
                 $payments_total = $balance;
-                $journal->journalEntry('Repayment of past debt', -1 * abs($receivable_total), $partner_id, $receivable_id);
+                $journal->journalEntry('Repayment of past debt', -1 * abs($receivable_total), $partner_id, $receivable_id, grouping_id:$grouping_id);
             }
         }
 
@@ -202,7 +204,7 @@ class Invoice
         // process invoices
         $invoices = $this->getPartnerInvoices($partner_id, $invoice_id);
 
-        foreach ($invoices as $payment_key => $invoice) {
+        foreach ($invoices as $invoice_key => $invoice) {
             $invoice_data = [];
             $single_invoice_total = 0;
 
@@ -213,7 +215,7 @@ class Invoice
                 foreach ($items as $key => $item) {
                     $amount = $item_total = ($item->quantity) ? $item->price * $item->quantity : $item->price;
                     $title = ($item->title) ? $item->title : "Item ID:$item->id";
-                    $journal->journalEntry($title, $amount, $invoice->partner_id, $item->ledger_id);
+                    $journal->journalEntry($title, $amount, $invoice->partner_id, $item->ledger_id, grouping_id:$grouping_id);
 
                     $item_rates = DBInvoiceItemRate::from('account_invoice_item_rate AS air')
                         ->select('air.*', 'at.ledger_id AS rate_ledger_id', 'at.title AS rate_title', 'at.method AS rate_method')
@@ -239,7 +241,7 @@ class Invoice
 
                         $item_total = $item_total + $calc_amount;
 
-                        $journal->journalEntry($title, $calc_amount, $invoice->partner_id, $item_rate->rate_ledger_id);
+                        $journal->journalEntry($title, $calc_amount, $invoice->partner_id, $item_rate->rate_ledger_id, grouping_id:$grouping_id);
                     }
 
                     $single_invoice_total = $single_invoice_total + $item_total;
@@ -275,42 +277,43 @@ class Invoice
 
         }
 
-        if ($invoices_total) {
+        if ($wallet_total) {
+            $balance = $wallet_total - $invoices_total;
 
-            if ($wallet_total) {
-                $balance = $wallet_total - $invoices_total;
+            if ($balance >= 0) {
+                if (abs($invoices_total) > 0) {
+                    $journal->journalEntry('Payment By wallet worth ' . abs($invoices_total), -1 * abs($invoices_total), $partner_id, $wallet_id, grouping_id:$grouping_id);
+                }
+                $invoices_total = 0;
+            } else {
+                $invoices_total = $invoices_total - $wallet_total;
+                if (abs($wallet_total) > 0) {
+                    $journal->journalEntry('Payment By wallet worth' . abs($wallet_total), -1 * abs($wallet_total), $partner_id, $wallet_id, grouping_id:$grouping_id);
+                }
+            }
+        }
 
-                if ($balance >= 0) {
-                    $journal->journalEntry('Payment By wallet worth ' . abs($invoices_total), -1 * abs($invoices_total), $partner_id, $wallet_id);
-                    $invoices_total = 0;
-                } else {
-                    $invoices_total = $invoices_total - $wallet_total;
-                    $journal->journalEntry('Payment By wallet worth' . abs($wallet_total), -1 * abs($wallet_total), $partner_id, $wallet_id);
+        $balance = $payments_total - $invoices_total;
+
+        if ($invoice_id && $balance) {
+            $this->reconcileInvoices($partner_id);
+        }
+
+        if ($balance > 0) {
+            $journal->journalEntry('Credit to wallet worth ' . abs($balance), abs($balance), $partner_id, $wallet_id, grouping_id:$grouping_id);
+        } elseif ($balance < 0) {
+
+            $debt = abs($balance);
+
+            if ($non_posted_total) {
+                $debt = ($debt < $non_posted_total) ? $debt : $non_posted_total;
+            } else {
+                if ($debt > $receivable_total) {
+                    $debt = $debt - $receivable_total;
                 }
             }
 
-            $balance = $payments_total - $invoices_total;
-
-            if ($invoice_id && $balance) {
-                $this->reconcileInvoices($partner_id);
-            }
-
-            if ($balance > 0) {
-                $journal->journalEntry('Credit to wallet worth ' . abs($balance), abs($balance), $partner_id, $wallet_id);
-            } elseif ($balance < 0) {
-
-                $debt = abs($balance);
-
-                if ($non_posted_total) {
-                    $debt = ($debt < $non_posted_total) ? $debt : $non_posted_total;
-                } else {
-                    if ($debt > $receivable_total) {
-                        $debt = $debt - $receivable_total;
-                    }
-                }
-
-                $journal->journalEntry('Partner Debt of ' . $debt, $debt, $partner_id, $receivable_id);
-            }
+            $journal->journalEntry('Partner Debt of ' . $debt, $debt, $partner_id, $receivable_id, grouping_id:$grouping_id);
         }
     }
 
@@ -350,21 +353,6 @@ class Invoice
         return $invoice;
     }
 
-    public function getInvoiceNumber()
-    {
-
-        $padding = 7;
-        $prefix = 'Inv/' . date('Y') . '/';
-
-        $invoice_count = DBInvoice::where('invoice_no', '%' . $prefix . '%')->count() + 1;
-        $invoice_count_str = (string) $invoice_count;
-
-        $padding = $padding - strlen($invoice_count_str);
-
-        return $prefix . str_pad($invoice_count_str, $padding, "0", STR_PAD_LEFT);
-
-    }
-
     public function processInvoices()
     {
         $invoices = DBInvoice::select('partner_id')->distinct()->where('status', 'pending')
@@ -385,4 +373,20 @@ class Invoice
         }
 
     }
+
+    public function getInvoiceNumber()
+    {
+
+        $padding = 7;
+        $prefix = 'Inv/' . date('Y') . '/';
+
+        $invoice_count = DBInvoice::where('invoice_no', '%' . $prefix . '%')->count() + 1;
+        $invoice_count_str = (string) $invoice_count;
+
+        $padding = $padding - strlen($invoice_count_str);
+
+        return $prefix . str_pad($invoice_count_str, $padding, "0", STR_PAD_LEFT);
+
+    }
+
 }

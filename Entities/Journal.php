@@ -2,14 +2,14 @@
 
 namespace Modules\Account\Entities;
 
-use Modules\Base\Entities\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
+use Modules\Base\Entities\BaseModel;
 
 class Journal extends BaseModel
 {
 
-    protected $fillable = ['title', 'partner_id','ledger_id', 'debit', 'credit', 'params'];
+    protected $fillable = ['title', 'partner_id', 'ledger_id', 'grouping_id', 'debit', 'credit', 'params'];
     public $migrationDependancy = ['partner', 'account_ledger'];
     protected $table = "account_journal";
 
@@ -23,6 +23,7 @@ class Journal extends BaseModel
     {
         $table->increments('id');
         $table->string('title');
+        $table->char('grouping_id');
         $table->integer('partner_id');
         $table->integer('ledger_id');
         $table->decimal('debit', 20, 2)->nullable();
