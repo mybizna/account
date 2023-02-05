@@ -1,5 +1,5 @@
 <template>
-    <table-edit :path_param="path_param" :model="model">
+    <table-edit module="account" table="chart_of_account" title="Chart of Account" :model="model">
 
         <div class="row">
             <div class="col-md-6">
@@ -24,13 +24,12 @@ export default {
         TableEdit: window.$func.fetchComponent("components/common/TableEdit.vue")
     },
 
-    data () {
+    data() {
         return {
             id: null,
-            path_param: ["account", "chart_of_account"],
             model: {
-                id: "",
-                name: "",
+                id: "", 
+                name: "", 
                 slug: "",
             },
 

@@ -29,17 +29,17 @@ export default {
                 { type: "text", name: "is_posted", label: "is_posted", ope: "", },
             ],
             table_fields: [
-                { text: "title", prop: "title", name: "title", },
-                { text: "invoice_no", prop: "invoice_no", name: "invoice_no", },
+                { label: "Title", prop: "title", name: "title", },
+                { label: "invoice_no", prop: "invoice_no", name: "invoice_no", },
                 {
-                    text: "Partner",
+                    label: "Partner",
                     prop: "[partner__first_name] [partner__last_name]",
                     name: "partner_id",
                     foreign: ['partner__first_name', 'partner__last_name'],
                 },
-                { text: "status", prop: "status", name: "status",  },
-                { text: "is_posted", prop: "is_posted", name: "is_posted", is_boolean: true, },
-                { text: "total", prop: "total", name: "total",  },
+                { label: "status", prop: "status", name: "status",  },
+                { label: "is_posted", prop: "is_posted", name: "is_posted", is_boolean: true, },
+                { label: "total", prop: "total", name: "total",  },
             ],
         };
     },

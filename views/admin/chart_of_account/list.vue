@@ -1,5 +1,5 @@
 <template>
-    <table-list title="Chart of Account" :path_param="path_param" :search_fields="search_fields" :model="model"
+    <table-list  module="account" table="chart_of_account"  title="Chart of Account" :search_fields="search_fields" :model="model"
         :table_fields="table_fields"></table-list>
 </template>
 
@@ -14,7 +14,6 @@ export default {
 
     data () {
         return {
-            path_param: ["account", "chart_of_account"],
             model: {
                 name: "",
                 slug: "",
@@ -24,8 +23,8 @@ export default {
                 { type: "text", name: "slug", label: "Slug", ope: "", },
             ],
             table_fields: [
-                { text: "Name", prop: "name", name: "name", },
-                { text: "Slug", prop: "slug", name: "slug", },
+                { label: "Name", prop: "name", name: "name", },
+                { label: "Slug", prop: "slug", name: "slug", },
             ],
         };
     },
