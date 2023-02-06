@@ -10,8 +10,6 @@ export default {
             "components/common/TableList.vue"
         ),
     },
-
-
     data () {
         return {
             model: {
@@ -21,7 +19,6 @@ export default {
             search_fields: [
                 { type: "text", name: "name", label: "Name", ope: "", },
                 { type: "text", name: "slug", label: "Slug", ope: "", },
-                { type: "text", name: "slug", label: "Slugs", ope: "", },
             ],
             table_fields: [
                 { label: "Name", prop: "name", name: "name", },
