@@ -4,8 +4,9 @@ namespace Modules\Account\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Modules\Base\Http\Controllers\BaseController;
 use Modules\Account\Classes\Invoice;
+use Modules\Account\Classes\Payment;
+use Modules\Base\Http\Controllers\BaseController;
 
 class InvoiceController extends BaseController
 {
@@ -13,13 +14,13 @@ class InvoiceController extends BaseController
     public function fetchData(Request $request)
     {
         $result = [
-            'module'  => 'account',
-            'model'   => 'invoice',
-            'status'  => 0,
-            'total'   => 0,
-            'error'   => 1,
-            'records'    => [],
-            'message' => 'No Records'
+            'module' => 'account',
+            'model' => 'invoice',
+            'status' => 0,
+            'total' => 0,
+            'error' => 1,
+            'records' => [],
+            'message' => 'No Records',
         ];
 
         $partner_id = $request->get('partner_id');
@@ -49,7 +50,7 @@ class InvoiceController extends BaseController
             $result['ledgers'] = $ledger_list;
             $result['partner'] = $partner;
             $result['message'] = 'Records Found Successfully.';
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             #throw $th;
 
             $result['error'] = 1;
@@ -64,29 +65,43 @@ class InvoiceController extends BaseController
     {
 
         $invoice = new Invoice();
+        $payment = new Payment();
 
         $result = [
-            'module'  => 'account',
-            'model'   => 'invoice',
-            'status'  => 0,
-            'total'   => 0,
-            'error'   => 1,
-            'records'    => [],
-            'message' => 'No Records'
+            'module' => 'account',
+            'model' => 'invoice',
+            'status' => 0,
+            'total' => 0,
+            'error' => 1,
+            'records' => [],
+            'message' => 'No Records',
         ];
 
         $data = $request->all();
 
-        $partner_id =  $data['partner_id'];
-        $items =  $data['items'] ?? [];
-        $status =  $data['status'];
-        $title =  $data['title'] ?? 'Invoice #';
-        $description =  $data['notation'];
-        $gateways =  $data['gateways'];
+        $partner_id = $data['partner_id'];
+        $items = $data['items'] ?? [];
+        $status = $data['status'];
+        $title = $data['title'] ?? 'Invoice #';
+        $description = $data['notation'];
+        $gateways = $data['gateways'];
 
         try {
-            $invoice->generateInvoice($title, $partner_id, $items, $status, $gateways, $description);
-        } catch (\Throwable $th) {
+            foreach ($gateways as $item_key => $gateway) {
+                if ($gateway['paid_amount'] && $status == 'draft') {
+                    $status = 'pending';
+                }
+
+                $title = $gateway['title'] . " Payment. " . $gateway['reference'] . ' ' . $gateway['others'];
+
+                if ($gateway['paid_amount']) {
+                    $payment->makePayment($partner_id, $title, $gateway['paid_amount'], $gateway['id']);
+                }
+            }
+
+            $invoice = $invoice->generateInvoice($title, $partner_id, $items, $status, $description);
+
+        } catch (\Throwable$th) {
             throw $th;
 
             $result['error'] = 1;

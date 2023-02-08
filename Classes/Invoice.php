@@ -16,7 +16,16 @@ use Modules\Account\Events\InvoicePaid;
 
 class Invoice
 {
-    public function generateInvoice($title, $partner_id, $items = [], $status = 'draft', $gateways = [], $description = "")
+    /**
+     * Generating invoice based on set parameters
+     *
+     * @param  string $title
+     * @param  string $partner_id
+     * @param  array  $items
+     * @param  string $description Description for the Invoice
+     * @return void
+     */
+    public function generateInvoice($title, $partner_id, $items = [], $status='draft', $description = "")
     {
         $total = 0;
         $ledger = new Ledger();
@@ -100,27 +109,11 @@ class Invoice
                 $total = $total + $tmp_total;
             }
 
-            foreach ($gateways as $item_key => $gateway) {
-                if ($gateway['paid_amount'] && $status == 'draft') {
-                    $status = 'pending';
-                }
-
-                $title = $gateway['title'] . " Payment. " . $gateway['reference'] . ' ' . $gateway['others'];
-                $payment->makePayment($partner_id, $title, $gateway['paid_amount'], $gateway['id']);
-            }
-
-            if ($description == 'Invoice #') {
+            if ($description == '') {
                 $description = "Invoice #$invoice->id.";
-                DBInvoice::where('id', $invoice->id)
-                    ->update(
-                        [
-                            'description' => $description,
-                            'status' => $status,
-                        ]
-                    );
             }
 
-            DBInvoice::where('id', $invoice->id)->update(['total' => $total]);
+            DBInvoice::where('id', $invoice->id)->update(['description' => $description, 'total' => $total]);
 
             $this->reconcileInvoices($partner_id, $invoice->id);
 
@@ -381,6 +374,15 @@ class Invoice
      */
     }
 
+    /**
+     * Function to reconcile invoices
+     */
+
+    /**
+     * Getting all Invoices
+     *
+     * @return $invoice List of all Invoices
+     */
     public function getInvoices()
     {
         $invoices_qry = DBInvoice::where('status', 'pending')
@@ -391,8 +393,16 @@ class Invoice
         return $invoices;
     }
 
-    public function getPartnerInvoices($partner_id, $invoice_id = false)
+    /**
+     * Function for getting all Partner Invoices
+     *
+     * @param int $partner_id
+     * @param boolean $invoice_id
+     * @return void
+     */
+    public function getPartnerInvoices(int $partner_id, $invoice_id = false)
     {
+        //# Get the invoices for this partner
         if ($invoice_id) {
             DBInvoice::where('id', $invoice_id)->update(['status' => 'pending']);
         }
