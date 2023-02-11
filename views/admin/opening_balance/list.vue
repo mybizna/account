@@ -1,6 +1,7 @@
 <template>
-    <table-list title="Account Opening Balance" :path_param="path_param" :search_fields="search_fields" :model="model"
-        :table_fields="table_fields"></table-list>
+    <table-list :path_param="['account', 'opening_balance']" title="Account Opening Balance"
+        :search_fields="search_fields" :model="model" :table_fields="table_fields"
+        :setting="{ hide_delete_button: true }"></table-list>
 </template>
 
 <script>
@@ -10,9 +11,8 @@ export default {
             "components/common/TableList.vue"
         ),
     },
-    data () {
+    data() {
         return {
-            path_param: ["account", "opening_balance"],
             model: {
                 financial_year_id: "",
                 chart_id: "",
@@ -38,7 +38,7 @@ export default {
                     name: "financial_year_id",
                     foreign: ['account_financial_year__name'],
                 },
-                 {
+                {
                     text: "Chart of Account",
                     prop: "[account_chart_of_account__name]",
                     name: "chart_id",

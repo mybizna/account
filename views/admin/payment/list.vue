@@ -1,6 +1,6 @@
 <template>
-    <table-list title="Payment" :path_param="path_param" :search_fields="search_fields" :model="model"
-        :table_fields="table_fields"></table-list>
+    <table-list :path_param="['account', 'payment']" title="Payment" :search_fields="search_fields" :model="model"
+        :table_fields="table_fields" :setting="{ hide_delete_button: true }"></table-list>
 </template>
 
 <script>
@@ -13,7 +13,6 @@ export default {
 
     data() {
         return {
-            path_param: ["account", "payment"],
             model: {
                 title: "",
                 amount: "",
@@ -44,7 +43,7 @@ export default {
                     name: "partner_id",
                     foreign: ['partner__first_name', 'partner__last_name'],
                 },
-            
+
                 { text: "Receipt", prop: "receipt_no", name: "receipt_no", },
                 { text: "Code", prop: "code", name: "code", },
                 {

@@ -1,5 +1,5 @@
 <template>
-    <table-list title="Coupon" :path_param="path_param" :search_fields="search_fields" :model="model"
+    <table-list :path_param="['account', 'coupon']" title="Coupon" :search_fields="search_fields" :model="model"
         :table_fields="table_fields"></table-list>
 </template>
 
@@ -10,9 +10,8 @@ export default {
             "components/common/TableList.vue"
         ),
     },
-    data () {
+    data() {
         return {
-            path_param: ["account", "coupon"],
             model: {
                 code: "",
                 description: "",

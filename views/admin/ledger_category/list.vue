@@ -1,6 +1,7 @@
 <template>
-    <table-list title="Account Ledger Category" :path_param="path_param" :search_fields="search_fields" :model="model"
-        :table_fields="table_fields"></table-list>
+    <table-list :path_param="['account', 'ledger_category']" title="Account Ledger Category"
+        :search_fields="search_fields" :model="model" :table_fields="table_fields"
+        :setting="{ hide_delete_button: true }"></table-list>
 </template>
 
 <script>
@@ -12,9 +13,8 @@ export default {
     },
 
 
-    data () {
+    data() {
         return {
-            path_param: ["account", "ledger_category"],
             model: {
                 name: "",
                 slug: "",

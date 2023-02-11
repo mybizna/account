@@ -1,6 +1,6 @@
 <template>
-    <table-list title="Invoice Status" :path_param="path_param" :search_fields="search_fields" :model="model"
-        :table_fields="table_fields"></table-list>
+    <table-list :path_param="['account', 'invoice_status']" title="Invoice Status" :search_fields="search_fields"
+        :model="model" :table_fields="table_fields" :setting="{ hide_delete_button: true }"></table-list>
 </template>
 
 <script>
@@ -10,9 +10,8 @@ export default {
             "components/common/TableList.vue"
         ),
     },
-    data () {
+    data() {
         return {
-            path_param: ["account", "invoice_status"],
             model: {
                 type_name: "",
                 slug: "",

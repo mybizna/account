@@ -1,6 +1,6 @@
 <template>
-    <table-list title="Invoice" :path_param="path_param" :search_fields="search_fields" :model="model"
-        :table_fields="table_fields"></table-list>
+    <table-list :path_param="['account', 'invoice']" title="Invoice" :search_fields="search_fields" :model="model"
+        :table_fields="table_fields" :setting="{ hide_delete_button: true }"></table-list>
 </template>
 
 <script>
@@ -10,9 +10,8 @@ export default {
             "components/common/TableList.vue"
         ),
     },
-    data () {
+    data() {
         return {
-            path_param: ["account", "invoice"],
             model: {
                 title: "",
                 partner_id: "",
@@ -37,9 +36,9 @@ export default {
                     name: "partner_id",
                     foreign: ['partner__first_name', 'partner__last_name'],
                 },
-                { label: "status", prop: "status", name: "status",  },
+                { label: "status", prop: "status", name: "status", },
                 { label: "is_posted", prop: "is_posted", name: "is_posted", is_boolean: true, },
-                { label: "total", prop: "total", name: "total",  },
+                { label: "total", prop: "total", name: "total", },
             ],
         };
     },

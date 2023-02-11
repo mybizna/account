@@ -1,6 +1,6 @@
 <template>
-    <table-list title="Financial Year" :path_param="path_param" :search_fields="search_fields" :model="model"
-        :table_fields="table_fields"></table-list>
+    <table-list :path_param="['account', 'financial_year']" title="Financial Year" :search_fields="search_fields"
+        :model="model" :table_fields="table_fields" :setting="{hide_delete_button:true}"></table-list>
 </template>
 
 <script>
@@ -10,9 +10,8 @@ export default {
             "components/common/TableList.vue"
         ),
     },
-    data () {
+    data() {
         return {
-            path_param: ["account", "financial_year"],
             model: {
                 name: "",
                 description: "",
@@ -21,7 +20,6 @@ export default {
             },
             search_fields: [
                 { type: "text", name: "name", label: "Title", ope: "", },
-                { type: "text", name: "description", label: "Description", ope: "", },
                 { type: "datetime", name: "start_date", label: "Start Date", ope: "", },
                 { type: "datetime", name: "end_date", label: "End Date", ope: "", },
             ],
