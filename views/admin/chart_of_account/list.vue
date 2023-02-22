@@ -1,6 +1,9 @@
 <template>
     <table-list :path_param="['account', 'chart_of_account']" title="Chart of Account" :search_fields="search_fields"
-        :model="model" :table_fields="table_fields" :setting="{ hide_delete_button: true }"></table-list>
+        :model="model" :table_fields="table_fields" :setting="{ hide_delete_button: true }">
+        
+        
+        </table-list>
 </template>
 
 <script>
