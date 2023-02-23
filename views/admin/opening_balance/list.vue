@@ -1,7 +1,7 @@
 <template>
-    <table-list :path_param="['account', 'opening_balance']" title="Account Opening Balance"
+    <table-render :path_param="['account', 'opening_balance']" title="Account Opening Balance"
         :search_fields="search_fields" :model="model" :table_fields="table_fields"
-        :setting="{ hide_delete_button: true }"></table-list>
+        :setting="{ hide_delete_button: true }"></table-render>
 </template>
 
 <script>

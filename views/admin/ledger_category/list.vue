@@ -1,7 +1,7 @@
 <template>
-    <table-list :path_param="['account', 'ledger_category']" title="Account Ledger Category"
+    <table-render :path_param="['account', 'ledger_category']" title="Account Ledger Category"
         :search_fields="search_fields" :model="model" :table_fields="table_fields"
-        :setting="{ hide_delete_button: true }"></table-list>
+        :setting="{ hide_delete_button: true }"></table-render>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-    <table-edit module="account" table="chart_of_account" title="Chart of Account" :model="model">
+    <edit-render module="account" table="chart_of_account" title="Chart of Account" :model="model">
 
         <div class="row">
             <div class="col-md-6">
@@ -15,14 +15,11 @@
         </div>
 
 
-    </table-edit>
+    </edit-render>
 </template>
 
 <script>
 export default {
-    components: {
-        TableEdit: window.$func.fetchComponent("components/common/TableEdit.vue")
-    },
 
     data() {
         return {

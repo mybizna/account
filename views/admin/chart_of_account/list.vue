@@ -1,9 +1,18 @@
 <template>
-    <table-list :path_param="['account', 'chart_of_account']" title="Chart of Account" :search_fields="search_fields"
+    <table-render :path_param="['account', 'chart_of_account']" title="Chart of Account" :search_fields="search_fields"
         :model="model" :table_fields="table_fields" :setting="{ hide_delete_button: true }">
         
+        <template #header>
+            <th-render>Name</th-render>
+            <th-render>Slug</th-render>
+        </template>
+
+        <template #body="{ item }">
+            <td>{{ item.title }}</td>
+            <td>{{ item.slug }}</td>
+        </template>
         
-        </table-list>
+        </table-render>
 </template>
 
 <script>
