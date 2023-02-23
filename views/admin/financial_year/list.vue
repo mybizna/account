@@ -5,11 +5,7 @@
 
 <script>
 export default {
-    components: {
-        TableList: window.$func.fetchComponent(
-            "components/common/TableList.vue"
-        ),
-    },
+    
     data() {
         return {
             model: {
