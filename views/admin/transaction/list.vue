@@ -1,68 +1,43 @@
 <template>
-    <table-render :path_param="['account', 'transaction']" title="Transaction" :search_fields="search_fields"
-        :model="model" :table_fields="table_fields" :setting="{ hide_delete_button: true }"></table-render>
+    <table-render :path_param="['account', 'transaction']" title="Transaction" :table_fields="table_fields"
+        :setting="{ hide_delete_button: true }">
+
+        <template #header>
+            <th-render>Amount</th-render>
+            <th-render>Description</th-render>
+            <th-render>Partner</th-render>
+            <th-render>Left Chart of Account</th-render>
+            <th-render>Left Ledger</th-render>
+            <th-render>Right Chart of Account</th-render>
+            <th-render>Right Ledger</th-render>
+            <th-render>Is Processed</th-render>
+        </template>
+
+        <template #body="{ item }">
+            <td>{{ item.amount }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.partner_id }}</td>
+            <td>{{ item.partner_id__partner__first_name }} {{ item.partner_id__partner__last_name }}</td>
+            <td>{{ item.left_chart_of_account_id__account_chart_of_account__name }}</td>
+            <td>{{ item.left_ledger_id__account_ledger__name }}</td>
+            <td>{{ item.right_chart_of_account_id__account_chart_of_account__name }}</td>
+            <td>{{ item.right_ledger_id__account_ledger__name }}</td>
+            <td>{{ item.is_processed }}</td>
+        </template>
+
+    </table-render>
 </template>
 
 <script>
 export default {
     data() {
         return {
-            model: {
-                amount: "",
-                description: "",
-                partner_id: "",
-                left_chart_of_account_id: "",
-                left_ledger_id: "",
-                right_chart_of_account_id: "",
-                right_ledger_id: "",
-                is_processed: "",
-            },
-
-            search_fields: [
-                { type: "text", name: "amount", label: "amount", ope: "", },
-                { type: "text", name: "description", label: "description", ope: "", },
-                { type: "text", name: "partner_id", label: "partner_id", ope: "", },
-                { type: "text", name: "left_chart_of_account_id", label: "left_chart_of_account_id", ope: "", },
-                { type: "text", name: "left_ledger_id", label: "left_ledger_id", ope: "", },
-                { type: "text", name: "right_chart_of_account_id", label: "right_chart_of_account_id", ope: "", },
-                { type: "text", name: "right_ledger_id", label: "right_ledger_id", ope: "", },
-                { type: "text", name: "is_processed", label: "is_processed", ope: "", },
-            ],
             table_fields: [
-                { text: "amount", prop: "amount", name: "amount", },
-                { text: "description", prop: "description", name: "description", },
-                { text: "partner_id", prop: "partner_id", name: "partner_id", },
-                {
-                    text: "Partner",
-                    prop: "[partner__first_name] - [partner__last_name]",
-                    name: "partner_id",
-                    foreign: ['partner__first_name', 'partner__last_name'],
-                },
-                {
-                    text: "Left Chart of Account",
-                    prop: "[account_chart_of_account__name]",
-                    name: "left_chart_of_account_id",
-                    foreign: ['account_chart_of_account__name'],
-                },
-                {
-                    text: "Left Ledger",
-                    prop: "[account_ledger__name]",
-                    name: "left_ledger_id",
-                    foreign: ['account_ledger__name'],
-                },
-                {
-                    text: "Right Chart of Account",
-                    prop: "[account_chart_of_account__name]",
-                    name: "right_chart_of_account_id",
-                    foreign: ['account_chart_of_account__name'],
-                },
-                {
-                    text: "Right Ledger",
-                    prop: "[account_ledger__name]",
-                    name: "right_ledger_id",
-                    foreign: ['account_ledger__name'],
-                },
-                { text: "is_processed", prop: "is_processed", is_boolean: true, name: "is_processed", },
+                'amount', 'description', 'partner_id', 'is_processed',
+                'partner_id__partner__first_name', 'partner_id__partner__last_name',
+                'left_chart_of_account_id__account_chart_of_account__name',
+                'right_chart_of_account_id__account_chart_of_account__name',
+                'left_ledger_id__account_ledger__name', 'right_ledger_id__account_ledger__name'
             ],
         };
     },

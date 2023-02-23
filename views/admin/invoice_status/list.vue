@@ -1,24 +1,25 @@
 <template>
-    <table-render :path_param="['account', 'invoice_status']" title="Invoice Status" :search_fields="search_fields"
-        :model="model" :table_fields="table_fields" :setting="{ hide_delete_button: true }"></table-render>
+    <table-render :path_param="['account', 'invoice_status']" title="Invoice Status" :table_fields="table_fields"
+        :setting="{ hide_delete_button: true }">
+
+        <template #header>
+            <th-render>Type Name</th-render>
+            <th-render>Slug</th-render>
+        </template>
+
+        <template #body="{ item }">
+            <td>{{ item.type_name }}</td>
+            <td>{{ item.slug }}</td>
+        </template>
+
+    </table-render>
 </template>
 
 <script>
 export default {
     data() {
         return {
-            model: {
-                type_name: "",
-                slug: "",
-            },
-            search_fields: [
-                { type: "text", name: "type_name", label: "Type Name", ope: "", },
-                { type: "text", name: "slug", label: "Slug", ope: "", },
-            ],
-            table_fields: [
-                { text: "Type Name", prop: "type_name", name: "type_name", },
-                { text: "Slug", prop: "slug", name: "slug", },
-            ],
+            table_fields: ['type_name', 'slug'],
         };
     },
 };

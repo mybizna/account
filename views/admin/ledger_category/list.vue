@@ -1,7 +1,26 @@
 <template>
-    <table-render :path_param="['account', 'ledger_category']" title="Account Ledger Category"
-        :search_fields="search_fields" :model="model" :table_fields="table_fields"
-        :setting="{ hide_delete_button: true }"></table-render>
+    <table-render :path_param="['account', 'ledger_category']" title="Account Ledger Category" :table_fields="table_fields"
+        :setting="{ hide_delete_button: true }">
+
+
+        <template #header>
+            <th-render>Name</th-render>
+            <th-render>Slug</th-render>
+            <th-render>Chart of Account</th-render>
+            <th-render>Parent</th-render>
+            <th-render>System</th-render>
+        </template>
+
+        <template #body="{ item }">
+            <td>{{ item.name }}</td>
+            <td>{{ item.slug }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.chart_id__account_chart_of_account__name }}</td>
+            <td>{{ item.parent_id__account_ledger__name }}</td>
+            <td>{{ item.system }}</td>
+        </template>
+
+    </table-render>
 </template>
 
 <script>
@@ -10,37 +29,11 @@ export default {
 
     data() {
         return {
-            model: {
-                name: "",
-                slug: "",
-                chart_id: "",
-                parent_id: "",
-                system: "",
-            },
-            search_fields: [
-                { type: "text", name: "name", label: "Name", ope: "", },
-                { type: "text", name: "slug", label: "Slug", ope: "", },
-                { type: "text", name: "chart_id", label: "Chart Id", ope: "", },
-                { type: "text", name: "parent_id", label: "Parent", ope: "", },
-                { type: "switch", name: "system", label: "System", ope: "", },
-            ],
             table_fields: [
-                { text: "Name", prop: "name", name: "name", },
-                { text: "Slug", prop: "description", name: "description", },
-                {
-                    text: "Chart of Account",
-                    prop: "[account_chart_of_account__name]",
-                    name: "chart_id",
-                    foreign: ['account_chart_of_account__name'],
-                },
-                {
-                    text: "Parent",
-                    prop: "[account_ledger__name]",
-                    name: "parent_id",
-                    foreign: ['account_ledger__name'],
-                },
-                { text: "System", prop: "system", align: "center", is_boolean: true, name: "system", },
+                'name', 'description', 'system', 'parent_id__account_ledger__name',
+                'chart_id__account_chart_of_account__name'
             ],
+
         };
     },
 };

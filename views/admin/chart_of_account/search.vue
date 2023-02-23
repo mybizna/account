@@ -8,7 +8,8 @@ export default {
     watch: {
         model: {
             handler: function (newVal) {
-                this.$emitter.emit("system-search", { module: 'account', table: 'chart_of_account', search: this.model });
+                var path = ['account', 'chart_of_account'];
+                this.$emitter.emit("system-search", { path:['account', 'chart_of_account'], search: this.model });
             },
             deep: true
         },

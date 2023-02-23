@@ -1,5 +1,5 @@
 <template>
-    <edit-render module="account" table="chart_of_account" title="Chart of Account" :model="model">
+    <edit-render :path_param="['account', 'chart_of_account']" title="Chart of Account" :model="model">
 
         <div class="row">
             <div class="col-md-6">
@@ -25,8 +25,8 @@ export default {
         return {
             id: null,
             model: {
-                id: "", 
-                name: "", 
+                id: "",
+                name: "",
                 slug: "",
             },
 

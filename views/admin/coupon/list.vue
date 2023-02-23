@@ -1,54 +1,45 @@
 <template>
-    <table-render :path_param="['account', 'coupon']" title="Coupon" :search_fields="search_fields" :model="model"
-        :table_fields="table_fields"></table-render>
+    <table-render :path_param="['account', 'coupon']" title="Coupon" :table_fields="table_fields">
+
+        <template #header>
+            <th-render>Code</th-render>
+            <th-render>Description</th-render>
+            <th-render>Value</th-render>
+            <th-render>Start Amount</th-render>
+            <th-render>End Amount</th-render>
+            <th-render>Start Date</th-render>
+            <th-render>End Date</th-render>
+            <th-render>Applied</th-render>
+            <th-render>Is Percent</th-render>
+            <th-render>Published</th-render>
+            <th-render>Is Visible</th-render>
+        </template>
+        <template #body="{ item }">
+            <td>{{ item.code }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.value }}</td>
+            <td>{{ item.start_amount }}</td>
+            <td>{{ item.end_amount }}</td>
+            <td>{{ item.start_date }}</td>
+            <td>{{ item.end_date }}</td>
+            <td>{{ item.applied }}</td>
+            <td>{{ item.is_percent }}</td>
+            <td>{{ item.published }}</td>
+            <td>{{ item.is_visible }}</td>
+        </template>
+
+    </table-render>
 </template>
 
 <script>
 export default {
     data() {
         return {
-            model: {
-                code: "",
-                description: "",
-                value: "",
-                start_amount: "",
-                end_amount: "",
-                start_date: "",
-                end_date: "",
-                applied: "",
-                is_percent: "",
-                published: "",
-                is_visible: "",
-            },
-
-
-            search_fields: [
-                { type: "text", name: "code", label: "Code", ope: "", },
-                { type: "text", name: "description", label: "description", ope: "", },
-                { type: "text", name: "value", label: "value", ope: "", },
-                { type: "text", name: "start_amount", label: "start_amount", ope: "", },
-                { type: "text", name: "end_amount", label: "end_amount", ope: "", },
-                { type: "text", name: "start_date", label: "start_date", ope: "", },
-                { type: "text", name: "end_date", label: "end_date", ope: "", },
-                { type: "text", name: "applied", label: "applied", ope: "", },
-                { type: "text", name: "is_percent", label: "is_percent", ope: "", },
-                { type: "text", name: "published", label: "published", ope: "", },
-                { type: "text", name: "is_visible", label: "is_visible", ope: "", },
-            ],
             table_fields: [
-                { text: "Code", prop: "code", name: "code", },
-                { text: "description", prop: "description", name: "description", },
-                { text: "value", prop: "value", name: "value", },
-                { text: "start_amount", prop: "start_amount", name: "start_amount", },
-                { text: "end_amount", prop: "end_amount", name: "end_amount", },
-                { text: "start_date", prop: "start_date", name: "start_date", },
-                { text: "Ref", prop: "end_date", name: "end_date", },
-                { text: "end_date", prop: "applied", name: "applied", },
-                { text: "is_percent", prop: "is_percent", name: "is_percent", },
-                { text: "published", prop: "published", name: "published", },
-                { text: "is_visible", prop: "is_visible", name: "is_visible", },
+                "code", "description", "value", 'start_amount', 'end_amount',
+                'start_date', 'end_date', 'applied', 'is_percent', 'published', 'is_visible'
+            ]
 
-            ],
         };
     },
 };

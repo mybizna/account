@@ -1,6 +1,32 @@
 <template>
-    <table-render :path_param="['account', 'payment']" title="Payment" :search_fields="search_fields" :model="model"
-        :table_fields="table_fields" :setting="{ hide_delete_button: true }"></table-render>
+    <table-render :path_param="['account', 'payment']" title="Payment" :table_fields="table_fields"
+        :setting="{ hide_delete_button: true }">
+
+        <template #header>
+            <th-render>Title</th-render>
+            <th-render>Partner</th-render>
+            <th-render>Receipt</th-render>
+            <th-render>Code</th-render>
+            <th-render>Gateway</th-render>
+            <th-render>Ledger</th-render>
+            <th-render>Status</th-render>
+            <th-render>Type</th-render>
+            <th-render>Amount</th-render>
+        </template>
+
+        <template #body="{ item }">
+            <td>{{ item.title }}</td>
+            <td>{{ item.partner_id__partner__first_name }}</td>
+            <td>{{ item.receipt_no }}</td>
+            <td>{{ item.code }}</td>
+            <td>{{ item.gateway_id__account_gateway__title }}</td>
+            <td>{{ item.ledger_id__account_ledger__name }}</td>
+            <td>{{ item.status }}</td>
+            <td>{{ item.type }}</td>
+            <td>{{ item.amount }}</td>
+        </template>
+
+    </table-render>
 </template>
 
 <script>
@@ -8,54 +34,10 @@ export default {
 
     data() {
         return {
-            model: {
-                title: "",
-                amount: "",
-                ledger_id: "",
-                partner_id: "",
-                gateway_id: "",
-                receipt_no: "",
-                code: "",
-                status: "",
-                type: "",
-                is_posted: "",
-            },
-
-            search_fields: [
-                { type: "text", name: "title", label: "title", ope: "", },
-                { type: "text", name: "amount", label: "amount", ope: "", },
-                { type: "text", name: "receipt_no", label: "receipt_no", ope: "", },
-                { type: "text", name: "code", label: "code", ope: "", },
-                { type: "text", name: "status", label: "status", ope: "", },
-                { type: "text", name: "type", label: "type", ope: "", },
-                { type: "text", name: "is_posted", label: "is_posted", ope: "", },
-            ],
             table_fields: [
-                { text: "title", prop: "title", name: "title", },
-                {
-                    text: "Partner",
-                    prop: "[partner__first_name] [partner__last_name]",
-                    name: "partner_id",
-                    foreign: ['partner__first_name', 'partner__last_name'],
-                },
-
-                { text: "Receipt", prop: "receipt_no", name: "receipt_no", },
-                { text: "Code", prop: "code", name: "code", },
-                {
-                    text: "Gateway",
-                    prop: "[account_gateway__title]",
-                    name: "gateway_id",
-                    foreign: ['account_gateway__title'],
-                },
-                {
-                    text: "Ledger",
-                    prop: "[account_ledger__name]",
-                    name: "ledger_id",
-                    foreign: ['account_ledger__name'],
-                },
-                { text: "Status", prop: "status", name: "status", },
-                { text: "Type", prop: "type", name: "type", },
-                { text: "Amount", prop: "amount", name: "amount", },
+                'title', 'receipt_no', 'code', 'status', 'type', 'amount',
+                'partner_id__partner__first_name', 'partner_id__partner__last_name',
+                'gateway_id__account_gateway__title', 'ledger_id__account_ledger__name',
             ],
         };
     },

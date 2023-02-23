@@ -1,52 +1,36 @@
 <template>
-    <table-render :path_param="['account', 'opening_balance']" title="Account Opening Balance"
-        :search_fields="search_fields" :model="model" :table_fields="table_fields"
-        :setting="{ hide_delete_button: true }"></table-render>
+    <table-render :path_param="['account', 'opening_balance']" title="Account Opening Balance" :table_fields="table_fields"
+        :setting="{ hide_delete_button: true }">
+
+
+        <template #header>
+            <th-render>Type</th-render>
+            <th-render>Financial Year</th-render>
+            <th-render>Chart of Account</th-render>
+            <th-render>Ledger</th-render>
+            <th-render>Debit</th-render>
+            <th-render>Credit</th-render>
+        </template>
+
+        <template #body="{ item }">
+            <td>{{ item.type }}</td>
+            <td>{{ item.financial_year_id__account_financial_year__name }}</td>
+            <td>{{ item.chart_id__account_chart_of_account__name }}</td>
+            <td>{{ item.ledger_id__account_ledger__name }}</td>
+            <td>{{ item.debit }}</td>
+            <td>{{ item.credit }}</td>
+        </template>
+
+    </table-render>
 </template>
 
 <script>
 export default {
     data() {
         return {
-            model: {
-                financial_year_id: "",
-                chart_id: "",
-                ledger_id: "",
-                type: "",
-                debit: "",
-                credit: "",
-            },
-            search_fields: [
-                { type: "text", name: "type", label: "Type", ope: "", },
-                { type: "text", name: "financial_year_id", label: "Financial Year", ope: "", },
-                { type: "text", name: "chart_id", label: "Chart Id", ope: "", },
-                { type: "text", name: "ledger_id", label: "Ledger Id", ope: "", },
-                { type: "text", name: "debit", label: "Debit", ope: "", },
-                { type: "text", name: "credit", label: "Credit", ope: "", },
-            ],
             table_fields: [
-                { text: "Type", prop: "type", name: "type", },
-
-                {
-                    text: "Financial Year",
-                    prop: "[account_financial_year__name]",
-                    name: "financial_year_id",
-                    foreign: ['account_financial_year__name'],
-                },
-                {
-                    text: "Chart of Account",
-                    prop: "[account_chart_of_account__name]",
-                    name: "chart_id",
-                    foreign: ['account_chart_of_account__name'],
-                },
-                {
-                    text: "Ledger",
-                    prop: "[account_ledger__name]",
-                    name: "ledger_id",
-                    foreign: ['account_ledger__name'],
-                },
-                { text: "Debit", prop: "debit", name: "debit", },
-                { text: "Credit", prop: "credit", name: "credit", },
+                'type', 'chart_id__account_chart_of_account__name', 'debit', 'credit',
+                'financial_year_id__account_financial_year__name', 'ledger_id__account_ledger__name'
             ],
         };
     },

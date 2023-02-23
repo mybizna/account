@@ -1,30 +1,25 @@
 <template>
-    <table-render title="Account Journal" :path_param="path_param" :search_fields="search_fields" :model="model"
-        :table_fields="table_fields"></table-render>
+    <table-render :path_param="['account', 'journal']" title="Account Journal" :table_fields="table_fields">
+
+        <template #header>
+            <th-render>Title</th-render>
+            <th-render>Debit</th-render>
+            <th-render>Credit</th-render>
+        </template>
+
+        <template #body="{ item }">
+            <td>{{ item.title }}</td>
+            <td>{{ item.debit }}</td>
+            <td>{{ item.credit }}</td>
+        </template>
+    </table-render>
 </template>
 
 <script>
 export default {
-    data () {
+    data() {
         return {
-            path_param: ["account", "journal"],
-            model: {
-                title: "",
-                debit: "",
-                credit: "",
-                note: "",
-                particulars: "",
-            },
-            search_fields: [
-                { type: "text", name: "title", label: "title", ope: "", },
-                { type: "text", name: "debit", label: "debit", ope: "", },
-                { type: "text", name: "credit", label: "credit", ope: "", },
-            ],
-            table_fields: [
-                { text: "Title", prop: "title", name: "title", },
-                { text: "Debit", prop: "debit", name: "debit", },
-                { text: "Credit", prop: "credit", name: "credit", },
-            ],
+            table_fields: ['title', 'debit', 'credit'],
         };
     },
 };

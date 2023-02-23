@@ -1,51 +1,38 @@
 <template>
-    <table-render title="Account Ledger" :path_param="path_param" :search_fields="search_fields" :model="model"
-        :table_fields="table_fields"></table-render>
+    <table-render :path_param="['account', 'ledger']" title="Account Ledger" :table_fields="table_fields">
+    
+        <template #header>
+            <th-render>Name</th-render>
+            <th-render>Slug</th-render>
+            <th-render>Code</th-render>
+            <th-render>Chart of Account</th-render>
+            <th-render>Category</th-render>
+            <th-render>Unused</th-render>
+            <th-render>System</th-render>
+        </template>
+        
+        <template #body="{ item }">
+            <td>{{ item.name }}</td>
+            <td>{{ item.slug }}</td>
+            <td>{{ item.code }}</td>
+            <td>{{ item.chart_id__account_chart_of_account__name }}</td>
+            <td>{{ item.category_id__account_ledger_category__name }}</td>
+            <td>{{ item.unused }}</td>
+            <td>{{ item.system }}</td>
+        </template>
+
+    </table-render>
 </template>
 
 <script>
 export default {
-    data () {
+    data() {
         return {
-            path_param: ["account", "ledger"],
-            model: {
-                chart_id: "",
-                category_id: "",
-                name: "",
-                slug: "",
-                code: "",
-                unused: "",
-                system: "",
-            },
-            search_fields: [
-                { type: "text", name: "name", label: "Name", ope: "", },
-                { type: "text", name: "slug", label: "slug", ope: "", },
-                { type: "text", name: "code", label: "code", ope: "", },
-                { type: "text", name: "chart_id", label: "Chart", ope: "", },
-                { type: "text", name: "category_id", label: "Category", ope: "", },
-                { type: "switch", name: "unused", label: "Unused", ope: "", },
-                { type: "switch", name: "system", label: "System", ope: "", },
-            ],
             table_fields: [
-                { text: "Name", prop: "name", name: "name", },
-                { text: "Slug", prop: "slug", name: "slug", },
-                { text: "Code", prop: "code", name: "code", },
-
-                 {
-                    text: "Chart of Account",
-                    prop: "[account_chart_of_account__name]",
-                    name: "chart_id",
-                    foreign: ['account_chart_of_account__name'],
-                },
-                 {
-                    text: "Category",
-                    prop: "[account_ledger_category__name]",
-                    name: "category_id",
-                    foreign: ['account_ledger_category__name'],
-                },
-                { text: "Unused", prop: "unused", align: "center", is_boolean: true, name: "unused", },
-                { text: "System", prop: "system", align: "center", is_boolean: true, name: "system", },
+                'name','slug','code','unused','system',
+            'chart_id__account_ledger_category__name','category_id__account_ledger_category__name'
             ],
+          
         };
     },
 };
