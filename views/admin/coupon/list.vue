@@ -23,9 +23,18 @@
             <td>{{ item.start_date }}</td>
             <td>{{ item.end_date }}</td>
             <td>{{ item.applied }}</td>
-            <td>{{ item.is_percent }}</td>
-            <td>{{ item.published }}</td>
-            <td>{{ item.is_visible }}</td>
+            <td class="text-center">
+                <btn-status :status="item.applied"></btn-status>
+            </td>
+            <td class="text-center">
+                <btn-status :status="item.is_percent"></btn-status>
+            </td>
+            <td class="text-center">
+                <btn-status :status="item.published"></btn-status>
+            </td>
+            <td class="text-center">
+                <btn-status :status="item.is_visible"></btn-status>
+            </td>
         </template>
 
     </table-render>

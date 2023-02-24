@@ -19,9 +19,15 @@
             <td>{{ item.image }}</td>
             <td>{{ item.url }}</td>
             <td>{{ item.ordering }}</td>
-            <td>{{ item.is_default }}</td>
-            <td>{{ item.is_hidden }}</td>
-            <td>{{ item.published }}</td>
+            <td class="text-center">
+                <btn-status :status="item.is_default"></btn-status>
+            </td>
+            <td class="text-center">
+                <btn-status :status="item.is_hidden"></btn-status>
+            </td>
+            <td class="text-center">
+                <btn-status :status="item.published"></btn-status>
+            </td>
         </template>
 
     </table-render>

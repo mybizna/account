@@ -17,7 +17,9 @@
             <td>{{ item.invoice_no }}</td>
             <td>{{ item.partner_id__partner__first_name }} {{ item.partner_id__partner__last_name }}</td>
             <td>{{ item.status }}</td>
-            <td>{{ item.is_posted }}</td>
+            <td class="text-center">
+                <btn-status :status="item.is_posted"></btn-status>
+            </td>
             <td>{{ item.total }}</td>
         </template>
     </table-render>

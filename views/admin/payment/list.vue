@@ -21,7 +21,9 @@
             <td>{{ item.code }}</td>
             <td>{{ item.gateway_id__account_gateway__title }}</td>
             <td>{{ item.ledger_id__account_ledger__name }}</td>
-            <td>{{ item.status }}</td>
+            <td class="text-center">
+                <btn-status :status="item.status"></btn-status>
+            </td>
             <td>{{ item.type }}</td>
             <td>{{ item.amount }}</td>
         </template>

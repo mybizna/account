@@ -18,9 +18,15 @@
             <td>{{ item.value }}</td>
             <td>{{ item.start_amount }}</td>
             <td>{{ item.end_amount }}</td>
-            <td>{{ item.is_visible }}</td>
-            <td>{{ item.is_percent }}</td>
-            <td>{{ item.published }}</td>
+            <td class="text-center">
+                <btn-status :status="item.is_visible"></btn-status>
+            </td>
+            <td class="text-center">
+                <btn-status :status="item.is_percent"></btn-status>
+            </td>
+            <td class="text-center">
+                <btn-status :status="item.published"></btn-status>
+            </td>
         </template>
 
     </table-render>
