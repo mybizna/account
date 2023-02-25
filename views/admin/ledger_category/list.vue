@@ -30,7 +30,7 @@ export default {
     data() {
         return {
             table_fields: [
-                'name', 'description', 'system', 'parent_id__account_ledger__name',
+                'name', 'description', 'is_system', 'parent_id__account_ledger__name',
                 'chart_id__account_chart_of_account__name'
             ],
 

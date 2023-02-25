@@ -9,7 +9,7 @@ use Modules\Base\Classes\Migration;
 class LedgerCategory extends BaseModel
 {
 
-    protected $fillable = ['name', 'slug', 'chart_id', 'parent_id', 'system'];
+    protected $fillable = ['name', 'slug', 'chart_id', 'parent_id', 'is_system'];
     public $migrationDependancy = ['account_chart_of_account'];
     protected $table = "account_ledger_category";
 
@@ -26,7 +26,7 @@ class LedgerCategory extends BaseModel
         $table->string('slug')->nullable();
         $table->integer('chart_id')->nullable();
         $table->integer('parent_id')->nullable();
-        $table->tinyInteger('system')->nullable();
+        $table->tinyInteger('is_system')->nullable();
     }
 
     public function post_migration(Blueprint $table)

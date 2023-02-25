@@ -32,7 +32,7 @@ class Payment extends BaseModel
         $table->integer('gateway_id');
         $table->string('receipt_no')->nullable();
         $table->string('code')->nullable();
-        $table->enum('status', ['pending', 'paid', 'canceled'])->default('pending');
+        $table->enum('status', ['pending', 'paid', 'reversed','canceled'])->default('pending');
         $table->enum('type', ['in', 'out'])->default('in');
         $table->tinyInteger('is_posted')->default(false);
     }

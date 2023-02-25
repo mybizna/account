@@ -9,7 +9,7 @@ use Modules\Base\Entities\BaseModel;
 class Ledger extends BaseModel
 {
 
-    protected $fillable = ['chart_id', 'category_id', 'name', 'slug', 'code', 'unused', 'system'];
+    protected $fillable = ['chart_id', 'category_id', 'name', 'slug', 'code', 'unused', 'is_system'];
     public $migrationDependancy = ['account_chart_of_account', 'account_ledger_category'];
     protected $table = "account_ledger";
 
@@ -28,7 +28,7 @@ class Ledger extends BaseModel
         $table->string('slug')->nullable();
         $table->integer('code')->nullable();
         $table->tinyInteger('unused')->default(true);
-        $table->tinyInteger('system')->default(false);
+        $table->tinyInteger('is_system')->default(false);
     }
 
     public function post_migration(Blueprint $table)
@@ -46,7 +46,7 @@ class Ledger extends BaseModel
 
         $ledger = $this->where('id', $id)->first();
 
-        if ($ledger->system) {
+        if ($ledger->is_system) {
             return [
                 'module' => $this->module,
                 'model' => $this->model,

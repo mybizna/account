@@ -2,6 +2,7 @@
 
 namespace Modules\Account\Classes;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Modules\Account\Classes\Journal;
@@ -25,7 +26,7 @@ class Invoice
      * @param  string $description Description for the Invoice
      * @return void
      */
-    public function generateInvoice($title, $partner_id, $items = [], $status='draft', $description = "")
+    public function generateInvoice($title, $partner_id, $items = [], $status = 'draft', $description = "")
     {
         $total = 0;
         $ledger = new Ledger();
@@ -36,12 +37,16 @@ class Invoice
         DB::beginTransaction();
 
         try {
+
+            $due_date = Carbon::now()->addDays(14);
+            
             $invoice = DBInvoice::create(
                 [
                     'title' => $title,
                     'partner_id' => $partner_id,
                     'description' => $description,
                     'invoice_no' => $invoice_no,
+                    'due_date' => $due_date,
                     'status' => $status,
                 ]
             );

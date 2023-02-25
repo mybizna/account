@@ -18,7 +18,7 @@
             <td>{{ item.chart_id__account_chart_of_account__name }}</td>
             <td>{{ item.category_id__account_ledger_category__name }}</td>
             <td>{{ item.unused }}</td>
-            <td>{{ item.system }}</td>
+            <td>{{ item.is_system }}</td>
         </template>
 
     </table-render>
@@ -29,7 +29,7 @@ export default {
     data() {
         return {
             table_fields: [
-                'name','slug','code','unused','system',
+                'name','slug','code','unused','is_system',
             'chart_id__account_ledger_category__name','category_id__account_ledger_category__name'
             ],
           

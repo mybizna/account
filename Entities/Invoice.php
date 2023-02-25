@@ -27,6 +27,7 @@ class Invoice extends BaseModel
         $table->string('title');
         $table->char('invoice_no', 100);
         $table->integer('partner_id');
+        $table->date('due_date')->useCurrent();
         $table->string('module')->default('Account');
         $table->string('model')->default('Invoice');
         $table->enum('status', ['draft', 'pending', 'partial', 'paid', 'closed', 'void'])->default('draft')->nullable();
