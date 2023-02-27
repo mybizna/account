@@ -3,11 +3,11 @@
 
         <div class="row mb-2">
             <div class="col-sm-6">
-                <FormKit id="title" type="text" v-model="model.title" validation="required"
+                <FormKit label="Invoice Title"  id="title" type="text" v-model="model.title" validation="required"
                     inner-class="$reset formkit-inner" wrapper-class="$reset formkit-wrapper" input-class="h-10" />
             </div>
             <div class="col-sm-6">
-                <FormKit button_label="Select Customer" id="partner_id" type="recordpicker"
+                <FormKit label="Select Partner" button_label="Select Partner" id="partner_id" type="recordpicker"
                     comp_url="partner/admin/partner/list.vue" :setting="setting.partner_id" v-model="model.partner_id"
                     validation="required" inner-class="$reset formkit-inner" wrapper-class="$reset formkit-wrapper" />
             </div>

@@ -5,9 +5,9 @@ $this->add_module_info("account", [
     'description' => 'Account',
     'icon' => 'fas fa-funnel-dollar',
     'path' => '/account/admin/invoice',
-    'class_str'=> 'text-primary border-primary'
+    'class_str' => 'text-primary border-primary',
+    'position' => 1,
 ]);
- 
 
 //$this->add_menu("module", "key", "title","path", "icon", "position");
 $this->add_menu("account", "invoice", "Invoice", "/account/admin/invoice", "fas fa-cogs", 1);
