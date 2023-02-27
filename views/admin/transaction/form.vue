@@ -1,5 +1,5 @@
 <template>
-    <edit-render :path_param="path_param" :model="model">
+    <edit-render :path_param="['account', 'transaction']" :model="model">
         <div class="row">
             <div class="col-md-6">
                 <FormKit label="Id" id="id" type="hidden" v-model="model.id" validation="required" />
@@ -47,10 +47,9 @@
 
 <script>
 export default {
-    data () {
+    data() {
         return {
             id: null,
-            path_param: ["account", "transaction"],
             setting: {
                 partner_id: {
                     path_param: ["partner", "partner"],

@@ -2,18 +2,17 @@
 
 namespace Modules\Account\Entities;
 
-use Modules\Base\Entities\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
-
+use Modules\Base\Entities\BaseModel;
 
 class Rate extends BaseModel
 {
 
     protected $fillable = [
-        'title', 'slug', 'value', 'start_amount', 'end_amount', 'ledger_id',
-        'file_limit', 'file_type', 'file_structure', 'file_suffix',
-        'is_percent', 'is_visible', 'published'
+        'title', 'slug', 'value', 'ledger_id',
+        'value', 'method', 'params', 'ordering',
+        'on_total', 'published',
     ];
     public $migrationDependancy = ['account_ledger'];
     protected $table = "account_rate";

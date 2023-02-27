@@ -29,10 +29,8 @@ $this->add_submenu("account", "setting", "Rate", "/account/admin/rate", 5);
 $this->add_submenu("account", "setting", "Ledger", "/account/admin/ledger", 5);
 $this->add_submenu("account", "setting", "Ledger Category", "/account/admin/ledger_category", 5);
 
-$this->add_submenu("account", "reports", "Balance Sheet", "/account/reports/balance-sheet", 5);
-$this->add_submenu("account", "reports", "Income Statement", "/account/reports/balance-sheet", 5);
-$this->add_submenu("account", "reports", "Ledger Report", "/account/reports/ledger-report", 5);
-$this->add_submenu("account", "reports", "Trail Balance", "/account/reports/trail-balance", 5);
-//$this->add_submenu("account", "settings", "Tax Rates", "/settings/taxes/tax-rates", 5);
-//$this->add_submenu("account", "settings", "Tax Payments", "/settings/taxes/tax-records", 5);
-//$this->add_submenu("account", "settings", "Tax Rates", "/settings/taxes/tax-rates", 5);
+//TODO: Work on reporting
+//$this->add_submenu("account", "reports", "Balance Sheet", "/account/reports/balance-sheet", 5);
+//$this->add_submenu("account", "reports", "Income Statement", "/account/reports/balance-sheet", 5);
+//$this->add_submenu("account", "reports", "Ledger Report", "/account/reports/ledger-report", 5);
+//$this->add_submenu("account", "reports", "Trail Balance", "/account/reports/trail-balance", 5);

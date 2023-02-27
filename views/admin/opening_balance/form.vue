@@ -1,12 +1,13 @@
 <template>
-    <edit-render :path_param="path_param" :model="model">
+    <edit-render :path_param="['account', 'opening_balance']" :model="model">
 
         <div class="row">
             <div class="col-md-6">
 
                 <FormKit v-model="model.id" label="Id" id="id" type="hidden" validation="required" />
                 <FormKit v-model="model.type" label="Type" id="type" type="text" validation="required" />
-                <FormKit v-model="model.financial_year_id" label="Financial Year" id="financial_year_id" type="text" validation="required" />
+                <FormKit v-model="model.financial_year_id" label="Financial Year" id="financial_year_id" type="text"
+                    validation="required" />
                 <FormKit v-model="model.chart_id" label="Chart" id="chart_id" type="text" validation="required" />
                 <FormKit v-model="model.ledger_id" label="Ledger" id="ledger_id" type="text" validation="required" />
 
@@ -25,10 +26,9 @@
 
 <script>
 export default {
-    data () {
+    data() {
         return {
             id: null,
-            path_param: ["account", "opening_balance"],
             model: {
                 id: "",
                 financial_year_id: "",

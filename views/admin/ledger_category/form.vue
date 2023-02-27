@@ -1,5 +1,5 @@
 <template>
-    <edit-render :path_param="path_param" :model="model">
+    <edit-render :path_param="['account', 'ledger_category']" :model="model">
 
         <div class="row">
             <div class="col-md-6">
@@ -26,7 +26,6 @@ export default {
     data () {
         return {
             id: null,
-            path_param: ["account", "ledger_category"],
             model: {
                 id: "",
                 name: "",

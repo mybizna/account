@@ -1,5 +1,5 @@
 <template>
-    <edit-render :path_param="path_param" :model="model" passed_form_url="invoice/savedata">
+    <edit-render :path_param="['account', 'invoice']" :model="model" passed_form_url="invoice/savedata">
 
         <div class="row mb-2">
             <div class="col-sm-6">
@@ -268,7 +268,6 @@ export default {
         return {
             id: null,
             timestamp: "",
-            path_param: ["account", "invoice"],
             setting: {
                 partner_id: {
                     path_param: ["partner", "partner"],

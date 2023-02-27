@@ -14,8 +14,8 @@ return [
         "comp_url" => "account/admin/ledger/list.vue",
         "setting" => [
             'path_param' => ["account", "ledger"],
-            'fields' => ['name', 'slug', 'chart_id', 'account_chart_of_account__name'],
-            'template' => '[name] ([slug]) - [chart_id.account_chart_of_account__name]',
+            'fields' => ['name', 'slug', 'chart_id__account_chart_of_account__name'],
+            'template' => '[name] ([slug]) - [chart_id__account_chart_of_account__name]',
 
         ]
     ]
