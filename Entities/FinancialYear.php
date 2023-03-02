@@ -12,6 +12,8 @@ class FinancialYear extends BaseModel
     public $migrationDependancy = [];
     protected $table = "account_financial_year";
 
+    protected $can_delete = "false";
+
     /**
      * List of fields for managing postings.
      *

@@ -16,6 +16,8 @@ class Transaction extends BaseModel
     public $migrationDependancy = ['partner', 'account_payment', 'account_rate'];
     protected $table = "account_transaction";
 
+    protected $can_delete = "false";
+
     /**
      * List of fields for managing postings.
      *

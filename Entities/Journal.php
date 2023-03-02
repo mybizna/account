@@ -13,6 +13,8 @@ class Journal extends BaseModel
     public $migrationDependancy = ['partner', 'account_ledger'];
     protected $table = "account_journal";
 
+    protected $can_delete = "false";
+
     /**
      * List of fields for managing postings.
      *

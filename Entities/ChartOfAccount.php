@@ -12,6 +12,8 @@ class ChartOfAccount extends BaseModel
     public $migrationDependancy = [];
     protected $table = "account_chart_of_account";
 
+    protected $can_delete = "false";
+
     /**
      * List of fields for managing postings.
      *

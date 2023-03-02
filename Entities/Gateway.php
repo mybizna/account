@@ -17,6 +17,8 @@ class Gateway extends BaseModel
     public $migrationDependancy = ['core_currency', 'account_ledger'];
     protected $table = "account_gateway";
 
+    protected $can_delete = "false";
+
     /**
      * List of fields for managing postings.
      *

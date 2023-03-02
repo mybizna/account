@@ -16,6 +16,8 @@ class Payment extends BaseModel
     public $migrationDependancy = ['account_gateway', 'account_ledger', 'partner'];
     protected $table = "account_payment";
 
+    protected $can_delete = "false";
+
     /**
      * List of fields for managing postings.
      *

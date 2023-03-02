@@ -13,6 +13,8 @@ class Ledger extends BaseModel
     public $migrationDependancy = ['account_chart_of_account', 'account_ledger_category'];
     protected $table = "account_ledger";
 
+    protected $can_delete = "false";
+
     /**
      * List of fields for managing postings.
      *
