@@ -87,7 +87,8 @@ class Payment
                 
                 $gateway = $gateway_cls->getGatewayById($data['gateway_id']);
                 $payment->gateway_title = $gateway->title;
-
+                $payment->partner_name = $partner->first_name.' '.$partner->last_name .' '.$partner->email;
+                
                 $notification->send('account_payment_paid', $partner, $payment);
             }
 

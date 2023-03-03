@@ -49,7 +49,7 @@ class Payment
             <p> <b>Code:</b> {{ $code }} .</p>
             <p> <b>Gateway:</b> {{ $gateway_title }} .</p>
             <br><br>
-            Your payment {{ receipt_no }} of {{ $amount }} paid by {{ $gateway_title }} was successful.
+            Your payment {{ $receipt_no }} of {{ $amount }} paid by {{ $gateway_title }} was successful.
             <br><br>
             If you need any help, please let us know so that we can assist you.
             <br><br>
