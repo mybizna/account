@@ -3,7 +3,7 @@
 
         <div class="row mb-2">
             <div class="col-sm-6">
-                <FormKit label="Invoice Title"  id="title" type="text" v-model="model.title" validation="required"
+                <FormKit label="Invoice Title" id="title" type="text" v-model="model.title" validation="required"
                     inner-class="$reset formkit-inner" wrapper-class="$reset formkit-wrapper" input-class="h-10" />
             </div>
             <div class="col-sm-6">
@@ -39,15 +39,20 @@
 
                 </div>
                 <div class="col-md-4">
-                    <div
-                        :class="model.status == 'paid' ? 'bg-green' : (model.status == 'draft' ? 'bg-grey' : 'bg-red')">
+                    <div :class="model.status == 'paid' ? 'bg-green' : (model.status == 'draft' ? 'bg-grey' : 'bg-red')">
                         <h3 class="text-center p-2 uppercase font-semibold text-white"> {{ model.status }} </h3>
                     </div>
-                    <b v-if="invoice.date_created">Invoice #{{ invoice.date_created }}</b>
-                    <b v-else>Invoice #{{ invoice.id }}</b>
+                    <b>ID:</b> {{ invoice.id }}
+                    <br>
+                    <b>No:</b> {{ invoice.invoice_no }}
                     <br>
                     <br>
-                    <b>Payment Due:</b> {{ timestamp }}<br>
+                    <b>Payment Due:</b>
+
+                    <template v-if="invoice.due_date">{{ invoice.due_date }}</template>
+                    <template v-else>{{ timestamp }}</template>
+
+                    <br>
                 </div>
             </div>
 
@@ -156,7 +161,7 @@
                                     :aria-controls="gateway.slug" :aria-selected="!g_index ? 'true' : 'false'">
                                     <i v-if="gateway.paid_amount > 0" class="fas fa-check-circle"></i>
                                     {{
-                                            gateway.title
+                                        gateway.title
                                     }}</button>
                             </li>
                         </ul>
@@ -168,8 +173,7 @@
                                     <FormKit label="Amount" id="amount" type="number" validation="required"
                                         v-model="gateway.paid_amount" @keyup="calculateTotal" />
                                     <template v-if="gateway.slug != 'cash'">
-                                        <FormKit label="Reference" id="reference" type="text"
-                                            v-model="gateway.reference" />
+                                        <FormKit label="Reference" id="reference" type="text" v-model="gateway.reference" />
                                         <FormKit label="Others" id="others" type="text" v-model="gateway.others" />
                                     </template>
 
@@ -264,7 +268,7 @@
 
 <script>
 export default {
-    data () {
+    data() {
         return {
             id: null,
             timestamp: "",
@@ -312,7 +316,7 @@ export default {
             },
         };
     },
-    updated () {
+    updated() {
         var t = this;
 
         this.invoice = {
@@ -324,7 +328,6 @@ export default {
             alert(t.$router.params.id);
         }
 
-
         setInterval(function () {
             t.getNow();
         }, 1000);
@@ -333,9 +336,7 @@ export default {
     },
     watch: {
         // whenever question changes, this function will run
-        'model.partner_id' (newQuestion, oldQuestion) {
-
-            console.log(this.model);
+        'model.partner_id'(newQuestion, oldQuestion) {
 
             this.has_partner = true;
 
@@ -350,7 +351,7 @@ export default {
             const dateTime = date + ' ' + time;
             this.timestamp = dateTime;
         },
-        calculateTotal () {
+        calculateTotal() {
             var paid_amount = 0.00;
 
             this.model.gateways.forEach(gateway => {
@@ -375,20 +376,73 @@ export default {
 
         },
 
-        fetchData () {
+        fetchData() {
 
             var comp_url = 'invoice/fetchdata/';
 
             const getdata = async (t) => {
 
-                await window.axios.get(comp_url, { params: { partner_id: this.model.partner_id } })
+                var params = { id: this.id };
+
+                if (this.model.partner_id) {
+                    params = { partner_id: this.model.partner_id };
+                }
+                console.log(comp_url);
+
+                await window.axios.get(comp_url, { params: params })
                     .then(
                         response => {
+                            console.log(response.data);
 
                             t.model.gateways = response.data.gateways;
                             t.rates = response.data.rates;
                             t.ledgers = response.data.ledgers;
                             t.partner = response.data.partner;
+
+
+                            if (response.data.invoice.id) {
+                                t.model.partner_id = response.data.invoice.partner_id;
+                                t.model.total = response.data.invoice.total;
+                                t.model.subtotal = response.data.invoice.subtotal;
+                                //t.model.items = response.data.invoice.items;
+                                t.model.title = response.data.invoice.title;
+                                t.invoice = response.data.invoice;
+
+                                response.data.invoice.items.forEach(item => {
+                                    var rate_ids = [];
+                                    var item_data = {
+                                        id: item.id,
+                                        title: item.title,
+                                        ledger_id: item.ledger_id,
+                                        quantity: item.quantity,
+                                        price: item.price,
+                                        total: item.total,
+                                        rates: [],
+                                    };
+
+                                    item.rates.forEach(rate => {
+                                        var rate_data = {
+                                            id: rate.id,
+                                            title: rate.title,
+                                            slug: rate.slug,
+                                            value: rate.value,
+                                            ledger_id: rate.ledger_id,
+                                            method: rate.method,
+                                            published: rate.published,
+                                            title: rate.title,
+                                        };
+
+                                        item_data.rates.push(rate_data);
+                                        rate_ids.push(rate.id);
+                                        
+                                    });
+
+                                    item_data.rate_ids.push(rate.id);
+
+                                    t.model.items.push(item_data);
+
+                                });
+                            }
 
                             t.model.gateways.forEach(gateway => {
                                 gateway.reference = '';
@@ -403,7 +457,7 @@ export default {
             getdata(this);
         },
 
-        addRow () {
+        addRow() {
 
             this.model.items.push({
                 id: "",
@@ -419,7 +473,7 @@ export default {
             this.addCalculate();
 
         },
-        addRate (r_index, item, rate) {
+        addRate(r_index, item, rate) {
             window.$Modal.getOrCreateInstance(document.getElementById('Modal' + r_index)).hide()
 
             item.rates.push(rate);
@@ -431,7 +485,7 @@ export default {
 
             this.addCalculate();
         },
-        addCalculate () {
+        addCalculate() {
             this.model.total = 0;
             this.model.subtotal = 0;
 

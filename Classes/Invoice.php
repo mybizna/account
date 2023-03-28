@@ -394,9 +394,31 @@ class Invoice
         return $invoices;
     }
 
-    public function getInvoice($invoice_id)
+    public function getInvoice($invoice_id, $fetch_items = false)
     {
+        $invoice_total = 0;
         $invoice = DBInvoice::where('id', $invoice_id)->first();
+
+        if ($fetch_items) {
+            $items = DBInvoiceItem::where('invoice_id', $invoice->id)->get();
+
+            foreach ($items as $key => $item) {
+
+                $item_rates = DBInvoiceItemRate::from('account_invoice_item_rate AS air')
+                    ->select('air.*', 'at.ledger_id AS rate_ledger_id', 'at.title AS rate_title', 'at.method AS rate_method')
+                    ->leftJoin('account_rate AS at', 'at.id', '=', 'air.rate_id')
+                    ->where('invoice_item_id', $item->id)
+                    ->orderBy('method')
+                    ->orderBy('ordering')
+                    ->get();
+
+                $item->rates = $item_rates;
+
+            }
+
+            $invoice->items = $items;
+
+        }
 
         return $invoice;
     }

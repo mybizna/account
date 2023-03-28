@@ -13,6 +13,8 @@ class InvoiceController extends BaseController
 
     public function fetchData(Request $request)
     {
+        $invoice = new Invoice();
+
         $result = [
             'module' => 'account',
             'model' => 'invoice',
@@ -24,11 +26,16 @@ class InvoiceController extends BaseController
         ];
 
         $partner_id = $request->get('partner_id');
+        $invoice_id = $request->get('id');
 
         try {
             $rates = DB::table('account_rate')->get();
             $gateways = DB::table('account_gateway')->get();
             $partner = DB::table('partner')->where('id', $partner_id)->first();
+            if($invoice_id){
+                $result['invoice'] = $invoice->getInvoice($invoice_id, true);
+            }
+
             $ledgers = DB::table('account_ledger AS l')->select('l.*')
                 ->join('account_chart_of_account AS c', 'c.id', '=', 'l.chart_id')
                 ->where('c.slug', 'income')->get();
