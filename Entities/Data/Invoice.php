@@ -14,18 +14,18 @@ class Invoice
 
         $datasetter->add_data('core', 'notification', 'slug', [
             "slug" => "account_invoice_pending",
-            "short" => 'Invoice: {{ $invoice_no }} with due on {{ date("d-m-Y", strtotime($due_date)) }} is pending and you need to make payment of {{ $amount }}.',
-            "medium" => 'Invoice: {{ $invoice_no }} for [{{ $title }}] with due on {{ date("d-m-Y", strtotime($due_date)) }} is pending and you need to make payment of {{ $amount }}.',
+            "short" => 'Invoice: {{ $invoice_no }} with due on {{ date("d-m-Y", strtotime($due_date)) }} is pending and you need to make payment of {{ $balance }}.',
+            "medium" => 'Invoice: {{ $invoice_no }} for [{{ $title }}] with due on {{ date("d-m-Y", strtotime($due_date)) }} is pending and you need to make payment of {{ $balance }}.',
             "enable_short" => true,
             "enable_medium" => true,
             "enable_lengthy" => true,
             "published" => true,
-            "lengthy" => 'Hi {{ $partner_name }},
+            "lengthy" => 'Hi {{ $partner->name }},
             <br><br>
             <h3> Invoice: {{ $invoice_no }} .</h3>
             <p> <b>Invoice Title:</b> {{ $title }} .</p>
             <br><br>
-            This is a notice that an invoice has been generated on {{ date("j F Y", strtotime($date_created)) }} with due date {{ date("d-m-Y", strtotime($due_date)) }}.
+            This is a notice that an invoice has been generated on {{ date("j F Y", strtotime($created_at)) }} with due date {{ date("d-m-Y", strtotime($due_date)) }}.
             <br><br>
             Attached is a PDF with invoice details.
             <br><br>
@@ -42,7 +42,7 @@ class Invoice
             "enable_medium" => true,
             "enable_lengthy" => true,
             "published" => true,
-            "lengthy" => 'Hi {{ $partner_name }},
+            "lengthy" => 'Hi {{ $partner->name }},
             <br><br>
             <h3> <b>Invoice No:</b> {{ $invoice_no }} .</h3>
             <p> <b>Invoice Title:</b> {{ $title }} .</p>
@@ -65,7 +65,7 @@ class Invoice
             "enable_medium" => true,
             "enable_lengthy" => true,
             "published" => true,
-            "lengthy" => 'Hi {{ $partner_name }},
+            "lengthy" => 'Hi {{ $partner->name }},
             <br><br>
             <h3> Invoice: {{ $invoice_no }} .</h3>
             <p> <b>Invoice Title:</b> {{ $title }} .</p>
@@ -87,7 +87,7 @@ class Invoice
             "enable_medium" => true,
             "enable_lengthy" => true,
             "published" => true,
-            "lengthy" => 'Hi {{ $partner_name }},
+            "lengthy" => 'Hi {{ $partner->name }},
             <br><br>
             <h3> Invoice: {{ $invoice_no }} .</h3>
             <br><br>
@@ -108,7 +108,7 @@ class Invoice
             "enable_medium" => true,
             "enable_lengthy" => true,
             "published" => true,
-            "lengthy" => 'Hi {{ $partner_name }},
+            "lengthy" => 'Hi {{ $partner->name }},
             <br><br>
             <h3> Invoice: {{ $invoice_no }} .</h3>
             <br><br>

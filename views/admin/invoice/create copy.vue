@@ -321,7 +321,7 @@ export default {
 
         this.invoice = {
             id: 'New',
-            date_created: '',
+            created_at: '',
         };
 
         if (Object.prototype.hasOwnProperty.call(t.$router, "params") && Object.prototype.hasOwnProperty.call(t.$router.params, "id")) {

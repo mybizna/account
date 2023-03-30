@@ -43,7 +43,7 @@
                         :class="model.status == 'paid' ? 'bg-green' : (model.status == 'draft' ? 'bg-grey' : 'bg-red')">
                         <h3 class="text-center p-2 uppercase font-semibold text-white"> {{ model.status }} </h3>
                     </div>
-                    <b v-if="invoice.date_created">Invoice #{{ invoice.date_created }}</b>
+                    <b v-if="invoice.created_at">Invoice #{{ invoice.created_at }}</b>
                     <b v-else>Invoice #{{ invoice.id }}</b>
                     <br>
                     <br>
@@ -317,7 +317,7 @@ export default {
 
         this.invoice = {
             id: 'New',
-            date_created: '',
+            created_at: '',
         };
 
         if (Object.prototype.hasOwnProperty.call(t.$router, "params") && Object.prototype.hasOwnProperty.call(t.$router.params, "id")) {
