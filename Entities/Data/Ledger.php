@@ -850,7 +850,7 @@ class Ledger
             "chart_id" =>  $asset_chart_id,
             "name" => "Bank",
             "slug" => "bank",
-            "code" => "90",
+            "code" => "91",
             "system" => "0"
         ]);
     }

@@ -34,7 +34,7 @@ class Gateway
         return $gateways;
 
     }
-    
+
     public function getGateway($gateway_id)
     {
         if (Cache::has("account_gateway_" . $gateway_id)) {
@@ -99,6 +99,18 @@ class Gateway
             }
         }
         return false;
+    }
+    
+    private function getClassName($module)
+    {
+        $classname = 'Modules\\' . ucfirst($module) . '\Classes\Gateway';
+
+        if (class_exists($classname)) {
+            return new $classname();
+        } else {
+            throw new \Exception("class $classname not found.", 1);
+
+        };
     }
 
 }

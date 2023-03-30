@@ -19,7 +19,7 @@
                         @foreach ($gateway->tabs as $t_index => $tab)
                             <li class="mr-2">
                                 <a href="#" onclick="openCity(event, '{{ $tab['slug'] }}')" aria-current="page"
-                                    class="tablinks inline-block p-4 rounded-t-lg dark:hover:bg-gray-800 dark:hover:text-gray-300 {{ !$g_index && !$t_index ? 'text-blue-600 bg-gray-100' : '' }} ">
+                                    class="tablinks inline-block px-4 py-2 rounded-t-lg dark:hover:bg-gray-800 dark:hover:text-gray-300 {{ !$g_index && !$t_index ? 'text-blue-600 bg-gray-100' : '' }} ">
                                     {{ $tab['title'] }}
                                 </a>
                             </li>
