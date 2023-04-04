@@ -65,10 +65,11 @@
                     <b v-else>Invoice #{{ invoice.id }}</b>
                     <br>
                     <br>
-                    <b>Payment Due:</b>
-                    <FormKit id="due_date" type="datepicker" validation="required"
-                                        v-model="model.due_date" inner-class="$reset formkit-inner" />
-                    {{ timestamp }}<br>
+                    <b>Created On:</b> {{ timestamp }}
+                    <br>
+                    <b> Due Date:</b>
+                    <FormKit id="due_date" type="datepicker" validation="required" v-model="model.due_date"
+                        inner-class="$reset formkit-inner" />
                 </div>
             </div>
 
@@ -233,23 +234,25 @@
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <th colspan="2">Paid:</th>
+                                    <th colspan="10">Payment:</th>
                                 </tr>
                                 <template v-for="(gateway, g_index) in model.gateways" v-bind:key="g_index">
                                     <tr v-if="gateway.paid_amount > 0">
-                                        <th>{{ gateway.title }} on {{ timestamp }}:</th>
+                                        <th>{{ gateway.title }}</th>
+                                        <td>{{ timestamp }}</td>
+                                        <td>{{ gateway.reference }}</td>
                                         <td class="text-right font-semibold">{{ this.$func.money(gateway.paid_amount) }}
                                             {{ gateway.paid_amount }}
                                         </td>
                                     </tr>
                                 </template>
                                 <tr v-if="model.balance > 0" class="bg-red-200">
-                                    <th>Balance:</th>
+                                    <th colspan="3">Balance:</th>
                                     <td class="text-right font-semibold">{{ model.balance }}
                                     </td>
                                 </tr>
                                 <tr v-else-if="model.balance < 0" class="bg-green-200">
-                                    <th>OverPayment:</th>
+                                    <th colspan="3">OverPayment:</th>
                                     <td class="text-right font-semibold">{{ Math.abs(model.balance) }}
                                     </td>
                                 </tr>
@@ -358,6 +361,15 @@ export default {
         },
 
     },
+    created() {
+        var t = this;
+
+        setInterval(function () {
+            //alert('sssss');
+            t.getNow();
+            //alert(t.timestamp);
+        }, 1000);
+    },
     updated() {
         var t = this;
 
@@ -369,11 +381,6 @@ export default {
         if (Object.prototype.hasOwnProperty.call(t.$router, "params") && Object.prototype.hasOwnProperty.call(t.$router.params, "id")) {
             alert(t.$router.params.id);
         }
-
-
-        setInterval(function () {
-            t.getNow();
-        }, 1000);
 
         this.fetchData();
     },
@@ -391,8 +398,8 @@ export default {
     methods: {
         getNow: function () {
             const today = new Date();
-            const date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
-            const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            const date = ('0' + today.getDate()).slice(-2) + '/' + ('0' + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear();
+            const time = ('0' + today.getHours()).slice(-2) + ":" + ('0' + today.getMinutes()).slice(-2) + ":" + ('0' + today.getSeconds()).slice(-2);
             const dateTime = date + ' ' + time;
             this.timestamp = dateTime;
         },

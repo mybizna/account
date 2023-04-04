@@ -34,15 +34,15 @@ class Payment
         return false;
     }
 
-    public function addPayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $do_reconcile_invoices = false, $ledger_id = false, $invoice_id = false, $code = '')
+    public function addPayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $do_reconcile_invoices = false, $ledger_id = false, $invoice_id = false, $code = '', $reference = '', $others = '')
     {
         $payment = '';
 
-        $payment = $this->makePayment($partner_id, $title, $amount, $gateway_id, $do_reconcile_invoices, $ledger_id, $invoice_id, $code);
+        $payment = $this->makePayment($partner_id, $title, $amount, $gateway_id, $do_reconcile_invoices, $ledger_id, $invoice_id, $code, $reference, $others);
 
         return $payment;
     }
-    public function makePayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $do_reconcile_invoices = false, $ledger_id = false, $invoice_id = false, $code = '')
+    public function makePayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $do_reconcile_invoices = false, $ledger_id = false, $invoice_id = false, $code = '', $reference = '', $others = '')
     {
         $payment = '';
 
@@ -53,6 +53,7 @@ class Payment
 
         $partner = $partner->getPartner($partner_id);
         $receipt_no = time() . strtoupper(substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyz"), 0, 5));
+        $code = ($code != '') ? $code : $reference;
         $code = ($code != '') ? $code : $receipt_no;
 
         try {
@@ -64,6 +65,7 @@ class Payment
                     'title' => $title,
                     'receipt_no' => $receipt_no,
                     'code' => $code,
+                    'others' => $others,
                     'status' => 'paid',
                 ];
 

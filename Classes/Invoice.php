@@ -186,6 +186,8 @@ class Invoice
             $single_invoice_total = 0;
             $inv_balance = 0;
 
+            $items = DBInvoiceItem::where('invoice_id', $invoice->id)->get(); 
+
             // Get wallet total
             Cache::forget("account_ledger_total_" . $wallet_id . '_' . $partner_id);
             $wallet_ledger = $ledger->getLedgerTotal($wallet_id, $partner_id);
@@ -195,7 +197,6 @@ class Invoice
 
             if ($invoice->is_posted == false) {
 
-                $items = DBInvoiceItem::where('invoice_id', $invoice->id)->get();
                 foreach ($items as $key => $item) {
 
                     $amount = $item_total = ($item->quantity) ? $item->price * $item->quantity : $item->price;
@@ -310,6 +311,7 @@ class Invoice
 
                 $invoice->payment_amount = $inv_balance;
                 $invoice->balance = $debt;
+                
                 $notification->send('account_invoice_partial', $partner, $invoice);
 
                 $amount_paid = 0;

@@ -99,16 +99,17 @@ class InvoiceController extends BaseController
         $description = $data['notation'];
         $gateways = $data['gateways'];
 
+        
         try {
             foreach ($gateways as $item_key => $gateway) {
                 if ($gateway['paid_amount'] && $status == 'draft') {
                     $status = 'pending';
                 }
-
-                $title = $gateway['title'] . " Payment. " . $gateway['reference'] . ' ' . $gateway['others'];
-
+                
+                $payment_title = $gateway['title'] . " Payment. " . $gateway['reference'] . ' ' . $gateway['others'];
+                
                 if ($gateway['paid_amount']) {
-                    $payment->makePayment($partner_id, $title, $gateway['paid_amount'], $gateway['id']);
+                    $payment->makePayment($partner_id, $payment_title, $gateway['paid_amount'], $gateway['id'], reference:$gateway['reference'], others:$gateway['others']);
                 }
             }
 

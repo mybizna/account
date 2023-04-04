@@ -36,15 +36,19 @@ class Ledger
 
     public function getLedgerBySlug($ledger_slug)
     {
+        Cache::forget("account_ledger_" . $ledger_slug);
 
         if (Cache::has("account_ledger_" . $ledger_slug)) {
             $ledger = Cache::get("account_ledger_" . $ledger_slug);
             return $ledger;
         } else {
             try {
+                console_log($ledger_slug);
                 $query = $this->getLedgerQuery();
                 $ledger = $query->where('al.slug', $ledger_slug)->first();
-                $ledger = Cache::put("account_ledger_" . $ledger_slug, $ledger, 3600);
+               
+                Cache::put("account_ledger_" . $ledger_slug, $ledger, 3600);
+                
                 return $ledger;
                 //code...
             } catch (\Throwable$th) {

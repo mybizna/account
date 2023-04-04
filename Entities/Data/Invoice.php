@@ -47,7 +47,7 @@ class Invoice
             <h3> <b>Invoice No:</b> {{ $invoice_no }} .</h3>
             <p> <b>Invoice Title:</b> {{ $title }} .</p>
             <br><br>
-            [{{ title }}]
+            [{{ $title }}]
             The invoice {{ $invoice_no }} has a partial payment of {{ $payment_amount }} with balance of {{ $balance }}.
             <br><br>
             Attached is a PDF with invoice details.
