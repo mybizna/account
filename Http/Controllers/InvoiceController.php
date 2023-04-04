@@ -30,20 +30,28 @@ class InvoiceController extends BaseController
 
         try {
             $rates = DB::table('account_rate')->get();
-            $gateways = DB::table('account_gateway')->get();
-            $partner = DB::table('partner')->where('id', $partner_id)->first();
-            if($invoice_id){
+            $gateways = DB::table('account_gateway')->where('is_hide_in_invoice', false)->get();
+            $partner = false;
+            if ($invoice_id) {
                 $result['invoice'] = $invoice->getInvoice($invoice_id, true);
+                $partner = DB::table('partner')->where('id', $result['invoice']->partner_id)->first();
+            } else {
+                $ledgers = DB::table('account_ledger AS l')->select('l.*')
+                    ->join('account_chart_of_account AS c', 'c.id', '=', 'l.chart_id')
+                    ->where('c.slug', 'income')->get();
+
+                $ledger_list = collect();
+                $ledger_list->push(['value' => '', 'label' => '--- Please Select ---']);
+                foreach ($ledgers as $key => $ledger) {
+                    $ledger_list->push(['value' => $ledger->id, 'label' => $ledger->name]);
+                }
+
+                $result['rates'] = $rates;
+                $result['ledgers'] = $ledger_list;
             }
 
-            $ledgers = DB::table('account_ledger AS l')->select('l.*')
-                ->join('account_chart_of_account AS c', 'c.id', '=', 'l.chart_id')
-                ->where('c.slug', 'income')->get();
-
-            $ledger_list = collect();
-            $ledger_list->push(['value' => '', 'label' => '--- Please Select ---']);
-            foreach ($ledgers as $key => $ledger) {
-                $ledger_list->push(['value' => $ledger->id, 'label' => $ledger->name]);
+            if ($partner_id) {
+                $partner = DB::table('partner')->where('id', $partner_id)->first();
             }
 
             foreach ($gateways as $key => $gateway) {
@@ -53,8 +61,6 @@ class InvoiceController extends BaseController
             $result['error'] = 0;
             $result['status'] = 1;
             $result['gateways'] = $gateways;
-            $result['rates'] = $rates;
-            $result['ledgers'] = $ledger_list;
             $result['partner'] = $partner;
             $result['message'] = 'Records Found Successfully.';
         } catch (\Throwable$th) {

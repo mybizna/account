@@ -3,7 +3,7 @@
 
         <div class="row mb-2">
             <div class="col-sm-6">
-                <FormKit label="Invoice Title"  id="title" type="text" v-model="model.title" validation="required"
+                <FormKit label="Invoice Title" id="title" type="text" v-model="model.title" validation="required"
                     inner-class="$reset formkit-inner" wrapper-class="$reset formkit-wrapper" input-class="h-10" />
             </div>
             <div class="col-sm-6">
@@ -14,7 +14,16 @@
 
         </div>
 
-        <div v-if="has_partner" class="invoice-form p-1 border border-dotted border-dashed border-green-600 rounded">
+        <div v-if="has_partner"
+            class="relative invoice-form p-1 border border-dotted border-dashed border-green-600 rounded overflow-hidden">
+
+            <div style="margin-right: -45px; !important" class="absolute w-48  p-1 top-7 right-0 rotate-45"
+                :class="getStatusClass">
+                <h3
+                    class="text-center p-1 uppercase font-semibold text-white  text-xl border-b border-t border-dashed border-gray-50">
+                    {{ model.status }} </h3>
+            </div>
+
             <div class="row">
                 <div class="col-md-4">
                     <span class="underline">From</span>
@@ -29,25 +38,37 @@
                 <div class="col-md-4">
                     <span class="underline">To</span>
                     <address v-if="partner">
-                        <strong>{{ partner.first_name }} {{ partner.last_name }}</strong><br>
-                        <strong>{{ partner.company }} </strong><br>
-                        {{ partner.address }} {{ partner.postal_code }}<br>
-                        {{ partner.city }}, {{ partner.country }}<br>
-                        Phone: {{ partner.phone }} &nbsp; {{ partner.mobile }}<br>
-                        Email: {{ partner.email }}
+                        <template v-if="partner.first_name || partner.last_name">
+                            <strong>{{ partner.first_name }} {{ partner.last_name }}</strong><br>
+                        </template>
+                        <template v-if="partner.company">
+                            <strong>{{ partner.company }} </strong><br>
+                        </template>
+                        <template v-if="partner.address || partner.postal_code">
+                            {{ partner.address }} {{ partner.postal_code }}<br>
+                        </template>
+                        <template v-if="partner.city || partner.country">
+                            {{ partner.city }}, {{ partner.country }}<br>
+                        </template>
+                        <template v-if="partner.phone || partner.mobile">
+                            Phone: {{ partner.phone }} &nbsp; {{ partner.mobile }}<br>
+                        </template>
+                        <template v-if="partner.email">
+                            Email: {{ partner.email }}
+                        </template>
                     </address>
 
                 </div>
                 <div class="col-md-4">
-                    <div
-                        :class="model.status == 'paid' ? 'bg-green' : (model.status == 'draft' ? 'bg-grey' : 'bg-red')">
-                        <h3 class="text-center p-2 uppercase font-semibold text-white"> {{ model.status }} </h3>
-                    </div>
+
                     <b v-if="invoice.created_at">Invoice #{{ invoice.created_at }}</b>
                     <b v-else>Invoice #{{ invoice.id }}</b>
                     <br>
                     <br>
-                    <b>Payment Due:</b> {{ timestamp }}<br>
+                    <b>Payment Due:</b>
+                    <FormKit id="due_date" type="datepicker" validation="required"
+                                        v-model="model.due_date" />
+                    {{ timestamp }}<br>
                 </div>
             </div>
 
@@ -156,7 +177,7 @@
                                     :aria-controls="gateway.slug" :aria-selected="!g_index ? 'true' : 'false'">
                                     <i v-if="gateway.paid_amount > 0" class="fas fa-check-circle"></i>
                                     {{
-                                            gateway.title
+                                        gateway.title
                                     }}</button>
                             </li>
                         </ul>
@@ -168,8 +189,7 @@
                                     <FormKit label="Amount" id="amount" type="number" validation="required"
                                         v-model="gateway.paid_amount" @keyup="calculateTotal" />
                                     <template v-if="gateway.slug != 'cash'">
-                                        <FormKit label="Reference" id="reference" type="text"
-                                            v-model="gateway.reference" />
+                                        <FormKit label="Reference" id="reference" type="text" v-model="gateway.reference" />
                                         <FormKit label="Others" id="others" type="text" v-model="gateway.others" />
                                     </template>
 
@@ -217,7 +237,7 @@
                                 </tr>
                                 <template v-for="(gateway, g_index) in model.gateways" v-bind:key="g_index">
                                     <tr v-if="gateway.paid_amount > 0">
-                                        <th>{{ gateway.title }} on Now:</th>
+                                        <th>{{ gateway.title }} on {{ timestamp }}:</th>
                                         <td class="text-right font-semibold">{{ this.$func.money(gateway.paid_amount) }}
                                             {{ gateway.paid_amount }}
                                         </td>
@@ -264,7 +284,7 @@
 
 <script>
 export default {
-    data () {
+    data() {
         return {
             id: null,
             timestamp: "",
@@ -293,6 +313,7 @@ export default {
                 total: 0.00,
                 subtotal: 0.00,
                 gateways: [],
+                due_date: [],
                 items: [{
                     id: "",
                     title: "",
@@ -312,7 +333,32 @@ export default {
             },
         };
     },
-    updated () {
+    computed: {
+        getStatusClass() {
+
+            var classes = '';
+
+            switch (this.model.status) {
+                case 'paid':
+                    classes = 'bg-green-700';
+                    break;
+                case 'draft':
+                    classes = 'bg-gray-500';
+                    break;
+                case 'partial':
+                    classes = 'bg-orange-500';
+                    break;
+                case 'pending':
+                default:
+                    classes = 'bg-red-700';
+                    break;
+            }
+
+            return classes;
+        },
+
+    },
+    updated() {
         var t = this;
 
         this.invoice = {
@@ -333,7 +379,7 @@ export default {
     },
     watch: {
         // whenever question changes, this function will run
-        'model.partner_id' (newQuestion, oldQuestion) {
+        'model.partner_id'(newQuestion, oldQuestion) {
 
             console.log(this.model);
 
@@ -350,7 +396,7 @@ export default {
             const dateTime = date + ' ' + time;
             this.timestamp = dateTime;
         },
-        calculateTotal () {
+        calculateTotal() {
             var paid_amount = 0.00;
 
             this.model.gateways.forEach(gateway => {
@@ -364,7 +410,7 @@ export default {
             this.model.balance = this.model.total - this.model.paid_amount;
 
             if (paid_amount > 0) {
-                this.model.status = 'pending';
+                this.model.status = 'partial';
             } else {
                 this.model.status = 'draft';
             }
@@ -375,7 +421,7 @@ export default {
 
         },
 
-        fetchData () {
+        fetchData() {
 
             var comp_url = 'invoice/fetchdata/';
 
@@ -403,7 +449,7 @@ export default {
             getdata(this);
         },
 
-        addRow () {
+        addRow() {
 
             this.model.items.push({
                 id: "",
@@ -419,7 +465,7 @@ export default {
             this.addCalculate();
 
         },
-        addRate (r_index, item, rate) {
+        addRate(r_index, item, rate) {
             window.$Modal.getOrCreateInstance(document.getElementById('Modal' + r_index)).hide()
 
             item.rates.push(rate);
@@ -431,7 +477,7 @@ export default {
 
             this.addCalculate();
         },
-        addCalculate () {
+        addCalculate() {
             this.model.total = 0;
             this.model.subtotal = 0;
 

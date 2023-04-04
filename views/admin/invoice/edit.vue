@@ -1,47 +1,61 @@
 <template>
     <edit-render :path_param="['account', 'invoice']" :model="model" passed_form_url="invoice/savedata">
 
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <FormKit label="Invoice Title" id="title" type="text" v-model="model.title" validation="required"
-                    inner-class="$reset formkit-inner" wrapper-class="$reset formkit-wrapper" input-class="h-10" />
-            </div>
-            <div class="col-sm-6">
-                <FormKit label="Select Partner" button_label="Select Partner" id="partner_id" type="recordpicker"
-                    comp_url="partner/admin/partner/list.vue" :setting="setting.partner_id" v-model="model.partner_id"
-                    validation="required" inner-class="$reset formkit-inner" wrapper-class="$reset formkit-wrapper" />
+        <div class="relative invoice-form p-1 border border-dotted border-dashed border-green-600 rounded overflow-hidden">
+            
+            <div style="margin-right: -45px; !important" 
+                class="absolute w-48  p-1 top-7 right-0 rotate-45"
+                :class="getStatusClass">
+                <h3 class="text-center p-1 uppercase font-semibold text-white  text-xl border-b border-t border-dashed border-gray-50"> {{ model.status }} </h3>
             </div>
 
-        </div>
-
-        <div v-if="has_partner" class="invoice-form p-1 border border-dotted border-dashed border-green-600 rounded">
             <div class="row">
                 <div class="col-md-4">
                     <span class="underline">From</span>
                     <address>
-                        <strong>{{ company.name }} </strong><br>
-                        {{ company.address }} {{ company.postal_code }}<br>
-                        {{ company.city }}, {{ company.country }}<br>
-                        Phone: {{ company.phone }} &nbsp; {{ company.mobile }}<br>
-                        Email: {{ company.email }}
+                        <template v-if="company.name">
+                            <strong>{{ company.name }} </strong><br>
+                        </template>
+                        <template v-if="company.address || company.postal_code">
+                            {{ company.address }} {{ company.postal_code }}<br>
+                        </template>
+                        <template v-if="company.city || company.country">
+                            {{ company.city }}, {{ company.country }}<br>
+                        </template>
+                        <template v-if="company.phone || company.mobile">
+                            Phone: {{ company.phone }} &nbsp; {{ company.mobile }}<br>
+                        </template>
+                        <template v-if="company.email">
+                            Email: {{ company.email }}
+                        </template>
                     </address>
                 </div>
                 <div class="col-md-4">
                     <span class="underline">To</span>
                     <address v-if="partner">
-                        <strong>{{ partner.first_name }} {{ partner.last_name }}</strong><br>
-                        <strong>{{ partner.company }} </strong><br>
-                        {{ partner.address }} {{ partner.postal_code }}<br>
-                        {{ partner.city }}, {{ partner.country }}<br>
-                        Phone: {{ partner.phone }} &nbsp; {{ partner.mobile }}<br>
-                        Email: {{ partner.email }}
+                        <template v-if="partner.first_name || partner.last_name">
+                            <strong>{{ partner.first_name }} {{ partner.last_name }}</strong><br>
+                        </template>
+                        <template v-if="partner.company">
+                            <strong>{{ partner.company }} </strong><br>
+                        </template>
+                        <template v-if="partner.address || partner.postal_code">
+                            {{ partner.address }} {{ partner.postal_code }}<br>
+                        </template>
+                        <template v-if="partner.city || partner.country">
+                            {{ partner.city }}, {{ partner.country }}<br>
+                        </template>
+                        <template v-if="partner.phone || partner.mobile">
+                            Phone: {{ partner.phone }} &nbsp; {{ partner.mobile }}<br>
+                        </template>
+                        <template v-if="partner.email">
+                            Email: {{ partner.email }}
+                        </template>
                     </address>
 
                 </div>
                 <div class="col-md-4">
-                    <div :class="model.status == 'paid' ? 'bg-green' : (model.status == 'draft' ? 'bg-grey' : 'bg-red')">
-                        <h3 class="text-center p-2 uppercase font-semibold text-white"> {{ model.status }} </h3>
-                    </div>
+
                     <b>ID:</b> {{ invoice.id }}
                     <br>
                     <b>No:</b> {{ invoice.invoice_no }}
@@ -68,87 +82,34 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="( item, index) in model.items" :key="index">
+                    <tr v-for="( item, index) in invoice.items" :key="index">
                         <td>
-                            <FormKit id="title" type="text" v-model="item.title" validation="required" />
+                            {{ item.title }}
                         </td>
                         <td>
-                            <FormKit id="ledger_id" type="select" v-model="item.ledger_id" :options="ledgers"
-                                validation="required" />
+                            {{ item.ledger_id }}
                         </td>
                         <td class="w-28">
-                            <FormKit id="quantity" type="number" v-model="item.quantity" @blur="addCalculate(rate)"
-                                validation="required" min="0" />
+                            {{ item.quantity }}
                         </td>
                         <td>
-                            <FormKit id="price" type="number" v-model="item.price" @blur="addCalculate(rate)"
-                                validation="required" min="0" step="0.01" />
+                            {{ item.price }}
                         </td>
                         <td>
                             <span v-for="( item_rate, rate_index) in item.rates" :key="rate_index"
-                                class="badge bg-secondary mr-1">{{ item_rate.title }} ({{ item_rate.value }}<span
-                                    v-if="item_rate.is_percent">%</span>)</span>
-                            <a class="badge bg-blue-700 text-white cursor-pointer" data-bs-toggle="modal"
-                                :data-bs-target="'#' + 'Modal' + index">
-                                <i class="fa-solid fa-plus"></i> Add Rate
-                            </a>
-
-                            <div class="modal fade" :id="'Modal' + index" tabindex="-1"
-                                :aria-labelledby="index + 'ModalLabel'" aria-hidden="true">
-                                <div class="modal-dialog ">
-                                    <div class="modal-content shadow-2xl shadow-indigo-500/50">
-                                        <div class="modal-header p-2">
-                                            <h5 class="modal-title font-semibold" :id="index + 'ModalLabel'">Select
-                                                Rate</h5>
-                                            <button type="button" class="" data-bs-dismiss="modal" aria-label="Close">
-                                                <i class="fa-solid fa-circle-xmark text-2xl	text-red"></i>
-                                            </button>
-                                        </div>
-
-                                        <div class="modal-body p-0">
-                                            <table class="table m-0 p-0">
-                                                <thead>
-                                                    <tr class="bg-slate-100 px-7">
-                                                        <th class="uppercase" scope="col"></th>
-                                                        <th class="uppercase" scope="col">Title</th>
-                                                        <th class="uppercase" scope="col">Value</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr v-for="( rate, r_index) in rates" :key="r_index">
-                                                        <td>
-                                                            <a v-if="item.rate_ids.includes(rate.id)"
-                                                                class="btn btn-danger btn-sm">Remove</a>
-                                                            <a v-else class="btn btn-primary btn-sm"
-                                                                @click="addRate(index, item, rate)">Add</a>
-                                                        </td>
-                                                        <td>
-                                                            {{ rate.title }}
-                                                        </td>
-                                                        <td>
-                                                            {{ rate.value }} <span v-if="rate.is_percent">%</span>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                class="badge bg-secondary mr-1">
+                                {{ item_rate.title }}
+                                ({{ item_rate.value }}<span v-if="item_rate.is_percent">%</span>)
+                            </span>
                         </td>
-                        <td class="font-semibold fs-16 text-right">{{ this.$func.money(item.total) }}</td>
+                        <td class="font-semibold fs-16 text-right">
+                            {{ item.amount }}
+                        </td>
                     </tr>
                 </tbody>
             </table>
 
-            <div class="text-center mt-2">
-                <a class="btn btn-primary btn-sm cursor-pointer" @click="addRow()">
-                    <i class="fa-solid fa-plus"></i> Add Row
-                </a>
-            </div>
-
             <div class="row mt-3">
-
                 <div class="col-6">
                     <p class="lead">Payment Methods:</p>
 
@@ -193,10 +154,6 @@
                     <div class="table-responsive">
                         <table class="table">
                             <tbody>
-                                <tr>
-                                    <th style="width:60%">Subtotal:</th>
-                                    <td class="text-right font-semibold">{{ this.$func.money(model.subtotal) }}</td>
-                                </tr>
                                 <template v-for="( rate, index) in rates" :key="index">
                                     <tr v-if="rate.total > 0 || rate.total < 0">
                                         <th>{{ rate.title }} (<span
@@ -208,7 +165,7 @@
                                 </template>
                                 <tr>
                                     <th>Total:</th>
-                                    <td class="text-right font-semibold">{{ this.$func.money(model.total) }}</td>
+                                    <td class="text-right font-semibold">{{ invoice.total }}</td>
                                 </tr>
 
                             </tbody>
@@ -217,7 +174,7 @@
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <th colspan="2">Paid:</th>
+                                    <th colspan="2">Payments:</th>
                                 </tr>
                                 <template v-for="(gateway, g_index) in model.gateways" v-bind:key="g_index">
                                     <tr v-if="gateway.paid_amount > 0">
@@ -252,16 +209,7 @@
             </div>
 
         </div>
-        <div v-else class="no-partner">
-            <div class=" text-center border-dashed p-5 rounded border border-red-600">
-                <span class="fa-stack text-red-400 " style="vertical-align: top; font-size:36px;">
-                    <i class="far fa-circle fa-stack-2x"></i>
-                    <i class="fas fa-file-alt fa-stack-1x"></i>
-                </span>
-                <h2 class="text-red-600">No Partner Selected</h2>
-                <p class=" text-red-400">All invoices should have partner selected first. Kindly select the parner.</p>
-            </div>
-        </div>
+
 
     </edit-render>
 </template>
@@ -276,12 +224,93 @@ export default {
             rates: [],
             ledgers: [],
             partner: {},
+            company: {
+                name: "Mybizna, Inc.",
+                address: "P.O Box 767 - 00618",
+                city: "Nairobi",
+                country: "Kenya",
+                phone: "+254 713 034 569",
+                email: "info@mybizna.com",
+            },
+            model: {
+                id: null,
+                partner_id: '',
+                total: 0.00,
+                subtotal: 0.00,
+                gateways: [],
+                title: '',
+                paid_amount: 0.00,
+                balance: 0.00,
+                notation: '',
+                status: 'draft',
+            },
         }
     },
     created() {
         this.id = this.$route.params.id;
-
+        this.id = this.model.id;
         this.fetchData();
     },
+    computed: {
+        getStatusClass() {
+
+            var classes = '';
+
+            switch (this.model.status) {
+                case 'paid':
+                    classes = 'bg-green-700';
+                    break;
+                case 'draft':
+                    classes = 'bg-gray-500';
+                    break;
+                case 'partial':
+                    classes = 'bg-orange-500';
+                    break;
+                case 'pending':
+                default:
+                    classes = 'bg-red-700';
+                    break;
+            }
+
+            return classes;
+        },
+
+    },
+    methods: {
+
+        fetchData() {
+
+
+            var comp_url = 'invoice/fetchdata/';
+
+            const getdata = async (t) => {
+                var id = t.$route.params.id;
+
+                await window.axios.get(comp_url, { params: { id: id } })
+                    .then(
+                        response => {
+
+                            t.model.gateways = response.data.gateways;
+                            t.rates = response.data.rates;
+                            t.model.status = 'paid';
+                            t.has_partner = true;
+                            t.ledgers = response.data.ledgers;
+                            t.partner = response.data.partner;
+                            t.invoice = response.data.invoice;
+                            //t.modal.partner_id = t.partner.id;
+
+                            t.model.gateways.forEach(gateway => {
+                                gateway.reference = '';
+                                gateway.others = '';
+                                gateway.paid_amount = 0.00;
+                            });
+
+                            t.rates.sort(function (a, b) { return a.ordering - b.ordering; });
+                        });
+            };
+
+            getdata(this);
+        },
+    }
 }
 </script>

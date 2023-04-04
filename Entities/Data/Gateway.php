@@ -20,7 +20,8 @@ class Gateway
             "instruction" => "",
             "ordering" => 0,
             "is_default" => true,
-            "is_hidden" => true,
+            "is_hidden" => false,
+            "is_hide_in_invoice" => false,
             "published" => true
         ]);
 
@@ -32,7 +33,8 @@ class Gateway
             "instruction" => "Enter Reference as cheque no. or bank transaction reference no.",
             "ordering" => 0,
             "is_default" => false,
-            "is_hidden" => true,
+            "is_hidden" => false,
+            "is_hide_in_invoice" => false,
             "published" => true
         ]);
     }
