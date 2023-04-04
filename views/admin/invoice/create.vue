@@ -17,7 +17,7 @@
         <div v-if="has_partner"
             class="relative invoice-form p-1 border border-dotted border-dashed border-green-600 rounded overflow-hidden">
 
-            <div style="margin-right: -45px; !important" class="absolute w-48  p-1 top-7 right-0 rotate-45"
+            <div style="margin-right: -45px; !important" class="absolute w-48 z-10 p-1 top-7 right-0 rotate-45"
                 :class="getStatusClass">
                 <h3
                     class="text-center p-1 uppercase font-semibold text-white  text-xl border-b border-t border-dashed border-gray-50">
@@ -67,7 +67,7 @@
                     <br>
                     <b>Payment Due:</b>
                     <FormKit id="due_date" type="datepicker" validation="required"
-                                        v-model="model.due_date" />
+                                        v-model="model.due_date" inner-class="$reset formkit-inner" />
                     {{ timestamp }}<br>
                 </div>
             </div>
