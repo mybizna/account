@@ -86,11 +86,11 @@ class Ledger
         return false;
     }
 
-    public function getLedgerTotal($ledger_id, $partner_id = '')
+    public function getLedgerTotal($ledger_id, $partner_id = '', $payment_id = '')
     {
 
-        if (Cache::has("account_ledger_total_" . $ledger_id . '_' . $partner_id)) {
-            $ledger_total = Cache::get("account_ledger_total_" . $ledger_id . '_' . $partner_id);
+        if (Cache::has("account_ledger_total_" . $ledger_id . '_' . $partner_id . '_' . $payment_id)) {
+            $ledger_total = Cache::get("account_ledger_total_" . $ledger_id . '_' . $partner_id . '_' . $payment_id);
             return $ledger_total;
         } else {
             try {
@@ -101,6 +101,10 @@ class Ledger
                     $query->where('partner_id', $partner_id);
                 }
 
+                if ($payment_id) {
+                    $query->where('payment_id', $payment_id);
+                }
+
                 $debit = $query->sum('debit');
                 $credit = $query->sum('credit');
                 $total = $credit - $debit;
@@ -109,7 +113,7 @@ class Ledger
                     $total = $debit - $credit;
                 }
 
-                Cache::put("account_ledger_total_" . $ledger_id . '_' . $partner_id, [
+                Cache::put("account_ledger_total_" . $ledger_id . '_' . $partner_id . '_' . $payment_id, [
                     'debit' => $debit,
                     'credit' => $credit,
                     'total' => $total,

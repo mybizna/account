@@ -9,7 +9,7 @@ use Modules\Base\Entities\BaseModel;
 class Journal extends BaseModel
 {
 
-    protected $fillable = ['title', 'partner_id', 'ledger_id', 'grouping_id', 'debit', 'credit', 'params'];
+    protected $fillable = ['title','grouping_id',  'partner_id', 'ledger_id',  'payment_id', 'invoice_id', 'debit', 'credit', 'params'];
     public $migrationDependancy = ['partner', 'account_ledger'];
     protected $table = "account_journal";
 
@@ -28,6 +28,8 @@ class Journal extends BaseModel
         $table->char('grouping_id');
         $table->integer('partner_id');
         $table->integer('ledger_id');
+        $table->integer('payment_id')->nullable();
+        $table->integer('invoice_id')->nullable();
         $table->decimal('debit', 20, 2)->nullable();
         $table->decimal('credit', 20, 2)->nullable();
         $table->string('params')->nullable();
@@ -41,6 +43,14 @@ class Journal extends BaseModel
 
         if (Migration::checkKeyExist('account_journal', 'ledger_id')) {
             $table->foreign('ledger_id')->references('id')->on('account_ledger')->nullOnDelete();
+        }
+
+        if (Migration::checkKeyExist('account_journal', 'payment_id')) {
+            $table->foreign('payment_id')->references('id')->on('account_payment')->nullOnDelete();
+        }
+
+        if (Migration::checkKeyExist('account_journal', 'invoice_id')) {
+            $table->foreign('invoice_id')->references('id')->on('account_invoice')->nullOnDelete();
         }
     }
 }

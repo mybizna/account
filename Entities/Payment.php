@@ -11,7 +11,7 @@ class Payment extends BaseModel
 
     protected $fillable = [
         'title', 'amount', 'ledger_id', 'partner_id', 'gateway_id', 'receipt_no',
-        'code', 'others', 'status', "type", 'is_posted',
+        'code', 'others', 'stage', 'status', "type", 'is_posted',
     ];
     public $migrationDependancy = ['account_gateway', 'account_ledger', 'partner'];
     protected $table = "account_payment";
@@ -35,7 +35,8 @@ class Payment extends BaseModel
         $table->string('receipt_no')->nullable();
         $table->string('code')->nullable();
         $table->string('others')->nullable();
-        $table->enum('status', ['pending', 'paid', 'reversed','canceled'])->default('pending');
+        $table->enum('stage', ['pending', 'wallet', 'posted'])->default('pending');
+        $table->enum('status', ['pending', 'paid', 'reversed', 'canceled'])->default('pending');
         $table->enum('type', ['in', 'out'])->default('in');
         $table->tinyInteger('is_posted')->default(false);
     }

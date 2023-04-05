@@ -9,7 +9,7 @@ use Modules\Account\Entities\Journal as DBJournal;
 class Journal
 {
 
-    public function journalEntry($title, $amount, $partner_id, $ledger_id, $grouping_id = '')
+    public function journalEntry($title, $amount, $partner_id, $ledger_id, $grouping_id = '', $payment_id = '', $invoice_id = '')
     {
         $ledger_cls = new Ledger();
 
@@ -33,6 +33,8 @@ class Journal
                 'partner_id' => $partner_id,
                 'ledger_id' => $ledger_id,
                 'grouping_id' => $grouping_id,
+                'payment_id' => $payment_id,
+                'invoice_id' => $invoice_id,
                 $credit_debit => abs($amount),
             ]
         );
