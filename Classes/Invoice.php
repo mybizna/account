@@ -161,11 +161,6 @@ class Invoice
         // get partner invoices
         $invoices = $this->getPartnerInvoices($partner_id, $invoice_id);
 
-        print_r('reconcileInvoices');
-        print_r($partner_id);
-        //print_r($invoices);
-        print_r(count($invoices));
-
         foreach ($invoices as $invoice_key => $invoice) {
             $invoice_data = ['status' => 'pending'];
             $inv_total = 0;
@@ -233,6 +228,7 @@ class Invoice
             $payments = $this->getPayments($partner_id);
 
             foreach ($payments as $key => $payment) {
+                $paid_amount = 0;
                 $payment_id = $payment->id;
                 $payment_amount = $payment->amount;
                 $payment_code = $payment->code;
@@ -250,41 +246,44 @@ class Invoice
                         if ($wallet_total > 0) {
                             $paid_amount = ($wallet_total > $inv_balance) ? $inv_balance : $wallet_total;
 
-                            $debt = $inv_balance - $paid_amount;
+                            $inv_balance = $inv_balance - $paid_amount;
 
-                            $invoice_data['status'] = ($debt) ? 'partial' : 'paid';
+                            $invoice_data['status'] = ($inv_balance > 0) ? 'partial' : 'paid';
 
-                            $journal->journalEntry("Payment By " . $payment_g_title . " - " . $payment_code . " of " . abs($paid_amount) . " [$invoice->invoice_no]", -1 * abs($paid_amount), $partner_id, $wallet_id, payment_id:$payment_id, grouping_id:$grouping_id);
-
+                            $journal->journalEntry("Payment By " . $payment_g_title . " - " . $payment_code . " of " . abs($paid_amount) . " [$invoice->invoice_no]", -1 * abs($paid_amount), $partner_id, $wallet_id, payment_id:$payment_id, invoice_id:$invoice->id, grouping_id:$grouping_id);
                             if ($invoice->is_posted == true) {
-                                $journal->journalEntry("Payment By " . $payment_g_title . " - " . $payment_code . " of " . abs($paid_amount) . " [$invoice->invoice_no]", -1 * abs($paid_amount), $partner_id, $receivable_id, payment_id:$payment_id, grouping_id:$grouping_id);
+                                $journal->journalEntry("Payment By " . $payment_g_title . " - " . $payment_code . " of " . abs($paid_amount) . " [$invoice->invoice_no]", -1 * abs($paid_amount), $partner_id, $receivable_id, payment_id:$payment_id, invoice_id:$invoice->id, grouping_id:$grouping_id);
                             }
 
                             $invoice->payment_amount = $paid_amount;
-                            $invoice->balance = $debt;
+                            $invoice->balance = $inv_balance;
+
                         }
                     } else if ($payment->stage == 'pending') {
                         if ($payment_amount > 0) {
                             $paid_amount = ($payment_amount > $inv_balance) ? $inv_balance : $payment_amount;
 
-                            $debt = $inv_balance - $paid_amount;
+                            $inv_balance = $inv_balance - $paid_amount;
 
-                            $invoice_data['status'] = ($debt) ? 'partial' : 'paid';
-                            
+                            $invoice_data['status'] = ($inv_balance > 0) ? 'partial' : 'paid';
+
                             if ($invoice->is_posted == true) {
-                                $journal->journalEntry("Payment By " . $payment_g_title . " - " . $payment_code . " of " . abs($paid_amount) . " [$invoice->invoice_no]", -1 * abs($paid_amount), $partner_id, $receivable_id, payment_id:$payment_id, grouping_id:$grouping_id);
+                                $journal->journalEntry("Payment By " . $payment_g_title . " - " . $payment_code . " of " . abs($paid_amount) . " [$invoice->invoice_no]", -1 * abs($paid_amount), $partner_id, $receivable_id, payment_id:$payment_id, invoice_id:$invoice->id, grouping_id:$grouping_id);
                             }
 
                             $invoice->payment_amount = $paid_amount;
-                            $invoice->balance = $debt;
+                            $invoice->balance = $inv_balance;
                         }
+                    }
+
+                    if ($inv_balance <= 0 || $paid_amount == $payment_amount) {
+                        DBPayment::where('id', $payment->id)->update(['is_posted' => true, 'stage' => 'posted']);
                     }
                 }
             }
 
-            if ($invoice_data['status'] == 'partial' && $invoice->is_posted == false) {
-
-                $journal->journalEntry("Debt of " . $invoice->balance . " [$invoice->invoice_no]", $invoice->balance, $partner_id, $receivable_id, payment_id:$payment_id, grouping_id:$grouping_id);
+            if ($inv_balance > 0 && $invoice->is_posted == false) {
+                $journal->journalEntry("Debt of " . $inv_balance . " [$invoice->invoice_no]", $inv_balance, $partner_id, $receivable_id, invoice_id:$invoice->id, grouping_id:$grouping_id);
 
                 $notification->send('account_invoice_pending', $partner, $invoice);
             }
@@ -302,28 +301,49 @@ class Invoice
                 }
             }
 
-            $invoices_total = $invoices_total + $inv_total;
-
         }
 
-        $credit = $amount_paid + $invoices_total - $wallet_total;
+        $payments = $this->getPayments($partner_id, true);
 
-        if ($credit > 0) {
-            $journal->journalEntry('Credit to wallet worth ' . abs($credit), abs($credit), $partner_id, $wallet_id, grouping_id:$grouping_id);
+        foreach ($payments as $key => $payment) {
+            $payment_id = $payment->id;
+
+            Cache::forget("account_ledger_total_" . $receivable_id . '_' . $partner_id . '_' . $payment_id);
+
+            $receivable_ledger = $ledger->getLedgerTotal($receivable_id, $partner_id, $payment_id);
+            $receivable_total = (isset($receivable_ledger['total']) && (int) $receivable_ledger['total'] > 0) ? (int) $receivable_ledger['total'] : 0;
+
+            $payment_data = ['is_posted' => true, 'stage' => 'posted'];
+
+            $credit = $payment->amount - $receivable_total;
+            if ($credit > 0) {
+                $journal->journalEntry('Credit to wallet worth ' . abs($credit), abs($credit), $partner_id, $wallet_id, payment_id:$payment_id, grouping_id:$grouping_id);
+                $payment_data['stage'] = 'wallet';
+            }
+
+            DBPayment::where('id', $payment->id)->update($payment_data);
         }
 
     }
 
-    public function getPayments($partner_id)
+    public function getPayments($partner_id, $pending_only = false)
     {
-        $payments = DBPayment::from('account_payment AS ap')
+        $payments_qry = DBPayment::from('account_payment AS ap')
             ->select('ap.*', 'ag.title AS g_title')
             ->leftJoin('account_gateway AS ag', 'ag.id', '=', 'ap.gateway_id')
             ->where('ap.partner_id', $partner_id)
             ->whereIn('ap.stage', ['pending', 'wallet'])
             ->where('ap.type', 'in')
-            ->orderBy('ap.stage', 'desc')
-            ->get();
+            ->orderBy('ap.id', 'ASC');
+
+        if ($pending_only) {
+            $payments_qry->where('ap.stage', 'pending');
+        } else {
+            $payments_qry->whereIn('ap.stage', ['pending', 'wallet']);
+
+        }
+
+        $payments = $payments_qry->get();
 
         return $payments;
     }
