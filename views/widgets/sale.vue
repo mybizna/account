@@ -8,7 +8,7 @@ export default {
         return {
             options: {
                 chart: {
-                    id: 'vuechart-profit',
+                    id: 'vuechart-sale',
                     sparkline: {
                         enabled: true
                     },
@@ -36,7 +36,7 @@ export default {
                     }
                 },
                 subtitle: {
-                    text: 'Expenses',
+                    text: 'Sales',
                     offsetX: 30,
                     style: {
                         fontSize: '14px',

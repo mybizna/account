@@ -3,6 +3,7 @@
 namespace Modules\Account\Classes;
 
 use Illuminate\Support\Facades\Cache;
+use Modules\Account\Entities\ChartOfAccount as DBChartOfAccount;
 use Modules\Account\Entities\Journal as DBJournal;
 use Modules\Account\Entities\Ledger as DBLedger;
 
@@ -46,9 +47,9 @@ class Ledger
                 console_log($ledger_slug);
                 $query = $this->getLedgerQuery();
                 $ledger = $query->where('al.slug', $ledger_slug)->first();
-               
+
                 Cache::put("account_ledger_" . $ledger_slug, $ledger, 3600);
-                
+
                 return $ledger;
                 //code...
             } catch (\Throwable$th) {
@@ -74,7 +75,9 @@ class Ledger
         } else {
             try {
                 $ledger = DBLedger::where('slug', $ledger_slug)->first();
+
                 $ledger_id = $ledger->id;
+                
                 Cache::put("account_ledger_" . $ledger_slug . "_id", $ledger->id, 3600);
 
                 return $ledger_id;
@@ -131,6 +134,8 @@ class Ledger
 
         return false;
     }
+
+  
 
     public function getAccountBalance($partner_id)
     {

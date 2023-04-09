@@ -8,7 +8,7 @@ export default {
         return {
             options: {
                 chart: {
-                    id: 'vuechart-profit',
+                    id: 'vuechart-expense',
                     sparkline: {
                         enabled: true
                     },
