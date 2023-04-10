@@ -60,17 +60,25 @@ class ChartOfAccount
     }
     public function getChartTotal($chart_id, $data)
     {
-
-        if (Cache::has("account_chart_total_" . $chart_id)) {
+        if (Cache::has("account_chart_total_" . $chart_id) && empty($data)) {
             $chart_total = Cache::get("account_chart_total_" . $chart_id);
             return $chart_total;
         } else {
             try {
+                $separator = (isset($data['separator'])) ? $data['separator'] : '';
                 $chart = $this->getChart($chart_id);
 
                 $query = DBJournal::from('account_journal AS aj')
                     ->where('al.chart_id', $chart_id)
                     ->leftJoin('account_ledger AS al', 'al.id', '=', 'aj.ledger_id');
+
+                if (isset($data['start_date']) && $data['start_date'] != '' && isset($data['end_date']) && $data['end_date'] != '') {
+                    $query->whereBetween('aj.created_at', [$data['start_date'], $data['end_date']]);
+                } elseif (isset($data['end_date']) && $data['end_date'] != '') {
+                    $query->whereDate('aj.created_at', '>=', $data['end_date']);
+                } elseif (isset($data['start_date']) && $data['start_date'] != '') {
+                    $query->whereDate('aj.created_at', '<=', $data['start_date']);
+                }
 
                 $debit = $query->sum('aj.debit');
                 $credit = $query->sum('aj.credit');
@@ -80,17 +88,15 @@ class ChartOfAccount
                     $total = $debit - $credit;
                 }
 
-                Cache::put("account_chart_total_" . $chart_id, [
-                    'debit' => floatval($debit),
-                    'credit' => floatval($credit),
-                    'total' => floatval($total),
-                ], 3600);
-
-                return [
-                    'debit' => floatval($debit),
-                    'credit' => floatval($credit),
-                    'total' => floatval($total),
+                $result = [
+                    'debit' => number_format($debit, 2, '.', $separator),
+                    'credit' => number_format($credit, 2, '.', $separator),
+                    'total' => number_format($total, 2, '.', $separator),
                 ];
+
+                Cache::put("account_chart_total_" . $chart_id, $result, 3600);
+
+                return $result;
             } catch (\Throwable$th) {
                 throw $th;
             }

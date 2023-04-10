@@ -4,8 +4,59 @@
 
 <script>
 export default {
+    created() {
+        var t = this;
+
+
+        window.axios
+            .get("/chart_of_account/summation/asset")
+            .then((response) => {
+                console.log(response.data.labels);
+                t.labels = response.data.labels;
+                t.asset = response.data.data;
+            }).catch((response) => { });
+
+        window.axios
+            .get("/chart_of_account/summation/expense")
+            .then((response) => {
+                t.expense = response.data.data;
+            }).catch((response) => { });
+
+        window.axios
+            .get("/chart_of_account/summation/income")
+            .then((response) => {
+                t.income = response.data.data;
+            }).catch((response) => { });
+
+        window.axios
+            .get("/chart_of_account/summation/liability")
+            .then((response) => {
+                t.liability = response.data.data;
+            }).catch((response) => { });
+
+        this.options = {
+            labels: t.labels
+        };
+
+        this.series = [
+            {
+                data: t.asset,
+            }, {
+                data: t.expense,
+            }, {
+                data: t.income,
+            }, {
+                data: t.liability,
+            }
+        ];
+    },
     data() {
         return {
+            labels: [],
+            asset: [],
+            expense: [],
+            income: [],
+            liability: [],
             options: {
                 chart: {
                     id: 'vuechart-stacked',
@@ -17,18 +68,8 @@ export default {
                     }
                 },
                 colors: ['#00D8B6', '#008FFB', '#FEB019', '#FF4560', '#775DD0'],
-                labels: [10, 11, 12, 13, 14, 15, 16, 17],
-                xaxis: {
-                    labels: {
-                        show: false
-                    },
-                    axisBorder: {
-                        show: false
-                    },
-                    axisTicks: {
-                        show: false
-                    },
-                },
+                labels: [0],
+
                 yaxis: {
                     axisBorder: {
                         show: false
@@ -52,15 +93,19 @@ export default {
             },
             series: [
                 {
-                    name: "Sales",
-                    data: [42, 52, 16, 55, 59, 51, 45, 32],
+                    name: "Asset",
+                    data: [0],
                 }, {
                     name: "Expenses",
-                    data: [6, 12, 4, 7, 5, 3, 6, 4],
+                    data: [0],
                 }, {
-                    name: "Profit",
-                    data: [6, 12, 4, 7, 5, 3, 6, 4],
+                    name: "Income",
+                    data: [0],
+                }, {
+                    name: "Liability",
+                    data: [0],
                 }
+
             ]
 
         };

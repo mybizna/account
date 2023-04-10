@@ -4,23 +4,11 @@ namespace Modules\Account\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Modules\Account\Classes\ChartOfAccount;
 use Modules\Base\Http\Controllers\BaseController;
 
 class LedgerController extends BaseController
 {
 
-    public function chartsummary(Request $request, $slug)
-    {
-        $chart_of_account = new ChartOfAccount();
-        
-        $data = $request->all();
-        
-        $result = $chart_of_account->getChartTotalBySlug($slug, $data);
-
-        print_r($result); exit;
-
-    }
     public function recordselect(Request $request)
     {
         $chart_of_account_id = $request->get('chart_of_account_id');

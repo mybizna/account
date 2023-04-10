@@ -1,11 +1,39 @@
 <template>
-    <apexchart width="100%" height="120px" type="area" :options="options" :series="series"></apexchart>
+    <apexchart ref="realtimeChart" width="100%" height="120px" type="area" :options="options" :series="series"></apexchart>
 </template>
 
 <script>
 export default {
+    created() {
+        var t = this;
+
+        window.axios
+            .get("/chart_of_account/summation/expense")
+            .then((response) => {
+                t.debit = response.data.debit;
+                t.credit = response.data.credit;
+                t.total = response.data.total;
+
+                t.options = {
+                    title: {
+                        text: t.total.toString(),
+                    },
+                    labels: response.data.labels
+                };
+
+                t.series = [{
+                    data: response.data.data
+                }];
+
+            })
+            .catch((response) => {
+            });
+    },
     data() {
         return {
+            debit: 0.00,
+            credit: 0.00,
+            total: 0.00,
             options: {
                 chart: {
                     id: 'vuechart-expense',
@@ -19,16 +47,13 @@ export default {
                 fill: {
                     opacity: 1,
                 },
-                labels: [...Array(11).keys()].map(n => `2023-09-0${n + 1}`),
-                yaxis: {
-                    min: 0
-                },
+                labels: ['0'],
                 xaxis: {
-                    type: 'datetime',
+                    type: 'string',
                 },
                 colors: ['#008FFB'],
                 title: {
-                    text: '1,235,312',
+                    text: '0.000',
                     offsetX: 30,
                     style: {
                         fontSize: '24px',
@@ -45,8 +70,8 @@ export default {
                 }
             },
             series: [{
-                name: 'Profit',
-                data: [70, 30, 40, 45, 50, 49, 60, 70, 91, 20, 30]
+                name: 'Amt',
+                data: [0]
             }]
 
         };
