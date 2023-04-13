@@ -66,6 +66,7 @@ class ChartOfAccount
         } else {
             try {
                 $separator = (isset($data['separator'])) ? $data['separator'] : '';
+
                 $chart = $this->getChart($chart_id);
 
                 $query = DBJournal::from('account_journal AS aj')
