@@ -151,12 +151,6 @@ class Ledger
 
         $balance = $wallet_total - $receivable_total;
 
-        print_r([
-            'receivable' => $receivable_total,
-            'wallet' => $wallet_total,
-            'balance' => $balance,
-        ]);
-
         return [
             'receivable' => $receivable_total,
             'wallet' => $wallet_total,
