@@ -9,6 +9,7 @@ use Modules\Account\Classes\Gateway;
 use Modules\Account\Classes\Invoice;
 use Modules\Account\Entities\Payment as DBPayment;
 use Modules\Core\Classes\Notification;
+use Modules\Core\Entities\Currency;
 use Modules\Partner\Classes\Partner;
 
 class Payment
@@ -34,15 +35,15 @@ class Payment
         return false;
     }
 
-    public function addPayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $do_reconcile_invoices = false, $ledger_id = false, $invoice_id = false, $code = '', $reference = '', $others = '')
+    public function addPayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $ledger_id = false, $invoice_id = false, $code = '', $reference = '', $others = '')
     {
         $payment = '';
 
-        $payment = $this->makePayment($partner_id, $title, $amount, $gateway_id, $do_reconcile_invoices, $ledger_id, $invoice_id, $code, $reference, $others);
+        $payment = $this->makePayment($partner_id, $title, $amount, $gateway_id, $ledger_id, $invoice_id, $code, $reference, $others);
 
         return $payment;
     }
-    public function makePayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $do_reconcile_invoices = false, $ledger_id = false, $invoice_id = false, $code = '', $reference = '', $others = '')
+    public function makePayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $ledger_id = false, $invoice_id = false, $code = '', $reference = '', $others = '')
     {
         $payment = '';
 
@@ -73,37 +74,49 @@ class Payment
                     $data['ledger_id'] = $ledger_id;
                 } else {
                     $ledger_cls = new Ledger();
-                    
+
                     $ledger = $ledger_cls->getLedgerBySlug('cash');
                     $data['ledger_id'] = $ledger->id;
                 }
-                
+
                 if ($gateway_id) {
                     $data['gateway_id'] = $gateway_id;
                 } else {
                     $gateway = $gateway_cls->getGatewayBySlug('cash');
                     $data['gateway_id'] = $gateway->id;
                 }
-                
-                $payment = DBPayment::create($data);
-                
+
                 $gateway = $gateway_cls->getGatewayById($data['gateway_id']);
+                $currency = $this->getCurrency($gateway->currency_id);
+
+                $amount = $amount / ($currency->rate ?? 1);
+                $data['amount'] = $amount;
+
+                $payment = DBPayment::create($data);
+
                 $payment->gateway_title = $gateway->title;
-                $payment->partner_name = $partner->first_name.' '.$partner->last_name .' '.$partner->email;
-                
+                $payment->partner_name = $partner->first_name . ' ' . $partner->last_name . ' ' . $partner->email;
+
                 $notification->send('account_payment_paid', $partner, $payment);
             }
 
-            if ($do_reconcile_invoices) {
-                $invoice->reconcileInvoices($partner_id, $invoice_id);
-            }
+            $invoice->reconcileInvoices($partner_id, $invoice_id);
+
         } catch (\Throwable$th) {
             throw $th;
         }
 
         return $payment;
     }
+    public function getCurrency($currency_id = '')
+    {
+        if ($currency_id) {
+            $currency = Currency::where(['id' => $currency_id])->first();
+            return $currency;
+        }
 
+        return false;
+    }
     public function getUser($user_id = '')
     {
         if ($user_id) {

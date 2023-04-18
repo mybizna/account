@@ -13,7 +13,9 @@ class Gateway
         $gateways_qry = DBGateway::where('published', true);
 
         if (!$show_hidden) {
-            $gateways_qry->where('is_hidden', false);
+            $gateways_qry->where('is_hidden', false)
+            ->orderBy('ordering', 'DESC')
+            ->orderBy('id', 'ASC');
         }
 
         $gateways = $gateways_qry->get();
@@ -70,9 +72,10 @@ class Gateway
         } else {
             try {
                 $gateway = DBGateway::where('slug', $gateway_slug)->first();
-                $gateway = Cache::put("account_gateway_" . $gateway_slug, $gateway, 3600);
+
+                Cache::put("account_gateway_" . $gateway_slug, $gateway, 3600);
+
                 return $gateway;
-                //code...
             } catch (\Throwable$th) {
                 throw $th;
             }
