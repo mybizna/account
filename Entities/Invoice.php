@@ -10,7 +10,8 @@ class Invoice extends BaseModel
 {
 
     protected $fillable = [
-        'title', 'invoice_no', 'partner_id', 'status', 'description', 'is_posted', 'total',
+        'title', 'invoice_no', 'partner_id', 'due_date', 'module', 'model', 'status', 
+        'description', 'is_posted', 'total',
     ];
     public $migrationDependancy = ['partner'];
     protected $table = "account_invoice";

@@ -3,7 +3,6 @@
 namespace Modules\Account\Classes;
 
 use Illuminate\Support\Facades\Cache;
-use Modules\Account\Entities\ChartOfAccount as DBChartOfAccount;
 use Modules\Account\Entities\Journal as DBJournal;
 use Modules\Account\Entities\Ledger as DBLedger;
 
@@ -44,7 +43,6 @@ class Ledger
             return $ledger;
         } else {
             try {
-                console_log($ledger_slug);
                 $query = $this->getLedgerQuery();
                 $ledger = $query->where('al.slug', $ledger_slug)->first();
 
@@ -77,7 +75,7 @@ class Ledger
                 $ledger = DBLedger::where('slug', $ledger_slug)->first();
 
                 $ledger_id = $ledger->id;
-                
+
                 Cache::put("account_ledger_" . $ledger_slug . "_id", $ledger->id, 3600);
 
                 return $ledger_id;
@@ -88,17 +86,25 @@ class Ledger
         }
         return false;
     }
+    public function getClearCache($ledger_id, $partner_id = '', $payment_id = '', $invoice_id = '')
+    {
+        Cache::forget("account_ledger_total_" . $ledger_id . '_' . $partner_id . '_' . $payment_id . '_' . $invoice_id);
+    }
 
-    public function getLedgerTotal($ledger_id, $partner_id = '', $payment_id = '')
+    public function getLedgerTotal($ledger_id, $partner_id = '', $payment_id = '', $invoice_id = '')
     {
 
-        if (Cache::has("account_ledger_total_" . $ledger_id . '_' . $partner_id . '_' . $payment_id)) {
-            $ledger_total = Cache::get("account_ledger_total_" . $ledger_id . '_' . $partner_id . '_' . $payment_id);
+        if (Cache::has("account_ledger_total_" . $ledger_id . '_' . $partner_id . '_' . $payment_id . '_' . $invoice_id)) {
+            $ledger_total = Cache::get("account_ledger_total_" . $ledger_id . '_' . $partner_id . '_' . $payment_id . '_' . $invoice_id);
             return $ledger_total;
         } else {
             try {
                 $ledger = $this->getLedger($ledger_id);
                 $query = DBJournal::where('ledger_id', $ledger_id);
+
+                if ($invoice_id) {
+                    $query->where('invoice_id', $invoice_id);
+                }
 
                 if ($partner_id) {
                     $query->where('partner_id', $partner_id);
@@ -116,7 +122,7 @@ class Ledger
                     $total = $debit - $credit;
                 }
 
-                Cache::put("account_ledger_total_" . $ledger_id . '_' . $partner_id . '_' . $payment_id, [
+                Cache::put("account_ledger_total_" . $ledger_id . '_' . $partner_id . '_' . $payment_id . '_' . $invoice_id, [
                     'debit' => $debit,
                     'credit' => $credit,
                     'total' => $total,
@@ -134,8 +140,6 @@ class Ledger
 
         return false;
     }
-
-  
 
     public function getAccountBalance($partner_id)
     {

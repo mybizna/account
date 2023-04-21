@@ -1,9 +1,6 @@
 <?php
-
 namespace Modules\Account\Classes;
 
-
-use Illuminate\Support\Facades\DB;
 use Modules\Account\Classes\Journal;
 
 class Transactions
