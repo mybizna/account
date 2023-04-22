@@ -8,7 +8,7 @@ $sales_revenue_id = $ledger->getLedgerId('sales_revenue', true);
 
 return [
     'sales_default_ledger' => [
-        "title"=>"Sales Default Ledger",
+        "title" => "Sales Default Ledger",
         "type" => "recordpicker",
         "value" => $sales_revenue_id,
         "comp_url" => "account/admin/ledger/list.vue",
@@ -17,6 +17,6 @@ return [
             'fields' => ['name', 'slug', 'chart_id__account_chart_of_account__name'],
             'template' => '[name] ([slug]) - [chart_id__account_chart_of_account__name]',
 
-        ]
-    ]
+        ],
+    ],
 ];
