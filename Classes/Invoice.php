@@ -160,7 +160,7 @@ class Invoice
 
         // get partner invoices
         $invoices = $this->getPartnerInvoices($partner_id, $invoice_id);
-
+     
         foreach ($invoices as $invoice_key => $invoice) {
             $invoice_data = ['status' => 'pending'];
             $inv_total = 0;
@@ -227,11 +227,11 @@ class Invoice
             $ledger->getClearCache($receivable_id, invoice_id:$invoice->id);
             $receivable_ledger = $ledger->getLedgerTotal($receivable_id, invoice_id:$invoice->id);
             $receivable_total = (isset($receivable_ledger['total']) && (int) $receivable_ledger['total'] > 0) ? (int) $receivable_ledger['total'] : 0;
-
+            
             $inv_balance = ($receivable_total) ? $receivable_total : $inv_total;
-
+          
             $payments = $this->getPayments($partner_id);
-
+     
             foreach ($payments as $key => $payment) {
                 $paid_amount = 0;
                 $payment_id = $payment->id;
@@ -434,6 +434,12 @@ class Invoice
     public function getInvoice($invoice_id, $fetch_items = false)
     {
         $invoice_total = 0;
+        $invoice = DBInvoice::where('id', $invoice_id)->first();
+        
+        if ($invoice->status != 'paid') {
+            $this->reconcileInvoices($invoice->partner_id, $invoice_id);
+        }
+
         $invoice = DBInvoice::where('id', $invoice_id)->first();
 
         if ($fetch_items) {
