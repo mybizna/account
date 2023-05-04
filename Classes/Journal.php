@@ -26,17 +26,26 @@ class Journal
             $grouping_id = $this->getGroupingId();
         }
 
-        DBJournal::create(
-            [
-                'title' => $title,
-                'partner_id' => $partner_id,
-                'ledger_id' => $ledger_id,
-                'grouping_id' => $grouping_id,
-                'payment_id' => $payment_id,
-                'invoice_id' => $invoice_id,
-                $credit_debit => abs($amount),
-            ]
-        );
+        $data = [
+            'title' => $title,
+            'partner_id' => $partner_id,
+            'ledger_id' => $ledger_id,
+            $credit_debit => abs($amount),
+        ];
+
+        if ($grouping_id) {
+            $data['grouping_id'] = $grouping_id;
+        }
+
+        if ($payment_id) {
+            $data['payment_id'] = $payment_id;
+        }
+
+        if ($invoice_id) {
+            $data['invoice_id'] = $invoice_id;
+        }
+        
+        DBJournal::create($data);
 
         Cache::forget("account_ledger_total_" . $ledger_id . '_' . $partner_id);
 
