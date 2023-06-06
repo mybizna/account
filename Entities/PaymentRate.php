@@ -22,18 +22,13 @@ class PaymentRate extends BaseModel
     public function migration(Blueprint $table)
     {
         $table->increments('id');
-        $table->integer('payment_id');
-        $table->integer('rate_id');
+        $table->foreignId('payment_id');
+        $table->foreignId('rate_id');
     }
 
     public function post_migration(Blueprint $table)
     {
-        if (Migration::checkKeyExist('account_payment_rate', 'payment_id')) {
-            $table->foreign('payment_id')->references('id')->on('account_payment')->nullOnDelete();
-        }
-
-        if (Migration::checkKeyExist('account_payment_rate', 'rate_id')) {
-            $table->foreign('rate_id')->references('id')->on('account_rate')->nullOnDelete();
-        }
+        Migration::addForeign($table, 'account_payment', 'payment_id');
+        Migration::addForeign($table, 'account_rate', 'rate_id');
     }
 }

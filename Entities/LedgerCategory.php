@@ -24,18 +24,14 @@ class LedgerCategory extends BaseModel
         $table->increments('id');
         $table->string('name')->nullable();
         $table->string('slug')->nullable();
-        $table->integer('chart_id')->nullable();
-        $table->integer('parent_id')->nullable();
+        $table->foreignId('chart_id')->nullable();
+        $table->foreignId('parent_id')->nullable();
         $table->tinyInteger('is_system')->nullable();
     }
 
     public function post_migration(Blueprint $table)
     {
-        if (Migration::checkKeyExist('account_ledger_category', 'chart_id')) {
-            $table->foreign('chart_id')->references('id')->on('account_chart_of_account')->nullOnDelete();
-        }
-        if (Migration::checkKeyExist('account_ledger_category', 'parent_id')) {
-            $table->foreign('parent_id')->references('id')->on('account_ledger_category')->nullOnDelete();
-        }
+        Migration::addForeign($table, 'account_chart_of_account', 'chart_id');
+        Migration::addForeign($table, 'account_ledger_category', 'parent_id');
     }
 }

@@ -22,18 +22,13 @@ class InvoiceCoupon extends BaseModel
     public function migration(Blueprint $table)
     {
         $table->increments('id');
-        $table->integer('payment_id');
-        $table->integer('coupon_id');
+        $table->foreignId('payment_id');
+        $table->foreignId('coupon_id');
     }
 
     public function post_migration(Blueprint $table)
     {
-        if (Migration::checkKeyExist('account_invoice_coupon', 'payment_id')) {
-            $table->foreign('payment_id')->references('id')->on('account_payment')->nullOnDelete();
-        }
-
-        if (Migration::checkKeyExist('account_invoice_coupon', 'coupon_id')) {
-            $table->foreign('coupon_id')->references('id')->on('account_coupon')->nullOnDelete();
-        }
+        Migration::addForeign($table, 'account_coupon', 'coupon_id');
+        Migration::addForeign($table, 'account_payment', 'payment_id');
     }
 }

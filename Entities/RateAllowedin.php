@@ -22,18 +22,13 @@ class RateAllowedin extends BaseModel
     public function migration(Blueprint $table)
     {
         $table->increments('id');
-        $table->integer('country_id');
-        $table->integer('rate_id');
+        $table->foreignId('country_id');
+        $table->foreignId('rate_id');
     }
 
     public function post_migration(Blueprint $table)
     {
-        if (Migration::checkKeyExist('account_rate_allowedin', 'country_id')) {
-            $table->foreign('country_id')->references('id')->on('core_country')->nullOnDelete();
-        }
-
-        if (Migration::checkKeyExist('account_rate_allowedin', 'rate_id')) {
-            $table->foreign('rate_id')->references('id')->on('account_rate')->nullOnDelete();
-        }
+        Migration::addForeign($table, 'core_country', 'country_id');
+        Migration::addForeign($table, 'account_rate', 'rate_id');
     }
 }

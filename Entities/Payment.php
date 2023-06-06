@@ -29,9 +29,9 @@ class Payment extends BaseModel
         $table->increments('id');
         $table->string('title');
         $table->decimal('amount', 20, 2);
-        $table->integer('ledger_id');
-        $table->integer('partner_id');
-        $table->integer('gateway_id');
+        $table->foreignId('ledger_id');
+        $table->foreignId('partner_id');
+        $table->foreignId('gateway_id');
         $table->string('receipt_no')->nullable();
         $table->string('code')->nullable();
         $table->string('others')->nullable();
@@ -43,16 +43,8 @@ class Payment extends BaseModel
 
     public function post_migration(Blueprint $table)
     {
-        if (Migration::checkKeyExist('account_payment', 'gateway_id')) {
-            $table->foreign('gateway_id')->references('id')->on('account_gateway')->nullOnDelete();
-        }
-
-        if (Migration::checkKeyExist('account_payment', 'ledger_id')) {
-            $table->foreign('ledger_id')->references('id')->on('account_ledger')->nullOnDelete();
-        }
-
-        if (Migration::checkKeyExist('account_payment', 'invoice_id')) {
-            $table->foreign('invoice_id')->references('id')->on('account_invoice')->nullOnDelete();
-        }
+        Migration::addForeign($table, 'account_gateway', 'gateway_id');
+        Migration::addForeign($table, 'account_ledger', 'ledger_id');
+        Migration::addForeign($table, 'account_invoice', 'invoice_id');
     }
 }

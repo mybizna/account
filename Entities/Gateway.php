@@ -30,8 +30,8 @@ class Gateway extends BaseModel
         $table->increments('id');
         $table->string('title');
         $table->string('slug');
-        $table->integer('ledger_id');
-        $table->integer('currency_id')->nullable();
+        $table->foreignId('ledger_id');
+        $table->foreignId('currency_id')->nullable();
         $table->string('image')->nullable();
         $table->string('url')->nullable();
         $table->string('module')->nullable();
@@ -45,12 +45,7 @@ class Gateway extends BaseModel
 
     public function post_migration(Blueprint $table)
     {
-        if (Migration::checkKeyExist('account_gateway', 'currency_id')) {
-            $table->foreign('currency_id')->references('id')->on('core_currency')->nullOnDelete();
-        }
-
-        if (Migration::checkKeyExist('account_gateway', 'ledger_id')) {
-            $table->foreign('ledger_id')->references('id')->on('account_ledger')->nullOnDelete();
-        }
+        Migration::addForeign($table, 'core_currency', 'currency_id');
+        Migration::addForeign($table, 'account_ledger', 'ledger_id');
     }
 }

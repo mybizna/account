@@ -24,8 +24,8 @@ class Ledger extends BaseModel
     public function migration(Blueprint $table)
     {
         $table->increments('id');
-        $table->integer('chart_id')->nullable();
-        $table->integer('category_id')->nullable();
+        $table->foreignId('chart_id')->nullable();
+        $table->foreignId('category_id')->nullable();
         $table->string('name')->nullable();
         $table->string('slug')->nullable();
         $table->integer('code')->nullable();
@@ -35,12 +35,8 @@ class Ledger extends BaseModel
 
     public function post_migration(Blueprint $table)
     {
-        if (Migration::checkKeyExist('account_ledger', 'chart_id')) {
-            $table->foreign('chart_id')->references('id')->on('account_chart_of_account')->nullOnDelete();
-        }
-        if (Migration::checkKeyExist('account_ledger', 'category_id')) {
-            $table->foreign('category_id')->references('id')->on('account_ledger_category')->nullOnDelete();
-        }
+        Migration::addForeign($table, 'account_chart_of_account', 'chart_id');
+        Migration::addForeign($table, 'account_ledger_category', 'category_id');
     }
 
     public function deleteRecord($id)

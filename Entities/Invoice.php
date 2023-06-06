@@ -27,7 +27,7 @@ class Invoice extends BaseModel
         $table->increments('id');
         $table->string('title');
         $table->char('invoice_no', 100);
-        $table->integer('partner_id');
+        $table->foreignId('partner_id');
         $table->date('due_date')->useCurrent();
         $table->string('module')->default('Account');
         $table->string('model')->default('Invoice');
@@ -39,8 +39,6 @@ class Invoice extends BaseModel
 
     public function post_migration(Blueprint $table)
     {
-        if (Migration::checkKeyExist('account_invoice', 'partner_id')) {
-            $table->foreign('partner_id')->references('id')->on('partner')->nullOnDelete();
-        }
+        Migration::addForeign($table, 'partner', 'partner_id');
     }
 }

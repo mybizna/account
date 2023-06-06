@@ -26,8 +26,8 @@ class InvoiceItemRate extends BaseModel
         $table->increments('id');
         $table->integer('title');
         $table->integer('slug');
-        $table->integer('rate_id');
-        $table->integer('invoice_item_id');
+        $table->foreignId('rate_id');
+        $table->foreignId('invoice_item_id');
         $table->enum('method', ['+', '+%', '-', '-%'])->default('+');
         $table->decimal('value', 20, 2)->default(0.00);
         $table->string('params')->nullable();
@@ -37,12 +37,7 @@ class InvoiceItemRate extends BaseModel
 
     public function post_migration(Blueprint $table)
     {
-        if (Migration::checkKeyExist('account_invoice_item_rate', 'invoice_id')) {
-            $table->foreign('invoice_id')->references('id')->on('account_invoice')->nullOnDelete();
-        }
-
-        if (Migration::checkKeyExist('account_invoice_item_rate', 'rate_id')) {
-            $table->foreign('rate_id')->references('id')->on('account_transaction')->nullOnDelete();
-        }
+        Migration::addForeign($table, 'account_invoice', 'invoice_id');
+        Migration::addForeign($table, 'account_transaction', 'rate_id');
     }
 }

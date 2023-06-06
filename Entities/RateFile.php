@@ -24,7 +24,7 @@ class RateFile extends BaseModel
     public function migration(Blueprint $table)
     {
         $table->increments('id');
-        $table->integer('rate_id');
+        $table->foreignId('rate_id');
         $table->string('year');
         $table->string('month');
         $table->string('token');
@@ -36,8 +36,6 @@ class RateFile extends BaseModel
 
     public function post_migration(Blueprint $table)
     {
-        if (Migration::checkKeyExist('account_rate_file', 'rate_id')) {
-            $table->foreign('rate_id')->references('id')->on('account_rate')->nullOnDelete();
-        }
+        Migration::addForeign($table, 'account_rate', 'rate_id');
     }
 }

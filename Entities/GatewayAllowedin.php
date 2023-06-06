@@ -2,9 +2,9 @@
 
 namespace Modules\Account\Entities;
 
-use Modules\Base\Entities\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
+use Modules\Base\Entities\BaseModel;
 
 class GatewayAllowedin extends BaseModel
 {
@@ -22,18 +22,13 @@ class GatewayAllowedin extends BaseModel
     public function migration(Blueprint $table)
     {
         $table->increments('id');
-        $table->integer('country_id');
-        $table->integer('gateway_id');
+        $table->foreignId('country_id');
+        $table->foreignId('gateway_id');
     }
 
     public function post_migration(Blueprint $table)
     {
-        if (Migration::checkKeyExist('account_gateway_allowedin', 'country_id')) {
-            $table->foreign('country_id')->references('id')->on('core_country')->nullOnDelete();
-        }
-
-        if (Migration::checkKeyExist('account_gateway_allowedin', 'gateway_id')) {
-            $table->foreign('gateway_id')->references('id')->on('account_gateway')->nullOnDelete();
-        }
+        Migration::addForeign($table, 'core_country', 'country_id');
+        Migration::addForeign($table, 'account_gateway', 'gateway_id');
     }
 }

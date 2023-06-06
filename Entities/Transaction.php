@@ -29,35 +29,21 @@ class Transaction extends BaseModel
         $table->increments('id');
         $table->decimal('amount', 20, 2)->default(0.00);
         $table->string('description');
-        $table->integer('partner_id');
-        $table->string('ledger_setting_id')->nullable();
-        $table->integer('left_chart_of_account_id')->nullable();
-        $table->integer('left_ledger_id')->nullable();
-        $table->integer('right_chart_of_account_id')->nullable();
-        $table->integer('right_ledger_id')->nullable();
+        $table->foreignId('partner_id');
+        $table->foreignId('ledger_setting_id')->nullable();
+        $table->foreignId('left_chart_of_account_id')->nullable();
+        $table->foreignId('left_ledger_id')->nullable();
+        $table->foreignId('right_chart_of_account_id')->nullable();
+        $table->foreignId('right_ledger_id')->nullable();
         $table->tinyInteger('is_processed')->nullable();
     }
 
     public function post_migration(Blueprint $table)
     {
-        if (Migration::checkKeyExist('account_transaction', 'ledger_setting_id')) {
-            $table->foreign('ledger_setting_id')->references('id')->on('account_ledger_setting')->nullOnDelete();
-        }
-
-        if (Migration::checkKeyExist('account_transaction', 'partner_id')) {
-            $table->foreign('partner_id')->references('id')->on('partner')->nullOnDelete();
-        }
-
-        if (Migration::checkKeyExist('account_transaction', 'left_ledger_id')) {
-            $table->foreign('left_ledger_id')->references('id')->on('account_ledger')->nullOnDelete();
-        }
-
-        if (Migration::checkKeyExist('account_transaction', 'right_chart_of_account_id')) {
-            $table->foreign('right_chart_of_account_id')->references('id')->on('account_chart_of_account')->nullOnDelete();
-        }
-
-        if (Migration::checkKeyExist('account_transaction', 'right_ledger_id')) {
-            $table->foreign('right_ledger_id')->references('id')->on('account_ledger')->nullOnDelete();
-        }
+        Migration::addForeign($table, 'account_ledger_setting', 'ledger_setting_id');
+        Migration::addForeign($table, 'partner', 'partner_id');
+        Migration::addForeign($table, 'account_ledger', 'left_ledger_id');
+        Migration::addForeign($table, 'account_chart_of_account', 'right_chart_of_account_id');
+        Migration::addForeign($table, 'account_ledger', 'right_ledger_id');
     }
 }
