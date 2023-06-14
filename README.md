@@ -1,8 +1,8 @@
 # MyBizna ERP - Account Module
 The Account module is an essential part of the MyBizna ERP system. It provides functionality related to managing and tracking financial accounts within your organization. This readme provides a brief overview of the module and how to get started with it.
 
-## Installation 
-To install the Account module, use the following composer command:
+## Installation  
+To install the Account module, use the following composer command: 
 ```
 composer require mybizna/account
 ```
