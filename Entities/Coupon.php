@@ -32,8 +32,8 @@ class Coupon extends BaseModel
         $table->date('start_date')->nullable();
         $table->date('end_date')->nullable();
         $table->string('applied')->nullable();
-        $table->tinyInteger('is_percent')->default(false);
-        $table->tinyInteger('published')->default(false);
+        $table->tinyInteger('is_percent')->default(0);
+        $table->tinyInteger('published')->default(0);
         $table->tinyInteger('is_visible')->default(false);
     }
 }

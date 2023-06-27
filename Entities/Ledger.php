@@ -29,8 +29,8 @@ class Ledger extends BaseModel
         $table->string('name')->nullable();
         $table->string('slug')->nullable();
         $table->integer('code')->nullable();
-        $table->tinyInteger('unused')->default(true);
-        $table->tinyInteger('is_system')->default(false);
+        $table->tinyInteger('unused')->default(1);
+        $table->tinyInteger('is_system')->default(0);
     }
 
     public function post_migration(Blueprint $table)
