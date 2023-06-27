@@ -345,7 +345,6 @@ class AccountTest extends TestCase
     //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     public function test_make_150_more_payment()
     {
-        //exit;
         $tmp_partner = DBPartner::where('phone', '0799999999')->first();
 
         $payment = new Payment();

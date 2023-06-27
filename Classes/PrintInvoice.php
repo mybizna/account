@@ -19,9 +19,6 @@ class PrintTicket
         /* Fill in your own connector here */
         $connector = new RawbtPrintConnector();
         
-       // $connector = new WindowsPrintConnector("BT");
-        //print_r('print'); exit;
-
         /* Information for the receipt */
         $items = array(
             new Item("Example item #1", "4.00"),
