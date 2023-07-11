@@ -3,9 +3,19 @@
 use Modules\Core\Classes\Currency;
 use Modules\Account\Classes\Ledger;
 
+
+if (!Schema::hasTable('account_ledger')) {
+    return [];
+}
+
+
 $ledger = new Ledger();
 
-$sales_revenue_id = $ledger->getLedgerId('sales_revenue', true);
+$sales_revenue_id = @$ledger->getLedgerId('sales_revenue', true);
+
+if(!$sales_revenue_id){
+    return [];
+}
 
 return [
     'sales_default_ledger' => [
