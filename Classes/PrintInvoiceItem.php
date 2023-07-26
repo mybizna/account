@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Queuing\Classes;
+namespace Modules\Account\Classes;
 
 /* A wrapper to do organise item names & prices into columns */
 
-class Item
+class PrintInvoiceItem
 {
     private $name;
     private $price;

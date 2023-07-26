@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Queuing\Classes;
+namespace Modules\Account\Classes;
 
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\EscposImage;
@@ -9,7 +9,7 @@ use Mike42\Escpos\PrintConnectors\RawbtPrintConnector;
 use Mike42\Escpos\CapabilityProfile;
 use Modules\Account\Classes\PrintInvoiceItem as Item;
 
-class PrintTicket
+class PrintInvoice
 {
  public function print(){
   
