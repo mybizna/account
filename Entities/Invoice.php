@@ -6,6 +6,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
 use Modules\Base\Entities\BaseModel;
 
+use Modules\Core\Classes\Views\ListTable;
+use Modules\Core\Classes\Views\FormBuilder;
+
 class Invoice extends BaseModel
 {
 
@@ -16,6 +19,60 @@ class Invoice extends BaseModel
     public $migrationDependancy = ['partner'];
     protected $table = "account_invoice";
 
+
+    public function listTable(){
+        // listing view fields
+        $fields = new ListTable();
+
+        $fields->name('title')->type('text')->ordering(true);
+        $fields->name('invoice_no')->type('text')->ordering(true);
+        $fields->name('partner_id')->type('recordpicker')->table('partner')->ordering(true);
+        $fields->name('due_date')->type('datetime')->ordering(true);
+        $fields->name('module')->type('text')->ordering(true);
+        $fields->name('model')->type('text')->ordering(true);
+        $fields->name('status')->type('switch')->ordering(true);
+        $fields->name('description')->type('textarea')->ordering(true);
+        $fields->name('is_posted')->type('switch')->ordering(true);
+
+
+        return $fields;
+
+    }
+    
+    public function formBuilder(){
+        // listing view fields
+        $fields = new FormBuilder();
+
+        $fields->name('title')->type('text')->group('w-1/2');
+        $fields->name('invoice_no')->type('text')->group('w-1/2');
+        $fields->name('partner_id')->type('recordpicker')->table('partner')->group('w-1/2');
+        $fields->name('due_date')->type('datetime')->group('w-1/2');
+        $fields->name('module')->type('text')->group('w-1/2');
+        $fields->name('model')->type('text')->group('w-1/2');
+        $fields->name('status')->type('switch')->group('w-1/2');
+        $fields->name('description')->type('textarea')->group('w-full');
+        $fields->name('is_posted')->type('switch')->group('w-1/2');
+
+        return $fields;
+
+    }
+
+    public function filter(){
+        // listing view fields
+        $fields = new FormBuilder();
+
+        $fields->name('title')->type('text')->group('w-1/6');
+        $fields->name('invoice_no')->type('text')->group('w-1/6');
+        $fields->name('partner_id')->type('recordpicker')->table('partner')->group('w-1/6');
+        $fields->name('due_date')->type('datetime')->group('w-1/6');
+        $fields->name('module')->type('text')->group('w-1/6');
+        $fields->name('model')->type('text')->group('w-1/6');
+        $fields->name('status')->type('switch')->group('w-1/6');
+        $fields->name('is_posted')->type('switch')->group('w-1/6');
+
+        return $fields;
+
+    }
     /**
      * List of fields for managing postings.
      *

@@ -6,6 +6,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
 use Modules\Base\Entities\BaseModel;
 
+use Modules\Core\Classes\Views\ListTable;
+use Modules\Core\Classes\Views\FormBuilder;
+
 class Payment extends BaseModel
 {
 
@@ -18,6 +21,66 @@ class Payment extends BaseModel
 
     protected $can_delete = "false";
 
+
+    public function listTable(){
+        // listing view fields
+        $fields = new ListTable();
+
+        $fields->name('title')->type('text')->ordering(true);
+        $fields->name('amount')->type('text')->ordering(true);
+        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->ordering(true);
+        $fields->name('partner_id')->type('recordpicker')->table('partner')->ordering(true);
+        $fields->name('gateway_id')->type('recordpicker')->table('account_gateway')->ordering(true);
+        $fields->name('receipt_no')->type('text')->ordering(true);
+        $fields->name('code')->type('text')->ordering(true);
+        $fields->name('others')->type('text')->ordering(true);
+        $fields->name('stage')->type('text')->ordering(true);
+        $fields->name('status')->type('switch')->ordering(true);
+        $fields->name('type')->type('text')->ordering(true);
+        $fields->name('is_posted')->type('switch')->ordering(true);
+
+
+        return $fields;
+
+    }
+    
+    public function formBuilder(){
+        // listing view fields
+        $fields = new FormBuilder();
+
+        $fields->name('title')->type('text')->group('w-1/2');
+        $fields->name('amount')->type('text')->group('w-1/2');
+        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/2');
+        $fields->name('partner_id')->type('recordpicker')->table('partner')->group('w-1/2');
+        $fields->name('gateway_id')->type('recordpicker')->table('account_gateway')->group('w-1/2');
+        $fields->name('receipt_no')->type('text')->group('w-1/2');
+        $fields->name('code')->type('text')->group('w-1/2');
+        $fields->name('others')->type('text')->group('w-1/2');
+        $fields->name('stage')->type('text')->group('w-1/2');
+        $fields->name('status')->type('switch')->group('w-1/2');
+        $fields->name('type')->type('text')->group('w-1/2');
+        $fields->name('is_posted')->type('switch')->group('w-1/2');
+
+
+        return $fields;
+
+    }
+
+    public function filter(){
+        // listing view fields
+        $fields = new FormBuilder();
+
+        $fields->name('title')->type('text')->group('w-1/6');
+        $fields->name('receipt_no')->type('text')->group('w-1/6');
+        $fields->name('code')->type('text')->group('w-1/6');
+        $fields->name('amount')->type('text')->group('w-1/6');
+        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/6');
+        $fields->name('partner_id')->type('recordpicker')->table('partner')->group('w-1/6');
+        $fields->name('gateway_id')->type('recordpicker')->table('account_gateway')->group('w-1/6');
+
+        return $fields;
+
+    }
     /**
      * List of fields for managing postings.
      *

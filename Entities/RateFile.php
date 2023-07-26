@@ -6,6 +6,9 @@ use Modules\Base\Entities\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
 
+use Modules\Core\Classes\Views\ListTable;
+use Modules\Core\Classes\Views\FormBuilder;
+
 class RateFile extends BaseModel
 {
 
@@ -15,6 +18,54 @@ class RateFile extends BaseModel
     public $migrationDependancy = ['account_rate'];
     protected $table = "account_rate_file";
 
+
+    public function listTable(){
+        // listing view fields
+        $fields = new ListTable();
+
+        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->ordering(true);
+        $fields->name('year')->type('text')->ordering(true);
+        $fields->name('month')->type('text')->ordering(true);
+        $fields->name('token')->type('text')->ordering(true);
+        $fields->name('type')->type('text')->ordering(true);
+        $fields->name('max_limit')->type('text')->ordering(true);
+        $fields->name('file')->type('text')->ordering(true);
+        $fields->name('is_processed')->type('switch')->ordering(true);
+
+        return $fields;
+
+    }
+    
+    public function formBuilder(){
+        // listing view fields
+        $fields = new FormBuilder();
+
+        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->group('w-1/2');
+        $fields->name('year')->type('text')->group('w-1/2');
+        $fields->name('month')->type('text')->group('w-1/2');
+        $fields->name('token')->type('text')->group('w-1/2');
+        $fields->name('type')->type('text')->group('w-1/2');
+        $fields->name('max_limit')->type('text')->group('w-1/2');
+        $fields->name('file')->type('text')->group('w-1/2');
+        $fields->name('is_processed')->type('switch')->group('w-1/2');
+
+
+        return $fields;
+
+    }
+
+    public function filter(){
+        // listing view fields
+        $fields = new FormBuilder();
+
+        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->group('w-1/6');
+        $fields->name('year')->type('text')->group('w-1/6');
+        $fields->name('month')->type('text')->group('w-1/6');
+        $fields->name('type')->type('text')->group('w-1/6');
+
+        return $fields;
+
+    }
     /**
      * List of fields for managing postings.
      *

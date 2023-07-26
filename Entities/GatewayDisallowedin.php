@@ -6,6 +6,9 @@ use Modules\Base\Entities\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
 
+use Modules\Core\Classes\Views\ListTable;
+use Modules\Core\Classes\Views\FormBuilder;
+
 class GatewayDisallowedin extends BaseModel
 {
 
@@ -13,6 +16,39 @@ class GatewayDisallowedin extends BaseModel
     public $migrationDependancy = ['core_country', 'account_gateway'];
     protected $table = "account_gateway_disallowedin";
 
+
+    public function listTable(){
+        // listing view fields
+        $fields = new ListTable();
+
+        $fields->name('country_id')->type('recordpicker')->table('core_country')->ordering(true);
+        $fields->name('gateway_id')->type('recordpicker')->table('account_gateway')->ordering(true);
+
+        return $fields;
+
+    }
+    
+    public function formBuilder(){
+        // listing view fields
+        $fields = new FormBuilder();
+
+        $fields->name('country_id')->type('recordpicker')->table('core_country')->group('w-1/2');
+        $fields->name('gateway_id')->type('recordpicker')->table('account_gateway')->group('w-1/2');
+
+        return $fields;
+
+    }
+
+    public function filter(){
+        // listing view fields
+        $fields = new FormBuilder();
+
+        $fields->name('country_id')->type('recordpicker')->table('core_country')->group('w-1/2');
+        $fields->name('gateway_id')->type('recordpicker')->table('account_gateway')->group('w-1/2');
+
+        return $fields;
+
+    }
     /**
      * List of fields for managing postings.
      *

@@ -6,6 +6,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
 use Modules\Base\Entities\BaseModel;
 
+use Modules\Core\Classes\Views\ListTable;
+use Modules\Core\Classes\Views\FormBuilder;
+
 class Rate extends BaseModel
 {
 
@@ -17,6 +20,54 @@ class Rate extends BaseModel
     public $migrationDependancy = ['account_ledger'];
     protected $table = "account_rate";
 
+
+    public function listTable(){
+        // listing view fields
+        $fields = new ListTable();
+
+        $fields->name('title')->type('text')->ordering(true);
+        $fields->name('slug')->type('text')->ordering(true);
+        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->ordering(true);
+        $fields->name('value')->type('text')->ordering(true);
+        $fields->name('method')->type('text')->ordering(true);
+        $fields->name('ordering')->type('text')->ordering(true);
+        $fields->name('on_total')->type('switch')->ordering(true);
+        $fields->name('published')->type('switch')->ordering(true);
+
+        return $fields;
+
+    }
+    
+    public function formBuilder(){
+        // listing view fields
+        $fields = new FormBuilder();
+
+        $fields->name('title')->type('text')->group('w-1/2');
+        $fields->name('slug')->type('text')->group('w-1/2');
+        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/2');
+        $fields->name('value')->type('text')->group('w-1/2');
+        $fields->name('method')->type('text')->group('w-1/2');
+        $fields->name('ordering')->type('text')->group('w-1/2');
+        $fields->name('on_total')->type('switch')->group('w-1/2');
+        $fields->name('published')->type('switch')->group('w-1/2');
+
+
+        return $fields;
+
+    }
+
+    public function filter(){
+        // listing view fields
+        $fields = new FormBuilder();
+
+        $fields->name('title')->type('text')->group('w-1/6');
+        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/6');
+        $fields->name('value')->type('text')->group('w-1/6');
+        $fields->name('method')->type('text')->group('w-1/6');
+
+        return $fields;
+
+    }
     /**
      * List of fields for managing postings.
      *

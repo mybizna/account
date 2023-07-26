@@ -6,6 +6,9 @@ use Modules\Base\Entities\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
 
+use Modules\Core\Classes\Views\ListTable;
+use Modules\Core\Classes\Views\FormBuilder;
+
 class GatewayRate extends BaseModel
 {
 
@@ -13,6 +16,39 @@ class GatewayRate extends BaseModel
     public $migrationDependancy = ['account_gateway', 'account_rate'];
     protected $table = "account_gateway_rate";
 
+
+    public function listTable(){
+        // listing view fields
+        $fields = new ListTable();
+
+        $fields->name('gateway_id')->type('recordpicker')->table('account_gateway')->ordering(true);
+        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->ordering(true);
+
+        return $fields;
+
+    }
+    
+    public function formBuilder(){
+        // listing view fields
+        $fields = new FormBuilder();
+
+        $fields->name('gateway_id')->type('recordpicker')->table('account_gateway')->group('w-1/2');
+        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->group('w-1/2');
+
+        return $fields;
+
+    }
+
+    public function filter(){
+        // listing view fields
+        $fields = new FormBuilder();
+
+        $fields->name('gateway_id')->type('recordpicker')->table('account_gateway')->group('w-1/2');
+        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->group('w-1/2');
+
+        return $fields;
+
+    }
     /**
      * List of fields for managing postings.
      *
