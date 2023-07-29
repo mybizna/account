@@ -2,22 +2,34 @@
 
 namespace Modules\Account\Entities;
 
-use Modules\Base\Entities\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
-
-use Modules\Core\Classes\Views\ListTable;
-use Modules\Core\Classes\Views\FormBuilder;
+use Modules\Base\Classes\Views\FormBuilder;
+use Modules\Base\Classes\Views\ListTable;
+use Modules\Base\Entities\BaseModel;
 
 class LedgerCategory extends BaseModel
 {
-
+    /**
+     * The fields that can be filled
+     * @var array<string>
+     */
     protected $fillable = ['name', 'slug', 'chart_id', 'parent_id', 'is_system'];
-    public $migrationDependancy = ['account_chart_of_account'];
+
+    /**
+     * List of tables names that are need in this model during migration.
+     * @var array<string>
+     */
+    public array $migrationDependancy = ['account_chart_of_account'];
+
+    /**
+     * The fields that can be filled
+     * @var array<string>
+     */
     protected $table = "account_ledger_category";
 
-
-    public function listTable(){
+    public function listTable(): ListTable
+    {
         // listing view fields
         $fields = new ListTable();
 
@@ -27,12 +39,12 @@ class LedgerCategory extends BaseModel
         $fields->name('parent_id')->type('recordpicker')->table('account_ledger_category')->ordering(true);
         $fields->name('is_system')->type('switch')->ordering(true);
 
-
         return $fields;
 
     }
-    
-    public function formBuilder(){
+
+    public function formBuilder(): FormBuilder
+    {
         // listing view fields
         $fields = new FormBuilder();
 
@@ -46,7 +58,8 @@ class LedgerCategory extends BaseModel
 
     }
 
-    public function filter(){
+    public function filter(): FormBuilder
+    {
         // listing view fields
         $fields = new FormBuilder();
 
@@ -59,7 +72,7 @@ class LedgerCategory extends BaseModel
 
     }
     /**
-     * List of fields for managing postings.
+     * List of fields to be migrated to the datebase when creating or updating model during migration.
      *
      * @param Blueprint $table
      * @return void

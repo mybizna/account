@@ -114,7 +114,7 @@ class PrintInvoice
         $printer->cut();
         $printer->pulse();
     
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         echo $e->getMessage();
     } finally {
         $printer->close();

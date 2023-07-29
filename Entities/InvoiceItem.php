@@ -4,23 +4,34 @@ namespace Modules\Account\Entities;
 
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
+use Modules\Base\Classes\Views\FormBuilder;
+use Modules\Base\Classes\Views\ListTable;
 use Modules\Base\Entities\BaseModel;
-
-use Modules\Core\Classes\Views\ListTable;
-use Modules\Core\Classes\Views\FormBuilder;
 
 class InvoiceItem extends BaseModel
 {
-
+    /**
+     * The fields that can be filled
+     * @var array<string>
+     */
     protected $fillable = [
         'title', 'invoice_id', 'ledger_id', 'price', 'amount', 'quantity',
         'module', 'model', 'item_id',
     ];
-    public $migrationDependancy = ['account_invoice', 'account_transaction'];
+
+    /**
+     * List of tables names that are need in this model during migration.
+     * @var array<string>
+     */
+    public array $migrationDependancy = ['account_invoice', 'account_transaction'];
+    /**
+     * The table associated with the model.
+     * @var string
+     */
     protected $table = "account_invoice_item";
 
-
-    public function listTable(){
+    public function listTable(): ListTable
+    {
         // listing view fields
         $fields = new ListTable();
 
@@ -34,12 +45,12 @@ class InvoiceItem extends BaseModel
         $fields->name('item_id')->type('text')->ordering(true);
         $fields->name('quantity')->type('text')->ordering(true);
 
-
         return $fields;
 
     }
-    
-    public function formBuilder(){
+
+    public function formBuilder(): FormBuilder
+    {
         // listing view fields
         $fields = new FormBuilder();
 
@@ -53,12 +64,12 @@ class InvoiceItem extends BaseModel
         $fields->name('item_id')->type('text')->group('w-1/2');
         $fields->name('quantity')->type('text')->group('w-1/2');
 
-
         return $fields;
 
     }
 
-    public function filter(){
+    public function filter(): FormBuilder
+    {
         // listing view fields
         $fields = new FormBuilder();
 
@@ -75,7 +86,7 @@ class InvoiceItem extends BaseModel
 
     }
     /**
-     * List of fields for managing postings.
+     * List of fields to be migrated to the datebase when creating or updating model during migration.
      *
      * @param Blueprint $table
      * @return void

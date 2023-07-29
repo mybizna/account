@@ -4,26 +4,38 @@ namespace Modules\Account\Entities;
 
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
+use Modules\Base\Classes\Views\FormBuilder;
+use Modules\Base\Classes\Views\ListTable;
 use Modules\Base\Entities\BaseModel;
-
-use Modules\Core\Classes\Views\ListTable;
-use Modules\Core\Classes\Views\FormBuilder;
 
 class Gateway extends BaseModel
 {
-
+    /**
+     * The fields that can be filled
+     * @var array<string>
+     */
     protected $fillable = [
         'title', 'slug', 'ledger_id', 'currency_id', 'image', 'url', 'instruction',
         'module', 'ordering', 'is_default', 'is_hidden', 'is_hide_in_invoice', 'published',
 
     ];
-    public $migrationDependancy = ['core_currency', 'account_ledger'];
+
+    /**
+     * List of tables names that are need in this model during migration.
+     * @var array<string>
+     */
+    public array $migrationDependancy = ['core_currency', 'account_ledger'];
+
+    /**
+     * The table associated with the model.
+     * @var string
+     */
     protected $table = "account_gateway";
 
     protected $can_delete = "false";
 
-
-    public function listTable(){
+    public function listTable(): ListTable
+    {
         // listing view fields
         $fields = new ListTable();
 
@@ -42,8 +54,9 @@ class Gateway extends BaseModel
         return $fields;
 
     }
-    
-    public function formBuilder(){
+
+    public function formBuilder(): FormBuilder
+    {
         // listing view fields
         $fields = new FormBuilder();
 
@@ -60,13 +73,13 @@ class Gateway extends BaseModel
         $fields->name('is_hidden')->type('switch')->group('w-1/2');
         $fields->name('is_hide_in_invoice')->type('switch')->group('w-1/2');
         $fields->name('published')->type('switch')->group('w-1/2');
-
 
         return $fields;
 
     }
 
-    public function filter(){
+    public function filter(): FormBuilder
+    {
         // listing view fields
         $fields = new FormBuilder();
 
@@ -83,13 +96,12 @@ class Gateway extends BaseModel
         $fields->name('is_hidden')->type('switch')->group('w-1/2');
         $fields->name('is_hide_in_invoice')->type('switch')->group('w-1/2');
         $fields->name('published')->type('switch')->group('w-1/2');
-    
 
         return $fields;
 
     }
     /**
-     * List of fields for managing postings.
+     * List of fields to be migrated to the datebase when creating or updating model during migration.
      *
      * @param Blueprint $table
      * @return void

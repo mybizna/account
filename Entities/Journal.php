@@ -4,22 +4,34 @@ namespace Modules\Account\Entities;
 
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
+use Modules\Base\Classes\Views\FormBuilder;
+use Modules\Base\Classes\Views\ListTable;
 use Modules\Base\Entities\BaseModel;
-
-use Modules\Core\Classes\Views\ListTable;
-use Modules\Core\Classes\Views\FormBuilder;
 
 class Journal extends BaseModel
 {
+    /**
+     * The fields that can be filled
+     * @var array<string>
+     */
+    protected $fillable = ['title', 'grouping_id', 'partner_id', 'ledger_id', 'payment_id', 'invoice_id', 'debit', 'credit', 'params'];
 
-    protected $fillable = ['title','grouping_id',  'partner_id', 'ledger_id',  'payment_id', 'invoice_id', 'debit', 'credit', 'params'];
-    public $migrationDependancy = ['partner', 'account_ledger'];
+    /**
+     * List of tables names that are need in this model during migration.
+     * @var array<string>
+     */
+    public array $migrationDependancy = ['partner', 'account_ledger'];
+
+    /**
+     * The fields that can be filled
+     * @var array<string>
+     */
     protected $table = "account_journal";
 
     protected $can_delete = "false";
 
-
-    public function listTable(){
+    public function listTable(): ListTable
+    {
         // listing view fields
         $fields = new ListTable();
 
@@ -33,12 +45,12 @@ class Journal extends BaseModel
         $fields->name('credit')->type('text')->ordering(true);
         $fields->name('params')->type('text')->ordering(true);
 
-
         return $fields;
 
     }
-    
-    public function formBuilder(){
+
+    public function formBuilder(): FormBuilder
+    {
         // listing view fields
         $fields = new FormBuilder();
 
@@ -52,12 +64,12 @@ class Journal extends BaseModel
         $fields->name('credit')->type('text')->group('w-1/2');
         $fields->name('params')->type('text')->group('w-1/2');
 
-
         return $fields;
 
     }
 
-    public function filter(){
+    public function filter(): FormBuilder
+    {
         // listing view fields
         $fields = new FormBuilder();
 
@@ -69,12 +81,12 @@ class Journal extends BaseModel
         $fields->name('invoice_id')->type('recordpicker')->table('account_invoice')->group('w-1/6');
         $fields->name('debit')->type('text')->group('w-1/6');
         $fields->name('credit')->type('text')->group('w-1/6');
-        
+
         return $fields;
 
     }
     /**
-     * List of fields for managing postings.
+     * List of fields to be migrated to the datebase when creating or updating model during migration.
      *
      * @param Blueprint $table
      * @return void

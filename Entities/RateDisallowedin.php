@@ -2,22 +2,34 @@
 
 namespace Modules\Account\Entities;
 
-use Modules\Base\Entities\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
-
-use Modules\Core\Classes\Views\ListTable;
-use Modules\Core\Classes\Views\FormBuilder;
+use Modules\Base\Classes\Views\FormBuilder;
+use Modules\Base\Classes\Views\ListTable;
+use Modules\Base\Entities\BaseModel;
 
 class RateDisallowedin extends BaseModel
 {
-
+    /**
+     * The fields that can be filled
+     * @var array<string>
+     */
     protected $fillable = ['country_id', 'rate_id'];
-    public $migrationDependancy = ['core_country', 'account_rate'];
+
+    /**
+     * List of tables names that are need in this model during migration.
+     * @var array<string>
+     */
+    public array $migrationDependancy = ['core_country', 'account_rate'];
+
+    /**
+     * The table associated with the model.
+     * @var string
+     */
     protected $table = "account_rate_disallowedin";
 
-
-    public function listTable(){
+    public function listTable(): ListTable
+    {
         // listing view fields
         $fields = new ListTable();
 
@@ -27,20 +39,21 @@ class RateDisallowedin extends BaseModel
         return $fields;
 
     }
-    
-    public function formBuilder(){
+
+    public function formBuilder(): FormBuilder
+    {
         // listing view fields
         $fields = new FormBuilder();
 
         $fields->name('country_id')->type('recordpicker')->table('core_country')->group('w-1/2');
         $fields->name('rate_id')->type('recordpicker')->table('account_rate')->group('w-1/2');
 
-
         return $fields;
 
     }
 
-    public function filter(){
+    public function filter(): FormBuilder
+    {
         // listing view fields
         $fields = new FormBuilder();
 
@@ -51,7 +64,7 @@ class RateDisallowedin extends BaseModel
 
     }
     /**
-     * List of fields for managing postings.
+     * List of fields to be migrated to the datebase when creating or updating model during migration.
      *
      * @param Blueprint $table
      * @return void

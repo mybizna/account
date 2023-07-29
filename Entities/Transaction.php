@@ -2,27 +2,39 @@
 
 namespace Modules\Account\Entities;
 
-use Modules\Base\Entities\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
-
-use Modules\Core\Classes\Views\ListTable;
-use Modules\Core\Classes\Views\FormBuilder;
+use Modules\Base\Classes\Views\FormBuilder;
+use Modules\Base\Classes\Views\ListTable;
+use Modules\Base\Entities\BaseModel;
 
 class Transaction extends BaseModel
 {
-
+    /**
+     * The fields that can be filled
+     * @var array<string>
+     */
     protected $fillable = [
         'amount', 'description', 'partner_id', 'ledger_setting_id', 'left_chart_of_account_id', 'left_ledger_id',
-        'right_chart_of_account_id', 'right_ledger_id', 'is_processed'
+        'right_chart_of_account_id', 'right_ledger_id', 'is_processed',
     ];
-    public $migrationDependancy = ['partner', 'account_payment', 'account_rate'];
+
+    /**
+     * List of tables names that are need in this model during migration.
+     * @var array<string>
+     */
+    public array $migrationDependancy = ['partner', 'account_payment', 'account_rate'];
+
+    /**
+     * The table associated with the model.
+     * @var string
+     */
     protected $table = "account_transaction";
 
     protected $can_delete = "false";
 
-
-    public function listTable(){
+    public function listTable(): ListTable
+    {
         // listing view fields
         $fields = new ListTable();
 
@@ -35,12 +47,12 @@ class Transaction extends BaseModel
         $fields->name('right_ledger_id')->type('recordpicker')->table('account_ledger')->ordering(true);
         $fields->name('is_processed')->type('switch')->ordering(true);
 
-
         return $fields;
 
     }
-    
-    public function formBuilder(){
+
+    public function formBuilder(): FormBuilder
+    {
         // listing view fields
         $fields = new FormBuilder();
 
@@ -54,12 +66,12 @@ class Transaction extends BaseModel
         $fields->name('is_processed')->type('switch')->group('w-1/2');
         $fields->name('description')->type('text')->group('w-full');
 
-
         return $fields;
 
     }
 
-    public function filter(){
+    public function filter(): FormBuilder
+    {
         // listing view fields
         $fields = new FormBuilder();
 
@@ -77,7 +89,7 @@ class Transaction extends BaseModel
     }
 
     /**
-     * List of fields for managing postings.
+     * List of fields to be migrated to the datebase when creating or updating model during migration.
      *
      * @param Blueprint $table
      * @return void

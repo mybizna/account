@@ -4,22 +4,35 @@ namespace Modules\Account\Entities;
 
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
+use Modules\Base\Classes\Views\FormBuilder;
+use Modules\Base\Classes\Views\ListTable;
 use Modules\Base\Entities\BaseModel;
-
-use Modules\Core\Classes\Views\ListTable;
-use Modules\Core\Classes\Views\FormBuilder;
 
 class Ledger extends BaseModel
 {
 
+    /**
+     * The fields that can be filled
+     * @var array<string>
+     */
     protected $fillable = ['chart_id', 'category_id', 'name', 'slug', 'code', 'unused', 'is_system'];
-    public $migrationDependancy = ['account_chart_of_account', 'account_ledger_category'];
+
+    /**
+     * List of tables names that are need in this model during migration.
+     * @var array<string>
+     */
+    public array $migrationDependancy = ['account_chart_of_account', 'account_ledger_category'];
+
+    /**
+     * The fields that can be filled
+     * @var array<string>
+     */
     protected $table = "account_ledger";
 
     protected $can_delete = "false";
 
-
-    public function listTable(){
+    public function listTable(): ListTable
+    {
         // listing view fields
         $fields = new ListTable();
 
@@ -31,12 +44,12 @@ class Ledger extends BaseModel
         $fields->name('unused')->type('switch')->ordering(true);
         $fields->name('is_system')->type('switch')->ordering(true);
 
-
         return $fields;
 
     }
-    
-    public function formBuilder(){
+
+    public function formBuilder(): FormBuilder
+    {
         // listing view fields
         $fields = new FormBuilder();
 
@@ -48,15 +61,14 @@ class Ledger extends BaseModel
         $fields->name('unused')->type('switch')->group('w-1/2');
         $fields->name('is_system')->type('switch')->group('w-1/2');
 
-
         return $fields;
 
     }
 
-    public function filter(){
+    public function filter(): FormBuilder
+    {
         // listing view fields
         $fields = new FormBuilder();
-
 
         $fields->name('chart_id')->type('recordpicker')->table('account_chart_of_account')->group('w-1/6');
         $fields->name('category_id')->type('recordpicker')->table('account_ledger_category')->group('w-1/6');
@@ -65,12 +77,11 @@ class Ledger extends BaseModel
         $fields->name('unused')->type('switch')->group('w-1/6');
         $fields->name('is_system')->type('switch')->group('w-1/6');
 
-
         return $fields;
 
     }
     /**
-     * List of fields for managing postings.
+     * List of fields to be migrated to the datebase when creating or updating model during migration.
      *
      * @param Blueprint $table
      * @return void

@@ -2,15 +2,25 @@
 
 namespace Modules\Account\Entities\Data;
 
-use Modules\Base\Classes\Datasetter;
 use Illuminate\Support\Facades\DB;
+use Modules\Base\Classes\Datasetter;
 
 class Gateway
 {
-
+    /**
+     * Set ordering of the Class to be migrated.
+     * @var int
+     */
     public $ordering = 3;
 
-    public function data(Datasetter $datasetter)
+    /**
+     * Run the database seeds with system default records.
+     * 
+     * @param Datasetter $datasetter
+     * 
+     * @return void
+     */
+    public function data(Datasetter $datasetter): void
     {
         $ledger_id = DB::table('account_ledger')->where('slug', 'cash')->value('id');
         $datasetter->add_data('account', 'gateway', 'slug', [
@@ -22,7 +32,7 @@ class Gateway
             "is_default" => true,
             "is_hidden" => true,
             "is_hide_in_invoice" => false,
-            "published" => true
+            "published" => true,
         ]);
 
         $ledger_id = DB::table('account_ledger')->where('slug', 'bank')->value('id');
@@ -35,7 +45,7 @@ class Gateway
             "is_default" => false,
             "is_hidden" => true,
             "is_hide_in_invoice" => false,
-            "published" => true
+            "published" => true,
         ]);
     }
 }
