@@ -103,7 +103,7 @@ class Invoice
 
                         if ($value != 0) {
                             if ($method == '-') {
-                                $calc_amount =  -1 * $value;
+                                $calc_amount = -1 * $value;
                             } elseif ($method == '-%') {
                                 $calc_amount = -1 * $tmp_total * $value / 100;
                             } elseif ($method == '+%') {
@@ -141,6 +141,14 @@ class Invoice
 
     }
 
+    /**
+     * Process all invoices that are not yes reconciled
+     *
+     * @param  int $partner_id
+     * @param  int|bool $invoice_id
+     *
+     * @return void
+     */
     public function reconcileInvoices($partner_id, $invoice_id = false)
     {
         $journal = new Journal();
@@ -327,6 +335,15 @@ class Invoice
 
     }
 
+    
+
+    /**
+     * Get amount used from payment
+     *
+     * @param object $payment
+     *
+     * @return float|int
+     */
     public function getAmountUsed($payment)
     {
         $ledger = new Ledger();
@@ -344,6 +361,14 @@ class Invoice
         return $total;
     }
 
+    /**
+     * Get payments
+     *
+     * @param int  $partner_id
+     * @param bool $pending_only
+     *
+     * @return array
+     */
     public function getPayments($partner_id, $pending_only = false)
     {
         $payments_qry = DBPayment::from('account_payment AS ap')
@@ -364,6 +389,15 @@ class Invoice
 
         return $payments;
     }
+
+    /**
+     * Post payments
+     *
+     * @param int $partner_id
+     * @param int $grouping_id
+     *
+     * @return void
+     */
     public function postPayments($partner_id, $grouping_id)
     {
         $journal = new Journal();
@@ -389,13 +423,9 @@ class Invoice
     }
 
     /**
-     * Function to reconcile invoices
-     */
-
-    /**
-     * Getting all Invoices
+     * Function for getting all Invoices
      *
-     * @return $invoice List of all Invoices
+     * @return array
      */
     public function getInvoices()
     {
@@ -412,7 +442,8 @@ class Invoice
      *
      * @param int $partner_id
      * @param boolean $invoice_id
-     * @return void
+     * 
+     * @return array
      */
     public function getPartnerInvoices(int $partner_id, $invoice_id = false)
     {
@@ -430,7 +461,7 @@ class Invoice
         if ($invoice_id) {
             $invoices_qry->where('id', $invoice_id);
         }
-        
+
         $invoices = $invoices_qry->orderBy('id', 'asc')->get();
 
         return $invoices;
@@ -471,6 +502,11 @@ class Invoice
         return $invoice;
     }
 
+    /**
+     * Function for processing invoices
+     *
+     * @return void
+     */
     public function processInvoices()
     {
         $invoices = DBInvoice::select('partner_id')->distinct()->where('status', 'pending')
@@ -481,6 +517,14 @@ class Invoice
         }
     }
 
+
+    /**
+     * Function for  deleting Invoice
+     *
+     * @param int $invoice_id
+     * 
+     * @return void
+     */
     public function deleteInvoice($invoice_id)
     {
         try {
@@ -492,6 +536,11 @@ class Invoice
 
     }
 
+    /**
+     * Generating invoice number for the invoice
+     *
+     * @return string
+     */
     public function getInvoiceNumber()
     {
 

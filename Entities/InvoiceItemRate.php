@@ -12,6 +12,7 @@ class InvoiceItemRate extends BaseModel
 {
     /**
      * The fields that can be filled
+     *
      * @var array<string>
      */
     protected $fillable = [
@@ -19,15 +20,22 @@ class InvoiceItemRate extends BaseModel
     ];
     /**
      * List of tables names that are need in this model during migration.
+     *
      * @var array<string>
      */
     public array $migrationDependancy = ['account_invoice_item', 'account_rate'];
     /**
      * The table associated with the model.
+     *
      * @var string
      */
     protected $table = "account_invoice_item_rate";
 
+    /**
+     * Function for defining list of fields in table view.
+     *
+     * @return ListTable
+     */
     public function listTable(): ListTable
     {
         // listing view fields
@@ -47,6 +55,11 @@ class InvoiceItemRate extends BaseModel
 
     }
 
+    /**
+     * Function for defining list of fields in form view.
+     * 
+     * @return FormBuilder
+     */
     public function formBuilder(): FormBuilder
     {
         // listing view fields
@@ -65,7 +78,11 @@ class InvoiceItemRate extends BaseModel
         return $fields;
 
     }
-
+    /**
+     * Function for defining list of fields in filter view.
+     * 
+     * @return FormBuilder
+     */
     public function filter(): FormBuilder
     {
         // listing view fields
@@ -86,7 +103,7 @@ class InvoiceItemRate extends BaseModel
      * @param Blueprint $table
      * @return void
      */
-    public function migration(Blueprint $table)
+    public function migration(Blueprint $table): void
     {
         $table->increments('id');
         $table->integer('title');
@@ -99,8 +116,14 @@ class InvoiceItemRate extends BaseModel
         $table->tinyInteger('ordering')->nullable();
         $table->tinyInteger('on_total')->default(false);
     }
-
-    public function post_migration(Blueprint $table)
+    /**
+     * Handle post migration processes for adding foreign keys.
+     *
+     * @param Blueprint $table
+     *
+     * @return void
+     */
+    public function post_migration(Blueprint $table): void
     {
         Migration::addForeign($table, 'account_invoice', 'invoice_id');
         Migration::addForeign($table, 'account_transaction', 'rate_id');

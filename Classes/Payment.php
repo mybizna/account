@@ -14,6 +14,14 @@ use Modules\Partner\Classes\Partner;
 class Payment
 {
 
+    /**
+     * Get Payment
+     *
+     * @param int $payment_id
+     *
+     * @return object|bool
+     */
+
     public function getPayment($payment_id)
     {
         if (Cache::has("account_payment_" . $payment_id)) {
@@ -26,7 +34,7 @@ class Payment
                 Cache::put("account_payment_" . $payment_id, $payment);
                 //code...
                 return $payment;
-            } catch (\Throwable$th) {
+            } catch (\Throwable $th) {
                 throw $th;
             }
         }
@@ -34,7 +42,22 @@ class Payment
         return false;
     }
 
-    public function addPayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $ledger_id = false, $invoice_id = false, $code = '', $reference = '', $others = '')
+    /**
+     * Add Payment
+     *
+     * @param int $partner_id
+     * @param string $title
+     * @param float $amount
+     * @param int $gateway_id
+     * @param int $ledger_id
+     * @param int $invoice_id
+     * @param string $code
+     * @param string $reference
+     * @param string $others
+     *
+     * @return object|bool
+     */
+    public function addPayment($partner_id, $title, $amount = 0.00, $gateway_id = null, $ledger_id = null, $invoice_id = null, $code = '', $reference = '', $others = '')
     {
         $payment = '';
 
@@ -42,7 +65,23 @@ class Payment
 
         return $payment;
     }
-    public function makePayment($partner_id, $title, $amount = 0.00, $gateway_id = '', $ledger_id = false, $invoice_id = false, $code = '', $reference = '', $others = '')
+
+    /**
+     * Make Payment
+     *
+     * @param int $partner_id
+     * @param string $title
+     * @param float $amount
+     * @param int $gateway_id
+     * @param int $ledger_id
+     * @param int $invoice_id
+     * @param string $code
+     * @param string $reference
+     * @param string $others
+     *
+     * @return object|bool
+     */
+    public function makePayment($partner_id, $title, $amount = 0.00, $gateway_id = null, $ledger_id = null, $invoice_id = null, $code = '', $reference = '', $others = '')
     {
         $payment = '';
 
@@ -101,13 +140,21 @@ class Payment
 
             $invoice->reconcileInvoices($partner_id, $invoice_id);
 
-        } catch (\Throwable$th) {
+        } catch (\Throwable $th) {
             throw $th;
         }
 
         return $payment;
     }
-    public function getCurrency($currency_id = '')
+
+    /**
+     * Get Currency
+     *
+     * @param int $currency_id
+     *
+     * @return object|bool
+     */
+    public function getCurrency($currency_id = null)
     {
         if ($currency_id) {
             $currency = Currency::where(['id' => $currency_id])->first();
@@ -116,7 +163,15 @@ class Payment
 
         return false;
     }
-    public function getUser($user_id = '')
+
+    /**
+     * Get User
+     *
+     * @param int $user_id
+     *
+     * @return object|bool
+     */
+    public function getUser($user_id = null)
     {
         if ($user_id) {
             $user = User::where(['id' => $user_id])->first();
@@ -128,6 +183,13 @@ class Payment
         return $user;
     }
 
+    /**
+     * Get Class Name
+     *
+     * @param string $module
+     *
+     * @return mixed
+     */
     private function getClassName($module)
     {
         $classname = 'Modules\\' . ucfirst($module) . '\Classes\Gateway';

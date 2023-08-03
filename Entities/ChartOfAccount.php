@@ -11,28 +11,37 @@ class ChartOfAccount extends BaseModel
 {
     /**
      * The fields that can be filled
+     *
      * @var array<string>
      */
     protected $fillable = ['name', 'slug'];
 
     /**
      * List of tables names that are need in this model during migration.
+     *
      * @var array<string>
      */
     public array $migrationDependancy = [];
 
     /**
      * The table associated with the model.
+     *
      * @var string
      */
     protected $table = "account_chart_of_account";
 
     /**
      * This model is not deletable.
-     * @var string
+     *
+     * @var bool
      */
     protected string $can_delete = "false";
 
+    /**
+     * Function for defining list of fields in table view.
+     *
+     * @return ListTable
+     */
     public function listTable(): ListTable
     {
         // listing view fields
@@ -45,6 +54,11 @@ class ChartOfAccount extends BaseModel
 
     }
 
+    /**
+     * Function for defining list of fields in form view.
+     *
+     * @return FormBuilder
+     */
     public function formBuilder(): FormBuilder
     {
         // listing view fields
@@ -57,6 +71,11 @@ class ChartOfAccount extends BaseModel
 
     }
 
+    /**
+     * Function for defining list of fields used for filtering.
+     *
+     * @return FormBuilder
+     */
     public function filter(): FormBuilder
     {
         // listing view fields
@@ -73,9 +92,10 @@ class ChartOfAccount extends BaseModel
      * Migration for creating table.
      *
      * @param Blueprint $table
+     *
      * @return void
      */
-    public function migration(Blueprint $table)
+    public function migration(Blueprint $table): void
     {
 
         $table->increments('id');

@@ -12,6 +12,7 @@ class Gateway extends BaseModel
 {
     /**
      * The fields that can be filled
+     *
      * @var array<string>
      */
     protected $fillable = [
@@ -22,18 +23,30 @@ class Gateway extends BaseModel
 
     /**
      * List of tables names that are need in this model during migration.
+     *
      * @var array<string>
      */
     public array $migrationDependancy = ['core_currency', 'account_ledger'];
 
     /**
      * The table associated with the model.
+     *
      * @var string
      */
     protected $table = "account_gateway";
 
-    protected $can_delete = "false";
+    /**
+     * This model is not deletable.
+     *
+     * @var bool
+     */
+    protected $can_delete = false;
 
+    /**
+     * Function for defining list of fields in table view.
+     *
+     * @return ListTable
+     */
     public function listTable(): ListTable
     {
         // listing view fields
@@ -55,6 +68,11 @@ class Gateway extends BaseModel
 
     }
 
+    /**
+     * Function for defining list of fields used for filtering.
+     * 
+     * @return FormBuilder
+     */
     public function formBuilder(): FormBuilder
     {
         // listing view fields
@@ -78,6 +96,11 @@ class Gateway extends BaseModel
 
     }
 
+    /**
+     * Function for defining list of fields used for filtering.
+     * 
+     * @return FormBuilder
+     */
     public function filter(): FormBuilder
     {
         // listing view fields
@@ -104,9 +127,10 @@ class Gateway extends BaseModel
      * List of fields to be migrated to the datebase when creating or updating model during migration.
      *
      * @param Blueprint $table
+     *
      * @return void
      */
-    public function migration(Blueprint $table)
+    public function migration(Blueprint $table): void
     {
         $table->increments('id');
         $table->string('title');
@@ -124,7 +148,14 @@ class Gateway extends BaseModel
         $table->tinyInteger('published')->default(false);
     }
 
-    public function post_migration(Blueprint $table)
+    /**
+     * Handle post migration processes for adding foreign keys.
+     *
+     * @param Blueprint $table
+     *
+     * @return void
+     */
+    public function post_migration(Blueprint $table):void
     {
         Migration::addForeign($table, 'core_currency', 'currency_id');
         Migration::addForeign($table, 'account_ledger', 'ledger_id');

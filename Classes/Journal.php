@@ -8,7 +8,20 @@ use Modules\Account\Entities\Journal as DBJournal;
 class Journal
 {
 
-    public function journalEntry($title, $amount, $partner_id, $ledger_id, $grouping_id = '', $payment_id = '', $invoice_id = '')
+    /**
+     * Adding Entry to Journal
+     *
+     * @param string $title
+     * @param float $amount
+     * @param int $partner_id
+     * @param int $ledger_id
+     * @param int $grouping_id
+     * @param int $payment_id
+     * @param int $invoice_id
+     *
+     * @return void
+     */
+    public function journalEntry($title, $amount, $partner_id, $ledger_id, $grouping_id = null, $payment_id = null, $invoice_id = null)
     {
         $ledger_cls = new Ledger();
 
@@ -44,13 +57,18 @@ class Journal
         if ($invoice_id) {
             $data['invoice_id'] = $invoice_id;
         }
-        
+
         DBJournal::create($data);
 
         Cache::forget("account_ledger_total_" . $ledger_id . '_' . $partner_id);
 
     }
 
+    /**
+     * Generate a unique Grouping ID
+     *
+     * @return string
+     */
     public function getGroupingId()
     {
 

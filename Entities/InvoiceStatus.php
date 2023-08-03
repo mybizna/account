@@ -11,20 +11,28 @@ class InvoiceStatus extends BaseModel
 {
     /**
      * The fields that can be filled
+     *
      * @var array<string>
      */
     protected $fillable = ['type_name', 'slug'];
     /**
      * List of tables names that are need in this model during migration.
+     *
      * @var array<string>
      */
     public array $migrationDependancy = [];
     /**
      * The table associated with the model.
+     *
      * @var string
      */
     protected $table = "account_invoice_status";
 
+    /**
+     * Function for defining list of fields in table view.
+     *
+     * @return ListTable
+     */
     public function listTable(): ListTable
     {
         // listing view fields
@@ -37,6 +45,11 @@ class InvoiceStatus extends BaseModel
 
     }
 
+    /**
+     * Function for defining list of fields in form view.
+     * 
+     * @return FormBuilder
+     */
     public function formBuilder(): FormBuilder
     {
         // listing view fields
@@ -49,6 +62,11 @@ class InvoiceStatus extends BaseModel
 
     }
 
+    /**
+     * Function for defining list of fields in filter view.
+     * 
+     * @return FormBuilder
+     */
     public function filter(): FormBuilder
     {
         // listing view fields
@@ -64,9 +82,10 @@ class InvoiceStatus extends BaseModel
      * List of fields to be migrated to the datebase when creating or updating model during migration.
      *
      * @param Blueprint $table
+     * 
      * @return void
      */
-    public function migration(Blueprint $table)
+    public function migration(Blueprint $table): void
     {
         $table->increments('id');
         $table->string('type_name')->nullable();

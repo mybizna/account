@@ -8,6 +8,14 @@ use Modules\Account\Entities\Ledger as DBLedger;
 
 class Ledger
 {
+    /**
+     * Get Ledger
+     *
+     * @param int $ledger_id
+     *
+     * @return object|bool
+     */
+
     public function getLedger($ledger_id)
     {
         if (Cache::has("account_ledger_" . $ledger_id)) {
@@ -21,7 +29,7 @@ class Ledger
                 Cache::put("account_ledger_" . $ledger_id, $ledger, 3600);
                 //code...
                 return $ledger;
-            } catch (\Throwable$th) {
+            } catch (\Throwable $th) {
                 throw $th;
             }
         }
@@ -29,11 +37,25 @@ class Ledger
         return false;
     }
 
+    /**
+     * Get Ledger by ID
+     *
+     * @param int $ledger_id
+     *
+     * @return object|bool
+     */
     public function getLedgerById($ledger_id)
     {
         return $this->getLedger($ledger_id);
     }
 
+    /**
+     * Get Ledger by Slug
+     *
+     * @param string $ledger_slug
+     *
+     * @return array|bool
+     */
     public function getLedgerBySlug($ledger_slug)
     {
         Cache::forget("account_ledger_" . $ledger_slug);
@@ -50,7 +72,7 @@ class Ledger
 
                 return $ledger;
                 //code...
-            } catch (\Throwable$th) {
+            } catch (\Throwable $th) {
                 throw $th;
             }
 
@@ -58,6 +80,11 @@ class Ledger
         }
     }
 
+    /**
+     * Get Ledger Query
+     *
+     * @return mixed
+     */
     public function getLedgerQuery()
     {
         return DBLedger::from('account_ledger AS al')
@@ -65,6 +92,13 @@ class Ledger
             ->leftJoin('account_chart_of_account AS ac', 'ac.id', '=', 'al.chart_id');
     }
 
+    /**
+     * Get Ledger ID
+     *
+     * @param string $ledger_slug
+     *
+     * @return array|bool
+     */
     public function getLedgerId($ledger_slug)
     {
         if (Cache::has("account_ledger_" . $ledger_slug . "_id")) {
@@ -80,18 +114,39 @@ class Ledger
 
                 return $ledger_id;
                 //code...
-            } catch (\Throwable$th) {
+            } catch (\Throwable $th) {
                 throw $th;
             }
         }
         return false;
     }
-    public function getClearCache($ledger_id, $partner_id = '', $payment_id = '', $invoice_id = '')
+
+    /**
+     * Clear Ledger Cache
+     *
+     * @param int $ledger_id
+     * @param int $partner_id
+     * @param int $payment_id
+     * @param int $invoice_id
+     *
+     * @return array|bool
+     */
+    public function getClearCache($ledger_id, $partner_id = null, $payment_id = null, $invoice_id = null)
     {
         Cache::forget("account_ledger_total_" . $ledger_id . '_' . $partner_id . '_' . $payment_id . '_' . $invoice_id);
     }
 
-    public function getLedgerTotal($ledger_id, $partner_id = '', $payment_id = '', $invoice_id = '')
+    /**
+     * Get Ledger Total
+     *
+     * @param int $ledger_id
+     * @param int $partner_id
+     * @param int $payment_id
+     * @param int $invoice_id
+     *
+     * @return array|bool
+     */
+    public function getLedgerTotal($ledger_id, $partner_id = null, $payment_id = null, $invoice_id = null)
     {
 
         if (Cache::has("account_ledger_total_" . $ledger_id . '_' . $partner_id . '_' . $payment_id . '_' . $invoice_id)) {
@@ -133,7 +188,7 @@ class Ledger
                     'credit' => $credit,
                     'total' => $total,
                 ];
-            } catch (\Throwable$th) {
+            } catch (\Throwable $th) {
                 throw $th;
             }
         }
@@ -141,6 +196,13 @@ class Ledger
         return false;
     }
 
+    /**
+     * Get Account Balance
+     *
+     * @param int $partner_id
+     *
+     * @return array
+     */
     public function getAccountBalance($partner_id)
     {
         // Get wallet total

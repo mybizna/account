@@ -13,24 +13,37 @@ class Ledger extends BaseModel
 
     /**
      * The fields that can be filled
+     *
      * @var array<string>
      */
     protected $fillable = ['chart_id', 'category_id', 'name', 'slug', 'code', 'unused', 'is_system'];
 
     /**
      * List of tables names that are need in this model during migration.
+     *
      * @var array<string>
      */
     public array $migrationDependancy = ['account_chart_of_account', 'account_ledger_category'];
 
     /**
      * The fields that can be filled
-     * @var array<string>
+     *
+     * @var string
      */
     protected $table = "account_ledger";
 
-    protected $can_delete = "false";
+    /**
+     * This model is not deletable.
+     *
+     * @var bool
+     */
+    protected $can_delete = false;
 
+    /**
+     * Function for defining list of fields in table view.
+     *
+     * @return ListTable
+     */
     public function listTable(): ListTable
     {
         // listing view fields
@@ -48,6 +61,11 @@ class Ledger extends BaseModel
 
     }
 
+    /**
+     * Function for defining list of fields in form view.
+     * 
+     * @return FormBuilder
+     */
     public function formBuilder(): FormBuilder
     {
         // listing view fields
@@ -65,6 +83,11 @@ class Ledger extends BaseModel
 
     }
 
+    /**
+     * Function for defining list of fields used for filtering.
+     * 
+     * @return FormBuilder
+     */
     public function filter(): FormBuilder
     {
         // listing view fields
@@ -86,7 +109,7 @@ class Ledger extends BaseModel
      * @param Blueprint $table
      * @return void
      */
-    public function migration(Blueprint $table)
+    public function migration(Blueprint $table): void
     {
         $table->increments('id');
         $table->foreignId('chart_id')->nullable();
@@ -98,12 +121,26 @@ class Ledger extends BaseModel
         $table->tinyInteger('is_system')->default(0);
     }
 
-    public function post_migration(Blueprint $table)
+    /**
+     * Handle post migration processes for adding foreign keys.
+     *
+     * @param Blueprint $table
+     *
+     * @return void
+     */
+    public function post_migration(Blueprint $table): void
     {
         Migration::addForeign($table, 'account_chart_of_account', 'chart_id');
         Migration::addForeign($table, 'account_ledger_category', 'category_id');
     }
 
+    /**
+     * Function for deleting a record.
+     *
+     * @param int $id
+     * 
+     * @return array
+     */
     public function deleteRecord($id)
     {
 
@@ -120,7 +157,7 @@ class Ledger extends BaseModel
             ];
         }
 
-        parent::deleteRecord($id);
+        return parent::deleteRecord($id);
 
     }
 }

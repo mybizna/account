@@ -5,7 +5,18 @@ use Modules\Account\Classes\Journal;
 
 class Transactions
 {
-    public function postTransaction($title, $amount, $partner_id, $left_ledger_id, $right_ledger_id)
+    /**
+     * Post a transaction
+     *
+     * @param string $title
+     * @param float $amount
+     * @param int $partner_id
+     * @param int $left_ledger_id
+     * @param int $right_ledger_id
+     *
+     * @return void
+     */
+    public function postTransaction($title, $amount, $partner_id, $left_ledger_id, $right_ledger_id):void
     {
         $journal = new Journal();
 

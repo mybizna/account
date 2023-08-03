@@ -7,6 +7,13 @@ use Modules\Account\Entities\Journal as DBJournal;
 
 class ChartOfAccount
 {
+    /**
+     * Get Chart of Account
+     *
+     * @param int $chart_id
+     *
+     * @return DBChartOfAccount
+     */
     public function getChart($chart_id)
     {
         if (Cache::has("account_chart_" . $chart_id)) {
@@ -15,53 +22,88 @@ class ChartOfAccount
         } else {
             try {
                 $chart = DBChartOfAccount::where('id', $chart_id)->first();
-                Cache::put("account_chart_" . $chart_id, $chart, 3600);
+
+                if (empty($chart)) {
+                    throw new \Exception("Chart of Account not found", 1);
+                }
+
+                Cache::put("account_chart_" . $chart_id, (array) $chart, 3600);
                 return $chart;
-            } catch (\Throwable$th) {
+            } catch (\Throwable $th) {
                 throw $th;
             }
         }
 
-        return false;
     }
 
+    /**
+     * Get Chart of Account by ID
+     *
+     * @param int $chart_id
+     *
+     * @return DBChartOfAccount
+     */
     public function getChartById($chart_id)
     {
         return $this->getChart($chart_id);
     }
 
+    /**
+     * Get Chart of Account by Slug
+     *
+     * @param string $slug
+     *
+     * @return int
+     */
     public function getChartId($slug)
     {
         if (Cache::has("account_chart_" . $slug . "_id")) {
             $chart_id = Cache::get("account_chart_" . $slug . "_id");
-            return $chart_id;
+            return intval($chart_id);
         } else {
             try {
                 $chart = DBChartOfAccount::where('slug', $slug)->first();
 
-                $chart_id = $chart->id;
+                $chart_id = intval($chart->id);
 
                 Cache::put("account_chart_" . $slug . "_id", $chart->id, 3600);
 
-                return $chart_id;
+                return intval($chart_id);
                 //code...
-            } catch (\Throwable$th) {
+            } catch (\Throwable $th) {
                 throw $th;
             }
         }
-        return false;
     }
+
+    /**
+     * Get Chart of Account by Slug
+     *
+     * @param string $slug
+     * @param array<string> $data
+     *
+     * @return array<string,float>
+     */
     public function getChartTotalBySlug($slug, $data)
     {
         $chart_id = $this->getChartId($slug);
 
         return $this->getChartTotal($chart_id, $data);
     }
+
+    /**
+     * Get Chart of Account total
+     *
+     * @param int $chart_id
+     * @param array<string,int> $data
+     *
+     * @return array<string,float>
+     */
     public function getChartTotal($chart_id, $data)
     {
         if (Cache::has("account_chart_total_" . $chart_id) && empty($data)) {
             $chart_total = Cache::get("account_chart_total_" . $chart_id);
-            return $chart_total;
+            return (array) $chart_total;
         } else {
             try {
                 $separator = (isset($data['separator'])) ? $data['separator'] : '';
@@ -97,12 +139,11 @@ class ChartOfAccount
                 Cache::put("account_chart_total_" . $chart_id, $result, 3600);
 
                 return $result;
-            } catch (\Throwable$th) {
+            } catch (\Throwable $th) {
                 throw $th;
             }
         }
 
-        return false;
     }
 
 }
