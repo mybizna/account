@@ -53,17 +53,15 @@ class Payment extends BaseModel
         // listing view fields
         $fields = new ListTable();
 
-        $fields->name('title')->type('text')->ordering(true);
-        $fields->name('amount')->type('text')->ordering(true);
+        $fields->name('receipt_no')->type('text')->ordering(true);
+        $fields->name('code')->type('text')->ordering(true);
+        $fields->name('amount')->type('amount')->ordering(true);
         $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->ordering(true);
         $fields->name('partner_id')->type('recordpicker')->table('partner')->ordering(true);
         $fields->name('gateway_id')->type('recordpicker')->table('account_gateway')->ordering(true);
-        $fields->name('receipt_no')->type('text')->ordering(true);
-        $fields->name('code')->type('text')->ordering(true);
-        $fields->name('others')->type('text')->ordering(true);
-        $fields->name('stage')->type('text')->ordering(true);
-        $fields->name('status')->type('switch')->ordering(true);
-        $fields->name('type')->type('text')->ordering(true);
+        $fields->name('stage')->type('status')->color(['pending' => 'red', 'wallet' => 'green', 'posted' => 'orange'])->ordering(true);
+        $fields->name('status')->type('status')->color(['pending' => 'red', 'paid' => 'green', 'reversed' => 'orange', 'canceled' => 'gray'])->ordering(true);
+        $fields->name('type')->type('status')->ordering(true);
         $fields->name('is_posted')->type('switch')->ordering(true);
 
         return $fields;
@@ -72,7 +70,7 @@ class Payment extends BaseModel
 
     /**
      * Function for defining list of fields in form view.
-     * 
+     *
      * @return FormBuilder
      */
     public function formBuilder(): FormBuilder
@@ -99,7 +97,7 @@ class Payment extends BaseModel
 
     /**
      * Function for defining list of fields in filter view.
-     * 
+     *
      * @return FormBuilder
      */
     public function filter(): FormBuilder
