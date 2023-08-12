@@ -56,8 +56,8 @@ class Ledger extends BaseModel
         // listing view fields
         $fields = new ListTable();
 
-        $fields->name('chart_id')->type('recordpicker')->table('account_chart_of_account')->ordering(true);
-        $fields->name('category_id')->type('recordpicker')->table('account_ledger_category')->ordering(true);
+        $fields->name('chart_id')->type('recordpicker')->table(['account', 'chart_of_account'])->ordering(true);
+        $fields->name('category_id')->type('recordpicker')->table(['account', 'ledger_category'])->ordering(true);
         $fields->name('name')->type('text')->ordering(true);
         $fields->name('slug')->type('text')->ordering(true);
         $fields->name('code')->type('text')->ordering(true);
@@ -78,8 +78,8 @@ class Ledger extends BaseModel
         // listing view fields
         $fields = new FormBuilder();
 
-        $fields->name('chart_id')->type('recordpicker')->table('account_chart_of_account')->group('w-1/2');
-        $fields->name('category_id')->type('recordpicker')->table('account_ledger_category')->group('w-1/2');
+        $fields->name('chart_id')->type('recordpicker')->table(['account', 'chart_of_account'])->group('w-1/2');
+        $fields->name('category_id')->type('recordpicker')->table(['account', 'ledger_category'])->group('w-1/2');
         $fields->name('name')->type('text')->group('w-1/2');
         $fields->name('slug')->type('text')->group('w-1/2');
         $fields->name('code')->type('text')->group('w-1/2');
@@ -100,8 +100,8 @@ class Ledger extends BaseModel
         // listing view fields
         $fields = new FormBuilder();
 
-        $fields->name('chart_id')->type('recordpicker')->table('account_chart_of_account')->group('w-1/6');
-        $fields->name('category_id')->type('recordpicker')->table('account_ledger_category')->group('w-1/6');
+        $fields->name('chart_id')->type('recordpicker')->table(['account', 'chart_of_account'])->group('w-1/6');
+        $fields->name('category_id')->type('recordpicker')->table(['account', 'ledger_category'])->group('w-1/6');
         $fields->name('name')->type('text')->group('w-1/6');
         $fields->name('code')->type('text')->group('w-1/6');
         $fields->name('unused')->type('switch')->group('w-1/6');

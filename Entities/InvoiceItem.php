@@ -51,8 +51,8 @@ class InvoiceItem extends BaseModel
         $fields = new ListTable();
 
         $fields->name('title')->type('text')->ordering(true);
-        $fields->name('invoice_id')->type('recordpicker')->table('account_invoice')->ordering(true);
-        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->ordering(true);
+        $fields->name('invoice_id')->type('recordpicker')->table(['account', 'invoice'])->ordering(true);
+        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->ordering(true);
         $fields->name('price')->type('text')->ordering(true);
         $fields->name('amount')->type('text')->ordering(true);
         $fields->name('module')->type('text')->ordering(true);
@@ -76,8 +76,8 @@ class InvoiceItem extends BaseModel
         $fields = new FormBuilder();
 
         $fields->name('title')->type('text')->group('w-1/2');
-        $fields->name('invoice_id')->type('recordpicker')->table('account_invoice')->group('w-1/2');
-        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/2');
+        $fields->name('invoice_id')->type('recordpicker')->table(['account', 'invoice'])->group('w-1/2');
+        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->group('w-1/2');
         $fields->name('price')->type('text')->group('w-1/2');
         $fields->name('amount')->type('text')->group('w-1/2');
         $fields->name('module')->type('text')->group('w-1/2');
@@ -100,8 +100,8 @@ class InvoiceItem extends BaseModel
         $fields = new FormBuilder();
 
         $fields->name('title')->type('text')->group('w-1/6');
-        $fields->name('invoice_id')->type('recordpicker')->table('account_invoice')->group('w-1/6');
-        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/6');
+        $fields->name('invoice_id')->type('recordpicker')->table(['account', 'invoice'])->group('w-1/6');
+        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->group('w-1/6');
         $fields->name('price')->type('text')->group('w-1/6');
         $fields->name('amount')->type('text')->group('w-1/6');
         $fields->name('module')->type('text')->group('w-1/6');

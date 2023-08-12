@@ -54,7 +54,7 @@ class Rate extends BaseModel
 
         $fields->name('title')->type('text')->ordering(true);
         $fields->name('slug')->type('text')->ordering(true);
-        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->ordering(true);
+        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->ordering(true);
         $fields->name('value')->type('text')->ordering(true);
         $fields->name('method')->type('text')->ordering(true);
         $fields->name('ordering')->type('text')->ordering(true);
@@ -77,7 +77,7 @@ class Rate extends BaseModel
 
         $fields->name('title')->type('text')->group('w-1/2');
         $fields->name('slug')->type('text')->group('w-1/2');
-        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/2');
+        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->group('w-1/2');
         $fields->name('value')->type('text')->group('w-1/2');
         $fields->name('method')->type('text')->group('w-1/2');
         $fields->name('ordering')->type('text')->group('w-1/2');
@@ -99,7 +99,7 @@ class Rate extends BaseModel
         $fields = new FormBuilder();
 
         $fields->name('title')->type('text')->group('w-1/6');
-        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/6');
+        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->group('w-1/6');
         $fields->name('value')->type('text')->group('w-1/6');
         $fields->name('method')->type('text')->group('w-1/6');
 

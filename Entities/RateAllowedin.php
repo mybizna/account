@@ -48,8 +48,8 @@ class RateAllowedin extends BaseModel
         // listing view fields
         $fields = new ListTable();
 
-        $fields->name('country_id')->type('recordpicker')->table('core_country')->ordering(true);
-        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->ordering(true);
+        $fields->name('country_id')->type('recordpicker')->table(['core', 'country'])->ordering(true);
+        $fields->name('rate_id')->type('recordpicker')->table(['account', 'rate'])->ordering(true);
 
         return $fields;
 
@@ -65,8 +65,8 @@ class RateAllowedin extends BaseModel
         // listing view fields
         $fields = new FormBuilder();
 
-        $fields->name('country_id')->type('recordpicker')->table('core_country')->group('w-1/2');
-        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->group('w-1/2');
+        $fields->name('country_id')->type('recordpicker')->table(['core', 'country'])->group('w-1/2');
+        $fields->name('rate_id')->type('recordpicker')->table(['account', 'rate'])->group('w-1/2');
 
         return $fields;
 
@@ -82,8 +82,8 @@ class RateAllowedin extends BaseModel
         // listing view fields
         $fields = new FormBuilder();
 
-        $fields->name('country_id')->type('recordpicker')->table('core_country')->group('w-1/6');
-        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->group('w-1/6');
+        $fields->name('country_id')->type('recordpicker')->table(['core', 'country'])->group('w-1/6');
+        $fields->name('rate_id')->type('recordpicker')->table(['account', 'rate'])->group('w-1/6');
 
         return $fields;
 

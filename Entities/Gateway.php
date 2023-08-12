@@ -61,8 +61,8 @@ class Gateway extends BaseModel
 
         $fields->name('title')->type('text')->ordering(true);
         $fields->name('slug')->type('text')->ordering(true);
-        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->ordering(true);
-        $fields->name('currency_id')->type('recordpicker')->table('core_currency')->ordering(true);
+        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->ordering(true);
+        $fields->name('currency_id')->type('recordpicker')->table(['core', 'currency'])->ordering(true);
         $fields->name('image')->type('text')->ordering(true);
         $fields->name('module')->type('text')->ordering(true);
         $fields->name('ordering')->type('text')->ordering(true);
@@ -87,8 +87,8 @@ class Gateway extends BaseModel
 
         $fields->name('title')->type('text')->group('w-1/2');
         $fields->name('slug')->type('text')->group('w-1/2');
-        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/2');
-        $fields->name('currency_id')->type('recordpicker')->table('core_currency')->group('w-1/2');
+        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->group('w-1/2');
+        $fields->name('currency_id')->type('recordpicker')->table(['core', 'currency'])->group('w-1/2');
         $fields->name('image')->type('text')->group('w-1/2');
         $fields->name('url')->type('text')->group('w-1/2');
         $fields->name('module')->type('text')->group('w-1/2');
@@ -115,8 +115,8 @@ class Gateway extends BaseModel
 
         $fields->name('title')->type('text')->group('w-1/2');
         $fields->name('slug')->type('text')->group('w-1/2');
-        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/2');
-        $fields->name('currency_id')->type('recordpicker')->table('core_currency')->group('w-1/2');
+        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->group('w-1/2');
+        $fields->name('currency_id')->type('recordpicker')->table(['core', 'currency'])->group('w-1/2');
         $fields->name('image')->type('text')->group('w-1/2');
         $fields->name('url')->type('text')->group('w-1/2');
         $fields->name('module')->type('text')->group('w-1/2');

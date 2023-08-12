@@ -53,7 +53,7 @@ class Invoice extends BaseModel
 
         $fields->name('title')->type('text')->ordering(true);
         $fields->name('invoice_no')->type('text')->ordering(true);
-        $fields->name('partner_id')->type('recordpicker')->table('partner')->ordering(true);
+        $fields->name('partner_id')->type('recordpicker')->table(['partner'])->ordering(true);
         $fields->name('due_date')->type('datetime')->ordering(true);
         $fields->name('module')->type('text')->ordering(true);
         $fields->name('model')->type('text')->ordering(true);
@@ -77,7 +77,7 @@ class Invoice extends BaseModel
 
         $fields->name('title')->type('text')->group('w-1/2');
         $fields->name('invoice_no')->type('text')->group('w-1/2');
-        $fields->name('partner_id')->type('recordpicker')->table('partner')->group('w-1/2');
+        $fields->name('partner_id')->type('recordpicker')->table(['partner'])->group('w-1/2');
         $fields->name('due_date')->type('datetime')->group('w-1/2');
         $fields->name('module')->type('text')->group('w-1/2');
         $fields->name('model')->type('text')->group('w-1/2');
@@ -101,7 +101,7 @@ class Invoice extends BaseModel
 
         $fields->name('title')->type('text')->group('w-1/6');
         $fields->name('invoice_no')->type('text')->group('w-1/6');
-        $fields->name('partner_id')->type('recordpicker')->table('partner')->group('w-1/6');
+        $fields->name('partner_id')->type('recordpicker')->table(['partner'])->group('w-1/6');
         $fields->name('due_date')->type('datetime')->group('w-1/6');
         $fields->name('module')->type('text')->group('w-1/6');
         $fields->name('model')->type('text')->group('w-1/6');

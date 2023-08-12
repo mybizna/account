@@ -50,9 +50,9 @@ class OpeningBalance extends BaseModel
         // listing view fields
         $fields = new ListTable();
 
-        $fields->name('financial_year_id')->type('recordpicker')->table('account_financial_year')->ordering(true);
-        $fields->name('chart_id')->type('recordpicker')->table('account_chart_of_account')->ordering(true);
-        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->ordering(true);
+        $fields->name('financial_year_id')->type('recordpicker')->table(['account', 'financial_year'])->ordering(true);
+        $fields->name('chart_id')->type('recordpicker')->table(['account', 'chart_of_account'])->ordering(true);
+        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->ordering(true);
         $fields->name('type')->type('text')->ordering(true);
         $fields->name('debit')->type('text')->ordering(true);
         $fields->name('credit')->type('text')->ordering(true);
@@ -71,9 +71,9 @@ class OpeningBalance extends BaseModel
         // listing view fields
         $fields = new FormBuilder();
 
-        $fields->name('financial_year_id')->type('recordpicker')->table('account_financial_year')->group('w-1/2');
-        $fields->name('chart_id')->type('recordpicker')->table('account_chart_of_account')->group('w-1/2');
-        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/2');
+        $fields->name('financial_year_id')->type('recordpicker')->table(['account', 'financial_year'])->group('w-1/2');
+        $fields->name('chart_id')->type('recordpicker')->table(['account', 'chart_of_account'])->group('w-1/2');
+        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->group('w-1/2');
         $fields->name('type')->type('text')->group('w-1/2');
         $fields->name('debit')->type('text')->group('w-1/2');
         $fields->name('credit')->type('text')->group('w-1/2');
@@ -92,9 +92,9 @@ class OpeningBalance extends BaseModel
         // listing view fields
         $fields = new FormBuilder();
 
-        $fields->name('financial_year_id')->type('recordpicker')->table('account_financial_year')->group('w-1/6');
-        $fields->name('chart_id')->type('recordpicker')->table('account_chart_of_account')->group('w-1/6');
-        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/6');
+        $fields->name('financial_year_id')->type('recordpicker')->table(['account', 'financial_year'])->group('w-1/6');
+        $fields->name('chart_id')->type('recordpicker')->table(['account', 'chart_of_account'])->group('w-1/6');
+        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->group('w-1/6');
         $fields->name('type')->type('text')->group('w-1/6');
         $fields->name('debit')->type('text')->group('w-1/6');
         $fields->name('credit')->type('text')->group('w-1/6');

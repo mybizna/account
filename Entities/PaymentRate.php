@@ -48,8 +48,8 @@ class PaymentRate extends BaseModel
         // listing view fields
         $fields = new ListTable();
 
-        $fields->name('payment_id')->type('recordpicker')->table('account_payment')->ordering(true);
-        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->ordering(true);
+        $fields->name('payment_id')->type('recordpicker')->table(['account', 'payment'])->ordering(true);
+        $fields->name('rate_id')->type('recordpicker')->table(['account', 'rate'])->ordering(true);
 
         return $fields;
 
@@ -65,8 +65,8 @@ class PaymentRate extends BaseModel
         // listing view fields
         $fields = new FormBuilder();
 
-        $fields->name('payment_id')->type('recordpicker')->table('account_payment')->group('w-1/2');
-        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->group('w-1/2');
+        $fields->name('payment_id')->type('recordpicker')->table(['account', 'payment'])->group('w-1/2');
+        $fields->name('rate_id')->type('recordpicker')->table(['account', 'rate'])->group('w-1/2');
 
         return $fields;
 
@@ -82,8 +82,8 @@ class PaymentRate extends BaseModel
         // listing view fields
         $fields = new FormBuilder();
 
-        $fields->name('payment_id')->type('recordpicker')->table('account_payment')->group('w-1/6');
-        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->group('w-1/6');
+        $fields->name('payment_id')->type('recordpicker')->table(['account', 'payment'])->group('w-1/6');
+        $fields->name('rate_id')->type('recordpicker')->table(['account', 'rate'])->group('w-1/6');
 
         return $fields;
 

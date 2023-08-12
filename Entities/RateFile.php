@@ -51,7 +51,7 @@ class RateFile extends BaseModel
         // listing view fields
         $fields = new ListTable();
 
-        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->ordering(true);
+        $fields->name('rate_id')->type('recordpicker')->table(['account', 'rate'])->ordering(true);
         $fields->name('year')->type('text')->ordering(true);
         $fields->name('month')->type('text')->ordering(true);
         $fields->name('token')->type('text')->ordering(true);
@@ -73,7 +73,7 @@ class RateFile extends BaseModel
         // listing view fields
         $fields = new FormBuilder();
 
-        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->group('w-1/2');
+        $fields->name('rate_id')->type('recordpicker')->table(['account', 'rate'])->group('w-1/2');
         $fields->name('year')->type('text')->group('w-1/2');
         $fields->name('month')->type('text')->group('w-1/2');
         $fields->name('token')->type('text')->group('w-1/2');
@@ -97,7 +97,7 @@ class RateFile extends BaseModel
         // listing view fields
         $fields = new FormBuilder();
 
-        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->group('w-1/6');
+        $fields->name('rate_id')->type('recordpicker')->table(['account', 'rate'])->group('w-1/6');
         $fields->name('year')->type('text')->group('w-1/6');
         $fields->name('month')->type('text')->group('w-1/6');
         $fields->name('type')->type('text')->group('w-1/6');

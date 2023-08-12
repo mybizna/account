@@ -57,10 +57,10 @@ class Journal extends BaseModel
 
         $fields->name('title')->type('text')->ordering(true);
         $fields->name('grouping_id')->type('text')->ordering(true);
-        $fields->name('partner_id')->type('recordpicker')->table('partner')->ordering(true);
-        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->ordering(true);
-        $fields->name('payment_id')->type('recordpicker')->table('account_payment')->ordering(true);
-        $fields->name('invoice_id')->type('recordpicker')->table('account_invoice')->ordering(true);
+        $fields->name('partner_id')->type('recordpicker')->table(['partner'])->ordering(true);
+        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->ordering(true);
+        $fields->name('payment_id')->type('recordpicker')->table(['account', 'payment'])->ordering(true);
+        $fields->name('invoice_id')->type('recordpicker')->table(['account', 'invoice'])->ordering(true);
         $fields->name('debit')->type('text')->ordering(true);
         $fields->name('credit')->type('text')->ordering(true);
         $fields->name('params')->type('text')->ordering(true);
@@ -81,10 +81,10 @@ class Journal extends BaseModel
 
         $fields->name('title')->type('text')->group('w-1/2');
         $fields->name('grouping_id')->type('text')->group('w-1/2');
-        $fields->name('partner_id')->type('recordpicker')->table('partner')->group('w-1/2');
-        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/2');
-        $fields->name('payment_id')->type('recordpicker')->table('account_payment')->group('w-1/2');
-        $fields->name('invoice_id')->type('recordpicker')->table('account_invoice')->group('w-1/2');
+        $fields->name('partner_id')->type('recordpicker')->table(['partner'])->group('w-1/2');
+        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->group('w-1/2');
+        $fields->name('payment_id')->type('recordpicker')->table(['account', 'payment'])->group('w-1/2');
+        $fields->name('invoice_id')->type('recordpicker')->table(['account', 'invoice'])->group('w-1/2');
         $fields->name('debit')->type('text')->group('w-1/2');
         $fields->name('credit')->type('text')->group('w-1/2');
         $fields->name('params')->type('text')->group('w-1/2');
@@ -105,10 +105,10 @@ class Journal extends BaseModel
 
         $fields->name('title')->type('text')->group('w-1/6');
         $fields->name('grouping_id')->type('text')->group('w-1/6');
-        $fields->name('partner_id')->type('recordpicker')->table('partner')->group('w-1/6');
-        $fields->name('ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/6');
-        $fields->name('payment_id')->type('recordpicker')->table('account_payment')->group('w-1/6');
-        $fields->name('invoice_id')->type('recordpicker')->table('account_invoice')->group('w-1/6');
+        $fields->name('partner_id')->type('recordpicker')->table(['partner'])->group('w-1/6');
+        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->group('w-1/6');
+        $fields->name('payment_id')->type('recordpicker')->table(['account', 'payment'])->group('w-1/6');
+        $fields->name('invoice_id')->type('recordpicker')->table(['account', 'invoice'])->group('w-1/6');
         $fields->name('debit')->type('text')->group('w-1/6');
         $fields->name('credit')->type('text')->group('w-1/6');
 

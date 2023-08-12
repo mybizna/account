@@ -48,8 +48,8 @@ class InvoiceCoupon extends BaseModel
         // listing view fields
         $fields = new ListTable();
 
-        $fields->name('payment_id')->type('recordpicker')->table('account_payment')->ordering(true);
-        $fields->name('coupon_id')->type('recordpicker')->table('account_coupon')->ordering(true);
+        $fields->name('payment_id')->type('recordpicker')->table(['account', 'payment'])->ordering(true);
+        $fields->name('coupon_id')->type('recordpicker')->table(['account', 'coupon'])->ordering(true);
 
         return $fields;
 
@@ -66,8 +66,8 @@ class InvoiceCoupon extends BaseModel
         // listing view fields
         $fields = new FormBuilder();
 
-        $fields->name('payment_id')->type('recordpicker')->table('account_payment')->group('w-1/2');
-        $fields->name('coupon_id')->type('recordpicker')->table('account_coupon')->group('w-1/2');
+        $fields->name('payment_id')->type('recordpicker')->table(['account', 'payment'])->group('w-1/2');
+        $fields->name('coupon_id')->type('recordpicker')->table(['account', 'coupon'])->group('w-1/2');
 
         return $fields;
 
@@ -83,8 +83,8 @@ class InvoiceCoupon extends BaseModel
         // listing view fields
         $fields = new FormBuilder();
 
-        $fields->name('payment_id')->type('recordpicker')->table('account_payment')->group('w-1/2');
-        $fields->name('coupon_id')->type('recordpicker')->table('account_coupon')->group('w-1/2');
+        $fields->name('payment_id')->type('recordpicker')->table(['account', 'payment'])->group('w-1/2');
+        $fields->name('coupon_id')->type('recordpicker')->table(['account', 'coupon'])->group('w-1/2');
 
         return $fields;
 

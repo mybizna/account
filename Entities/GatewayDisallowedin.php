@@ -48,8 +48,8 @@ class GatewayDisallowedin extends BaseModel
         // listing view fields
         $fields = new ListTable();
 
-        $fields->name('country_id')->type('recordpicker')->table('core_country')->ordering(true);
-        $fields->name('gateway_id')->type('recordpicker')->table('account_gateway')->ordering(true);
+        $fields->name('country_id')->type('recordpicker')->table(['core', 'country'])->ordering(true);
+        $fields->name('gateway_id')->type('recordpicker')->table(['account', 'gateway'])->ordering(true);
 
         return $fields;
 
@@ -65,8 +65,8 @@ class GatewayDisallowedin extends BaseModel
         // listing view fields
         $fields = new FormBuilder();
 
-        $fields->name('country_id')->type('recordpicker')->table('core_country')->group('w-1/2');
-        $fields->name('gateway_id')->type('recordpicker')->table('account_gateway')->group('w-1/2');
+        $fields->name('country_id')->type('recordpicker')->table(['core', 'country'])->group('w-1/2');
+        $fields->name('gateway_id')->type('recordpicker')->table(['account', 'gateway'])->group('w-1/2');
 
         return $fields;
 
@@ -82,8 +82,8 @@ class GatewayDisallowedin extends BaseModel
         // listing view fields
         $fields = new FormBuilder();
 
-        $fields->name('country_id')->type('recordpicker')->table('core_country')->group('w-1/2');
-        $fields->name('gateway_id')->type('recordpicker')->table('account_gateway')->group('w-1/2');
+        $fields->name('country_id')->type('recordpicker')->table(['core', 'country'])->group('w-1/2');
+        $fields->name('gateway_id')->type('recordpicker')->table(['account', 'gateway'])->group('w-1/2');
 
         return $fields;
 

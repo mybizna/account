@@ -59,12 +59,12 @@ class Transaction extends BaseModel
         $fields = new ListTable();
 
         $fields->name('amount')->type('text')->ordering(true);
-        $fields->name('partner_id')->type('recordpicker')->table('partner')->ordering(true);
-        $fields->name('ledger_setting_id')->type('recordpicker')->table('account_ledger_setting')->ordering(true);
-        $fields->name('left_chart_of_account_id')->type('recordpicker')->table('account_chart_of_account')->ordering(true);
-        $fields->name('left_ledger_id')->type('recordpicker')->table('account_ledger')->ordering(true);
-        $fields->name('right_chart_of_account_id')->type('recordpicker')->table('account_chart_of_account')->ordering(true);
-        $fields->name('right_ledger_id')->type('recordpicker')->table('account_ledger')->ordering(true);
+        $fields->name('partner_id')->type('recordpicker')->table(['partner'])->ordering(true);
+        $fields->name('ledger_setting_id')->type('recordpicker')->table(['account', 'ledger_setting'])->ordering(true);
+        $fields->name('left_chart_of_account_id')->type('recordpicker')->table(['account', 'chart_of_account'])->ordering(true);
+        $fields->name('left_ledger_id')->type('recordpicker')->table(['account', 'ledger'])->ordering(true);
+        $fields->name('right_chart_of_account_id')->type('recordpicker')->table(['account', 'chart_of_account'])->ordering(true);
+        $fields->name('right_ledger_id')->type('recordpicker')->table(['account', 'ledger'])->ordering(true);
         $fields->name('is_processed')->type('switch')->ordering(true);
 
         return $fields;
@@ -82,12 +82,12 @@ class Transaction extends BaseModel
         $fields = new FormBuilder();
 
         $fields->name('amount')->type('text')->group('w-1/2');
-        $fields->name('partner_id')->type('recordpicker')->table('partner')->group('w-1/2');
-        $fields->name('ledger_setting_id')->type('recordpicker')->table('account_ledger_setting')->group('w-1/2');
-        $fields->name('left_chart_of_account_id')->type('recordpicker')->table('account_chart_of_account')->group('w-1/2');
-        $fields->name('left_ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/2');
-        $fields->name('right_chart_of_account_id')->type('recordpicker')->table('account_chart_of_account')->group('w-1/2');
-        $fields->name('right_ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/2');
+        $fields->name('partner_id')->type('recordpicker')->table(['partner'])->group('w-1/2');
+        $fields->name('ledger_setting_id')->type('recordpicker')->table(['account', 'ledger_setting'])->group('w-1/2');
+        $fields->name('left_chart_of_account_id')->type('recordpicker')->table(['account', 'chart_of_account'])->group('w-1/2');
+        $fields->name('left_ledger_id')->type('recordpicker')->table(['account', 'ledger'])->group('w-1/2');
+        $fields->name('right_chart_of_account_id')->type('recordpicker')->table(['account', 'chart_of_account'])->group('w-1/2');
+        $fields->name('right_ledger_id')->type('recordpicker')->table(['account', 'ledger'])->group('w-1/2');
         $fields->name('is_processed')->type('switch')->group('w-1/2');
         $fields->name('description')->type('text')->group('w-full');
 
@@ -106,12 +106,12 @@ class Transaction extends BaseModel
         $fields = new FormBuilder();
 
         $fields->name('amount')->type('text')->group('w-1/6');
-        $fields->name('partner_id')->type('recordpicker')->table('partner')->group('w-1/6');
-        $fields->name('ledger_setting_id')->type('recordpicker')->table('account_ledger_setting')->group('w-1/6');
-        $fields->name('left_chart_of_account_id')->type('recordpicker')->table('account_chart_of_account')->group('w-1/6');
-        $fields->name('left_ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/6');
-        $fields->name('right_chart_of_account_id')->type('recordpicker')->table('account_chart_of_account')->group('w-1/6');
-        $fields->name('right_ledger_id')->type('recordpicker')->table('account_ledger')->group('w-1/6');
+        $fields->name('partner_id')->type('recordpicker')->table(['partner'])->group('w-1/6');
+        $fields->name('ledger_setting_id')->type('recordpicker')->table(['account', 'ledger_setting'])->group('w-1/6');
+        $fields->name('left_chart_of_account_id')->type('recordpicker')->table(['account', 'chart_of_account'])->group('w-1/6');
+        $fields->name('left_ledger_id')->type('recordpicker')->table(['account', 'ledger'])->group('w-1/6');
+        $fields->name('right_chart_of_account_id')->type('recordpicker')->table(['account', 'chart_of_account'])->group('w-1/6');
+        $fields->name('right_ledger_id')->type('recordpicker')->table(['account', 'ledger'])->group('w-1/6');
         $fields->name('is_processed')->type('switch')->group('w-1/6');
 
         return $fields;

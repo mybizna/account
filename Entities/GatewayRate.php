@@ -48,8 +48,8 @@ class GatewayRate extends BaseModel
         // listing view fields
         $fields = new ListTable();
 
-        $fields->name('gateway_id')->type('recordpicker')->table('account_gateway')->ordering(true);
-        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->ordering(true);
+        $fields->name('gateway_id')->type('recordpicker')->table(['account', 'gateway'])->ordering(true);
+        $fields->name('rate_id')->type('recordpicker')->table(['account', 'rate'])->ordering(true);
 
         return $fields;
 
@@ -65,8 +65,8 @@ class GatewayRate extends BaseModel
         // listing view fields
         $fields = new FormBuilder();
 
-        $fields->name('gateway_id')->type('recordpicker')->table('account_gateway')->group('w-1/2');
-        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->group('w-1/2');
+        $fields->name('gateway_id')->type('recordpicker')->table(['account', 'gateway'])->group('w-1/2');
+        $fields->name('rate_id')->type('recordpicker')->table(['account', 'rate'])->group('w-1/2');
 
         return $fields;
 
@@ -82,8 +82,8 @@ class GatewayRate extends BaseModel
         // listing view fields
         $fields = new FormBuilder();
 
-        $fields->name('gateway_id')->type('recordpicker')->table('account_gateway')->group('w-1/2');
-        $fields->name('rate_id')->type('recordpicker')->table('account_rate')->group('w-1/2');
+        $fields->name('gateway_id')->type('recordpicker')->table(['account', 'gateway'])->group('w-1/2');
+        $fields->name('rate_id')->type('recordpicker')->table(['account', 'rate'])->group('w-1/2');
 
         return $fields;
 
