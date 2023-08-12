@@ -17,6 +17,15 @@ class OpeningBalance extends BaseModel
      */
     protected $fillable = ['financial_year_id', 'chart_id', 'ledger_id', 'type', 'debit', 'credit'];
 
+
+
+    /**
+     * The fields that are to be render when performing relationship queries.
+     *
+     * @var array<string>
+     */
+    public $rec_names = ['financial_year_id', 'chart_id', 'ledger_id'];
+
     /**
      * List of tables names that are need in this model during migration.
      *

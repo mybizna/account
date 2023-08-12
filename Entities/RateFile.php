@@ -18,6 +18,12 @@ class RateFile extends BaseModel
     protected $fillable = [
         'rate_id', 'year', 'month', 'token', 'type', 'max_limit', 'file', 'is_processed',
     ];
+    /**
+     * The fields that are to be render when performing relationship queries.
+     *
+     * @var array<string>
+     */
+    public $rec_names = ['rate_id', 'year', 'month'];
 
     /**
      * List of tables names that are need in this model during migration.
@@ -59,7 +65,7 @@ class RateFile extends BaseModel
     }
     /**
      * Function for defining list of fields in form view.
-     * 
+     *
      * @return FormBuilder
      */
     public function formBuilder(): FormBuilder

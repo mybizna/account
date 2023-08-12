@@ -22,6 +22,13 @@ class Gateway extends BaseModel
     ];
 
     /**
+     * The fields that are to be render when performing relationship queries.
+     *
+     * @var array<string>
+     */
+    public $rec_names = ['title'];
+
+    /**
      * List of tables names that are need in this model during migration.
      *
      * @var array<string>
@@ -70,7 +77,7 @@ class Gateway extends BaseModel
 
     /**
      * Function for defining list of fields used for filtering.
-     * 
+     *
      * @return FormBuilder
      */
     public function formBuilder(): FormBuilder
@@ -98,7 +105,7 @@ class Gateway extends BaseModel
 
     /**
      * Function for defining list of fields used for filtering.
-     * 
+     *
      * @return FormBuilder
      */
     public function filter(): FormBuilder
@@ -155,7 +162,7 @@ class Gateway extends BaseModel
      *
      * @return void
      */
-    public function post_migration(Blueprint $table):void
+    public function post_migration(Blueprint $table): void
     {
         Migration::addForeign($table, 'core_currency', 'currency_id');
         Migration::addForeign($table, 'account_ledger', 'ledger_id');

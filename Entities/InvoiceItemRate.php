@@ -18,6 +18,14 @@ class InvoiceItemRate extends BaseModel
     protected $fillable = [
         'title', 'slug', 'rate_id', 'invoice_item_id', 'method', 'value', 'params', 'ordering', 'on_total',
     ];
+
+    /**
+     * The fields that are to be render when performing relationship queries.
+     *
+     * @var array<string>
+     */
+    public $rec_names = ['title'];
+
     /**
      * List of tables names that are need in this model during migration.
      *

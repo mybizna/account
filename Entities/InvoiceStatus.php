@@ -15,12 +15,23 @@ class InvoiceStatus extends BaseModel
      * @var array<string>
      */
     protected $fillable = ['type_name', 'slug'];
+
+
+
+    /**
+     * The fields that are to be render when performing relationship queries.
+     *
+     * @var array<string>
+     */
+    public $rec_names = ['type_name'];
+
     /**
      * List of tables names that are need in this model during migration.
      *
      * @var array<string>
      */
     public array $migrationDependancy = [];
+
     /**
      * The table associated with the model.
      *

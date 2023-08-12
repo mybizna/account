@@ -17,6 +17,13 @@ class FinancialYear extends BaseModel
     protected $fillable = ['name', 'start_date', 'end_date', 'description'];
 
     /**
+     * The fields that are to be render when performing relationship queries.
+     *
+     * @var array<string>
+     */
+    public $rec_names = ['name'];
+
+    /**
      * List of tables names that are need in this model during migration.
      *
      * @var array<string>

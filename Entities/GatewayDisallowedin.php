@@ -18,6 +18,13 @@ class GatewayDisallowedin extends BaseModel
     protected $fillable = ['country_id', 'gateway_id'];
 
     /**
+     * The fields that are to be render when performing relationship queries.
+     *
+     * @var array<string>
+     */
+    public $rec_names = ['country_id', 'gateway_id'];
+    
+    /**
      * List of tables names that are need in this model during migration.
      *
      * @var array<string>

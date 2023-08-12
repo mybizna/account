@@ -19,6 +19,13 @@ class Ledger extends BaseModel
     protected $fillable = ['chart_id', 'category_id', 'name', 'slug', 'code', 'unused', 'is_system'];
 
     /**
+     * The fields that are to be render when performing relationship queries.
+     *
+     * @var array<string>
+     */
+    public $rec_names = ['name'];
+
+    /**
      * List of tables names that are need in this model during migration.
      *
      * @var array<string>
@@ -63,7 +70,7 @@ class Ledger extends BaseModel
 
     /**
      * Function for defining list of fields in form view.
-     * 
+     *
      * @return FormBuilder
      */
     public function formBuilder(): FormBuilder
@@ -85,7 +92,7 @@ class Ledger extends BaseModel
 
     /**
      * Function for defining list of fields used for filtering.
-     * 
+     *
      * @return FormBuilder
      */
     public function filter(): FormBuilder
@@ -138,7 +145,7 @@ class Ledger extends BaseModel
      * Function for deleting a record.
      *
      * @param int $id
-     * 
+     *
      * @return array
      */
     public function deleteRecord($id)
