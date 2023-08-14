@@ -4,8 +4,6 @@ namespace Modules\Account\Entities;
 
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Base\Classes\Migration;
-use Modules\Base\Classes\Views\FormBuilder;
-use Modules\Base\Classes\Views\ListTable;
 use Modules\Base\Entities\BaseModel;
 
 class Rate extends BaseModel
@@ -43,98 +41,23 @@ class Rate extends BaseModel
     protected $table = "account_rate";
 
     /**
-     * Function for defining list of fields in table view.
-     *
-     * @return ListTable
-     */
-    public function listTable(): ListTable
-    {
-        // listing view fields
-        $fields = new ListTable();
-
-        $fields->name('title')->type('text')->ordering(true);
-        $fields->name('slug')->type('text')->ordering(true);
-        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->ordering(true);
-        $fields->name('value')->type('text')->ordering(true);
-        $fields->name('method')->type('text')->ordering(true);
-        $fields->name('ordering')->type('text')->ordering(true);
-        $fields->name('on_total')->type('switch')->ordering(true);
-        $fields->name('published')->type('switch')->ordering(true);
-
-        return $fields;
-
-    }
-
-    /**
-     * Function for defining list of fields in form view.
-     *
-     * @return FormBuilder
-     */
-    public function formBuilder(): FormBuilder
-    {
-        // listing view fields
-        $fields = new FormBuilder();
-
-        $fields->name('title')->type('text')->group('w-1/2');
-        $fields->name('slug')->type('text')->group('w-1/2');
-        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->group('w-1/2');
-        $fields->name('value')->type('text')->group('w-1/2');
-        $fields->name('method')->type('text')->group('w-1/2');
-        $fields->name('ordering')->type('text')->group('w-1/2');
-        $fields->name('on_total')->type('switch')->group('w-1/2');
-        $fields->name('published')->type('switch')->group('w-1/2');
-
-        return $fields;
-
-    }
-
-    /**
-     * Function for defining list of fields in filter view.
-     *
-     * @return FormBuilder
-     */
-    public function filter(): FormBuilder
-    {
-        // listing view fields
-        $fields = new FormBuilder();
-
-        $fields->name('title')->type('text')->group('w-1/6');
-        $fields->name('ledger_id')->type('recordpicker')->table(['account', 'ledger'])->group('w-1/6');
-        $fields->name('value')->type('text')->group('w-1/6');
-        $fields->name('method')->type('text')->group('w-1/6');
-
-        return $fields;
-
-    }
-    /**
      * List of fields to be migrated to the datebase when creating or updating model during migration.
      *
      * @param Blueprint $table
      * @return void
      */
-    public function migration(Blueprint $table): void
+    public function fields(Blueprint $table): void
     {
-        $table->increments('id');
-        $table->string('title');
-        $table->string('slug');
-        $table->foreignId('ledger_id');
-        $table->decimal('value', 20, 2);
-        $table->enum('method', ['+', '+%', '-', '-%'])->default('+');
-        $table->string('params')->nullable();
-        $table->tinyInteger('ordering')->nullable();
-        $table->tinyInteger('on_total')->default(false);
-        $table->tinyInteger('published')->default(false);
+        $this->fields->increments('id')->html('text');
+        $this->fields->string('title')->html('text');
+        $this->fields->string('slug')->html('text');
+        $this->fields->foreignId('ledger_id')->html('recordpicker')->table(['account', 'ledger']);
+        $this->fields->decimal('value', 20, 2)->html('amount');
+        $this->fields->enum('method', ['+', '+%', '-', '-%'])->default('+')->html('select');
+        $this->fields->string('params')->nullable()->html('textarea');
+        $this->fields->tinyInteger('ordering')->nullable()->html('text');
+        $this->fields->tinyInteger('on_total')->default(false)->html('switch');
+        $this->fields->tinyInteger('published')->default(false)->html('switch');
     }
 
-    /**
-     * Handle post migration processes for adding foreign keys.
-     *
-     * @param Blueprint $table
-     *
-     * @return void
-     */
-    public function post_migration(Blueprint $table): void
-    {
-        Migration::addForeign($table, 'account_ledger', 'ledger_id');
-    }
 }

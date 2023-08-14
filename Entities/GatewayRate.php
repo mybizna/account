@@ -38,79 +38,23 @@ class GatewayRate extends BaseModel
      */
     protected $table = "account_gateway_rate";
 
-    /**
-     * Function for defining list of fields in table view.
-     *
-     * @return ListTable
-     */
-    public function listTable(): ListTable
-    {
-        // listing view fields
-        $fields = new ListTable();
-
-        $fields->name('gateway_id')->type('recordpicker')->table(['account', 'gateway'])->ordering(true);
-        $fields->name('rate_id')->type('recordpicker')->table(['account', 'rate'])->ordering(true);
-
-        return $fields;
-
-    }
-
-    /**
-     * Function for defining list of fields in form view.
-     *
-     * @return FormBuilder
-     */
-    public function formBuilder(): FormBuilder
-    {
-        // listing view fields
-        $fields = new FormBuilder();
-
-        $fields->name('gateway_id')->type('recordpicker')->table(['account', 'gateway'])->group('w-1/2');
-        $fields->name('rate_id')->type('recordpicker')->table(['account', 'rate'])->group('w-1/2');
-
-        return $fields;
-
-    }
-
-    /**
-     * Function for defining list of fields in filter view.
-     *
-     * @return FormBuilder
-     */
-    public function filter(): FormBuilder
-    {
-        // listing view fields
-        $fields = new FormBuilder();
-
-        $fields->name('gateway_id')->type('recordpicker')->table(['account', 'gateway'])->group('w-1/2');
-        $fields->name('rate_id')->type('recordpicker')->table(['account', 'rate'])->group('w-1/2');
-
-        return $fields;
-
-    }
+  
+   
     /**
      * List of fields to be migrated to the datebase when creating or updating model during migration.
      *
      * @param Blueprint $table
      * @return void
      */
-    public function migration(Blueprint $table): void
+    public function fields(Blueprint $table): void
     {
-        $table->increments('id');
-        $table->foreignId('gateway_id');
-        $table->foreignId('rate_id');
+        $this->fields = $table ?? new Blueprint($this->table);
+
+        $this->fields->increments('id')->html('text');
+        $this->fields->foreignId('gateway_id')->html('recordpicker')->table(['account', 'gateway']);
+        $this->fields->foreignId('rate_id')->html('recordpicker')->table(['account', 'rate']);
     }
 
-    /**
-     * Handle post migration processes for adding foreign keys.
-     *
-     * @param Blueprint $table
-     *
-     * @return void
-     */
-    public function post_migration(Blueprint $table): void
-    {
-        Migration::addForeign($table, 'account_gateway', 'gateway_id');
-        Migration::addForeign($table, 'account_rate', 'rate_id');
-    }
+
+ 
 }

@@ -3,8 +3,6 @@
 namespace Modules\Account\Entities;
 
 use Illuminate\Database\Schema\Blueprint;
-use Modules\Base\Classes\Views\FormBuilder;
-use Modules\Base\Classes\Views\ListTable;
 use Modules\Base\Entities\BaseModel;
 
 class ChartOfAccount extends BaseModel
@@ -45,68 +43,18 @@ class ChartOfAccount extends BaseModel
     protected string $can_delete = "false";
 
     /**
-     * Function for defining list of fields in table view.
-     *
-     * @return ListTable
-     */
-    public function listTable(): ListTable
-    {
-        // listing view fields
-        $fields = new ListTable();
-
-        $fields->name('name')->type('text')->group('w-1/2');
-        $fields->name('slug')->type('text')->group('w-1/2');
-
-        return $fields;
-
-    }
-
-    /**
-     * Function for defining list of fields in form view.
-     *
-     * @return FormBuilder
-     */
-    public function formBuilder(): FormBuilder
-    {
-        // listing view fields
-        $fields = new FormBuilder();
-
-        $fields->name('name')->type('text')->group('w-1/2');
-        $fields->name('slug')->type('text')->group('w-1/2');
-
-        return $fields;
-
-    }
-
-    /**
-     * Function for defining list of fields used for filtering.
-     *
-     * @return FormBuilder
-     */
-    public function filter(): FormBuilder
-    {
-        // listing view fields
-        $fields = new FormBuilder();
-
-        $fields->name('name')->type('text')->group('w-1/2');
-        $fields->name('slug')->type('text')->group('w-1/2');
-
-        return $fields;
-
-    }
-
-    /**
      * Migration for creating table.
      *
      * @param Blueprint $table
      *
      * @return void
      */
-    public function migration(Blueprint $table): void
+    public function fields(Blueprint $table): void
     {
+        $this->fields = $table ?? new Blueprint($this->table);
 
-        $table->increments('id');
-        $table->string('name')->nullable();
-        $table->string('slug')->nullable();
+        $this->fields->increments('id');
+        $this->fields->string('name')->nullable()->html('text');
+        $this->fields->string('slug')->nullable()->html('text');
     }
 }
