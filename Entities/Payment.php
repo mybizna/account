@@ -68,8 +68,8 @@ class Payment extends BaseModel
         $this->fields->string('receipt_no')->nullable();
         $this->fields->string('code')->html('text')->nullable();
         $this->fields->string('others')->html('text')->nullable();
-        $this->fields->enum('stage', array_keys($stage))->html('select')->color($stage_colors)->default('pending');
-        $this->fields->enum('status', array_keys($status))->html('select')->color($status_colors)->default('pending');
+        $this->fields->enum('stage', array_keys($stage))->html('select')->color($stage_colors)->options($stage)->default('pending');
+        $this->fields->enum('status', array_keys($status))->html('select')->color($status_colors)->options($status)->default('pending');
         $this->fields->enum('type', ['in', 'out'])->html('select')->default('in');
         $this->fields->tinyInteger('is_posted')->html('switch')->default(false);
     }

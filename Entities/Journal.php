@@ -57,10 +57,10 @@ class Journal extends BaseModel
         $this->fields->increments('id')->html('text');
         $this->fields->string('title')->html('text');
         $this->fields->char('grouping_id')->html('text');
-        $this->fields->foreignId('partner_id')->html('recordpicker')->table(['partner']);
-        $this->fields->foreignId('ledger_id')->html('recordpicker')->table(['account', 'ledger']);
-        $this->fields->foreignId('payment_id')->nullable()->html('recordpicker')->table(['account', 'payment']);
-        $this->fields->foreignId('invoice_id')->nullable()->html('recordpicker')->table(['account', 'invoice']);
+        $this->fields->foreignId('partner_id')->html('recordpicker')->relation(['partner']);
+        $this->fields->foreignId('ledger_id')->html('recordpicker')->relation(['account', 'ledger']);
+        $this->fields->foreignId('payment_id')->nullable()->html('recordpicker')->relation(['account', 'payment']);
+        $this->fields->foreignId('invoice_id')->nullable()->html('recordpicker')->relation(['account', 'invoice']);
         $this->fields->decimal('debit', 20, 2)->nullable()->html('amount');
         $this->fields->decimal('credit', 20, 2)->nullable()->html('amount');
         $this->fields->string('params')->nullable()->html('text');

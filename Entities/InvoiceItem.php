@@ -51,8 +51,8 @@ class InvoiceItem extends BaseModel
 
         $this->fields->increments('id')->html('text');
         $this->fields->string('title')->html('text');
-        $this->fields->foreignId('invoice_id')->html('recordpicker')->table(['account', 'invoice']);
-        $this->fields->foreignId('ledger_id')->html('recordpicker')->table(['account', 'ledger']);
+        $this->fields->foreignId('invoice_id')->html('recordpicker')->relation(['account', 'invoice']);
+        $this->fields->foreignId('ledger_id')->html('recordpicker')->relation(['account', 'ledger']);
         $this->fields->decimal('price', 20, 2)->default(0.00)->html('amount');
         $this->fields->decimal('amount', 20, 2)->default(0.00)->html('amount');
         $this->fields->string('module')->nullable()->html('text');

@@ -49,14 +49,17 @@ class Invoice extends BaseModel
     {
         $this->fields = $table ?? new Blueprint($this->table);
 
+        $statuses = ['draft' => 'Draft', 'pending' => 'Pending', 'partial' => 'Partial', 'paid' => 'Paid', 'closed' => 'Closed', 'void' => 'Void'];
+        $statuses_color = ['draft' => 'gray', 'pending' => 'sky', 'partial' => 'indigo', 'paid' => 'green', 'closed' => 'orange', 'void' => 'red'];
+
         $this->fields->increments('id')->html('text');
         $this->fields->string('title')->html('text');
         $this->fields->char('invoice_no', 100)->html('text');
-        $this->fields->foreignId('partner_id')->html('recordpicker')->table(['partner']);
+        $this->fields->foreignId('partner_id')->html('recordpicker')->relation(['partner']);
         $this->fields->date('due_date')->useCurrent()->html('datetime');
         $this->fields->string('module')->default('Account')->html('text');
         $this->fields->string('model')->default('Invoice')->html('text');
-        $this->fields->enum('status', ['draft', 'pending', 'partial', 'paid', 'closed', 'void'])->html('switch')->default('draft')->nullable();
+        $this->fields->enum('status', array_keys($statuses))->html('switch')->default('draft')->options($statuses)->color($statuses_color)->nullable();
         $this->fields->string('description')->nullable()->html('textarea');
         $this->fields->tinyInteger('is_posted')->default(0)->html('switch');
         $this->fields->decimal('total', 20, 2)->nullable()->html('amount');

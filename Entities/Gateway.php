@@ -61,8 +61,8 @@ class Gateway extends BaseModel
         $this->fields->increments('id')->html('text');
         $this->fields->string('title')->html('text');
         $this->fields->string('slug')->html('text');
-        $this->fields->foreignId('ledger_id')->html('recordpicker')->table(['account', 'ledger']);
-        $this->fields->foreignId('currency_id')->nullable()->html('recordpicker')->table(['core', 'currency']);
+        $this->fields->foreignId('ledger_id')->html('recordpicker')->relation(['account', 'ledger']);
+        $this->fields->foreignId('currency_id')->nullable()->html('recordpicker')->relation(['core', 'currency']);
         $this->fields->string('image')->nullable()->html('text');
         $this->fields->string('url')->nullable()->html('text');
         $this->fields->string('module')->nullable()->html('text');

@@ -48,8 +48,8 @@ class GatewayAllowedin extends BaseModel
         $this->fields = $table ?? new Blueprint($this->table);
 
         $this->fields->increments('id')->html('text');
-        $this->fields->foreignId('country_id')->html('recordpicker')->table(['core', 'country']);
-        $this->fields->foreignId('gateway_id')->html('recordpicker')->table(['account', 'gateway']);
+        $this->fields->foreignId('country_id')->html('recordpicker')->relation(['core', 'country']);
+        $this->fields->foreignId('gateway_id')->html('recordpicker')->relation(['account', 'gateway']);
     }
 
 }

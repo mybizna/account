@@ -48,12 +48,14 @@ class InvoiceItemRate extends BaseModel
 
         $this->fields = $table ?? new Blueprint($this->table);
 
+        $methods = ['+' => '+', '+%' => '+%', '-' => '-', '-%' => '-%'];
+
         $this->fields->increments('id')->html('text');
         $this->fields->integer('title')->html('text');
         $this->fields->integer('slug')->html('text');
-        $this->fields->foreignId('rate_id')->html('recordpicker')->table(['account', 'rate']);
-        $this->fields->foreignId('invoice_item_id')->html('recordpicker')->table(['account', 'invoice_item']);
-        $this->fields->enum('method', ['+', '+%', '-', '-%'])->default('+')->html('select');
+        $this->fields->foreignId('rate_id')->html('recordpicker')->relation(['account', 'rate']);
+        $this->fields->foreignId('invoice_item_id')->html('recordpicker')->relation(['account', 'invoice_item']);
+        $this->fields->enum('method', array_keys($methods))->default('+')->html('select')->options($methods);
         $this->fields->decimal('value', 20, 2)->default(0.00)->html('amount');
         $this->fields->string('params')->nullable()->html('text');
         $this->fields->tinyInteger('ordering')->nullable()->html('text');

@@ -50,12 +50,14 @@ class Rate extends BaseModel
     {
         $this->fields = $table ?? new Blueprint($this->table);
 
+        $methods = ['+' => '+', '+%' => '+%', '-' => '-', '-%' => '-%'];
+
         $this->fields->increments('id')->html('text');
         $this->fields->string('title')->html('text');
         $this->fields->string('slug')->html('text');
-        $this->fields->foreignId('ledger_id')->html('recordpicker')->table(['account', 'ledger']);
+        $this->fields->foreignId('ledger_id')->html('recordpicker')->relation(['account', 'ledger']);
         $this->fields->decimal('value', 20, 2)->html('amount');
-        $this->fields->enum('method', ['+', '+%', '-', '-%'])->default('+')->html('select');
+        $this->fields->enum('method', array_keys($methods))->default('+')->html('select');
         $this->fields->string('params')->nullable()->html('textarea');
         $this->fields->tinyInteger('ordering')->nullable()->html('text');
         $this->fields->tinyInteger('on_total')->default(false)->html('switch');

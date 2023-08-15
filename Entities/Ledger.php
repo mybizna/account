@@ -56,8 +56,8 @@ class Ledger extends BaseModel
         $this->fields = $table ?? new Blueprint($this->table);
 
         $this->fields->increments('id')->html('text');
-        $this->fields->foreignId('chart_id')->nullable()->html('recordpicker')->table(['account', 'chart_of_account']);
-        $this->fields->foreignId('category_id')->nullable()->html('recordpicker')->table(['account', 'ledger_category']);
+        $this->fields->foreignId('chart_id')->nullable()->html('recordpicker')->relation(['account', 'chart_of_account']);
+        $this->fields->foreignId('category_id')->nullable()->html('recordpicker')->relation(['account', 'ledger_category']);
         $this->fields->string('name')->nullable()->html('text');
         $this->fields->string('slug')->nullable()->html('text');
         $this->fields->integer('code')->nullable()->html('text');

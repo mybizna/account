@@ -47,8 +47,8 @@ class GatewayRate extends BaseModel
         $this->fields = $table ?? new Blueprint($this->table);
 
         $this->fields->increments('id')->html('text');
-        $this->fields->foreignId('gateway_id')->html('recordpicker')->table(['account', 'gateway']);
-        $this->fields->foreignId('rate_id')->html('recordpicker')->table(['account', 'rate']);
+        $this->fields->foreignId('gateway_id')->html('recordpicker')->relation(['account', 'gateway']);
+        $this->fields->foreignId('rate_id')->html('recordpicker')->relation(['account', 'rate']);
     }
 
 }

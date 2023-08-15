@@ -48,9 +48,9 @@ class OpeningBalance extends BaseModel
         $this->fields = $table ?? new Blueprint($this->table);
 
         $this->fields->increments('id')->html('text');
-        $this->fields->foreignId('financial_year_id')->nullable()->html('recordpicker')->table(['account', 'financial_year']);
-        $this->fields->foreignId('chart_id')->nullable()->html('recordpicker')->table(['account', 'chart_of_account']);
-        $this->fields->foreignId('ledger_id')->nullable()->html('recordpicker')->table(['account', 'ledger']);
+        $this->fields->foreignId('financial_year_id')->nullable()->html('recordpicker')->relation(['account', 'financial_year']);
+        $this->fields->foreignId('chart_id')->nullable()->html('recordpicker')->relation(['account', 'chart_of_account']);
+        $this->fields->foreignId('ledger_id')->nullable()->html('recordpicker')->relation(['account', 'ledger']);
         $this->fields->string('type', 50)->nullable()->html('number');
         $this->fields->decimal('debit', 20, 2)->default(0.00)->html('amount');
         $this->fields->decimal('credit', 20, 2)->default(0.00)->html('amount');
