@@ -44,6 +44,9 @@ class InvoiceCoupon extends BaseModel
      */
     public function fields(Blueprint $table): void
     {
+
+        $this->fields = $table ?? new Blueprint($this->table);
+
         $this->fields->increments('id')->html('text');
         $this->fields->foreignId('payment_id')->html('recordpicker')->table(['account', 'payment']);
         $this->fields->foreignId('coupon_id')->html('recordpicker')->table(['account', 'coupon']);

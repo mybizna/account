@@ -44,6 +44,8 @@ class RateAllowedin extends BaseModel
      */
     public function fields(Blueprint $table): void
     {
+        $this->fields = $table ?? new Blueprint($this->table);
+
         $this->fields->increments('id')->html('text');
         $this->fields->foreignId('country_id')->html('recordpicker')->table(['core', 'country']);
         $this->fields->foreignId('rate_id')->html('recordpicker')->table(['account', 'rate']);

@@ -54,6 +54,8 @@ class Transaction extends BaseModel
      */
     public function fields(Blueprint $table): void
     {
+        $this->fields = $table ?? new Blueprint($this->table);
+
         $this->fields->increments('id')->html('text');
         $this->fields->decimal('amount', 20, 2)->default(0.00)->html('amount');
         $this->fields->string('description')->html('textarea');
