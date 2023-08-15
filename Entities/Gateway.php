@@ -54,7 +54,7 @@ class Gateway extends BaseModel
      *
      * @return void
      */
-    public function fields(Blueprint $table): void
+    public function fields(Blueprint $table = null): void
     {
         $this->fields = $table ?? new Blueprint($this->table);
 
@@ -72,6 +72,19 @@ class Gateway extends BaseModel
         $this->fields->tinyInteger('is_hidden')->default(0)->html('switch');
         $this->fields->tinyInteger('is_hide_in_invoice')->default(1)->html('switch');
         $this->fields->tinyInteger('published')->default(0)->html('switch');
+    }
+
+    /**
+     * List of structure for this model.
+     */
+    public function structure($structure): array
+    {
+        $structure = [
+            'table' => ['title', 'slug', 'ledger_id', 'currency_id', 'image', 'ordering', 'published'],
+            'filter' => ['title', 'slug', 'ledger_id', 'currency_id', 'published'],
+        ];
+
+        return $structure;
     }
 
 }

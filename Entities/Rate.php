@@ -46,7 +46,7 @@ class Rate extends BaseModel
      * @param Blueprint $table
      * @return void
      */
-    public function fields(Blueprint $table): void
+    public function fields(Blueprint $table = null): void
     {
         $this->fields = $table ?? new Blueprint($this->table);
 
@@ -60,6 +60,19 @@ class Rate extends BaseModel
         $this->fields->tinyInteger('ordering')->nullable()->html('text');
         $this->fields->tinyInteger('on_total')->default(false)->html('switch');
         $this->fields->tinyInteger('published')->default(false)->html('switch');
+    }
+
+    /**
+     * List of structure for this model.
+     */
+    public function structure($structure): array
+    {
+        $structure = [
+            'table' => ['title', 'slug', 'value', 'ledger_id', 'method', 'published'],
+            'filter' => ['title', 'value', 'ledger_id', 'published'],
+        ];
+
+        return $structure;
     }
 
 }

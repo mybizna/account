@@ -49,7 +49,7 @@ class FinancialYear extends BaseModel
      *
      * @return void
      */
-    public function fields(Blueprint $table): void
+    public function fields(Blueprint $table = null): void
     {
         $this->fields = $table ?? new Blueprint($this->table);
 
@@ -58,6 +58,19 @@ class FinancialYear extends BaseModel
         $this->fields->date('start_date')->nullable()->html('datetime');
         $this->fields->date('end_date')->nullable()->html('datetime');
         $this->fields->string('description')->nullable()->html('textarea');
+    }
+
+    /**
+     * List of structure for this model.
+     */
+    public function structure($structure): array
+    {
+        $structure = [
+            'table' => ['name', 'start_date', 'end_date'],
+            'filter' => ['name', 'start_date', 'end_date'],
+        ];
+
+        return $structure;
     }
 
 }

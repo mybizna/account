@@ -92,7 +92,7 @@ class Payment extends BaseModel
                     'fields' => ['gateway_id', 'stage', 'status', 'type', 'is_posted'],
                 ],
             ],
-            'filter' => ['w-1/6' => ['receipt_no', 'code', 'ledger_id', 'partner_id', 'gateway_id', 'stage']],
+            'filter' => ['receipt_no', 'code', 'ledger_id', 'partner_id', 'gateway_id', 'stage'],
         ];
 
         return $structure;

@@ -52,7 +52,7 @@ class Transaction extends BaseModel
      * @param Blueprint $table
      * @return void
      */
-    public function fields(Blueprint $table): void
+    public function fields(Blueprint $table = null): void
     {
         $this->fields = $table ?? new Blueprint($this->table);
 
@@ -66,6 +66,19 @@ class Transaction extends BaseModel
         $this->fields->foreignId('right_chart_of_account_id')->nullable()->html('recordpicker')->table(['account', 'chart_of_account']);
         $this->fields->foreignId('right_ledger_id')->nullable()->html('recordpicker')->table(['account', 'ledger']);
         $this->fields->tinyInteger('is_processed')->nullable()->html('switch');
+    }
+
+    /**
+     * List of structure for this model.
+     */
+    public function structure($structure): array
+    {
+        $structure = [
+            'table' => ['amount', 'partner_id', 'ledger_setting_id', 'left_chart_of_account_id', 'left_ledger_id', 'right_chart_of_account_id', 'right_ledger_id', 'is_processed'],
+            'filter' => ['partner_id', 'ledger_setting_id', 'left_chart_of_account_id', 'left_ledger_id', 'right_chart_of_account_id', 'right_ledger_id'],
+        ];
+
+        return $structure;
     }
 
 }

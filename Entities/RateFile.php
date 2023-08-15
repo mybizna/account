@@ -43,7 +43,7 @@ class RateFile extends BaseModel
      * @param Blueprint $table
      * @return void
      */
-    public function fields(Blueprint $table): void
+    public function fields(Blueprint $table = null): void
     {
         $this->fields = $table ?? new Blueprint($this->table);
 
@@ -56,6 +56,19 @@ class RateFile extends BaseModel
         $this->fields->integer('max_limit')->html('text');
         $this->fields->string('file')->html('text');
         $this->fields->tinyInteger('is_processed')->nullable()->html('switch');
+    }
+
+    /**
+     * List of structure for this model.
+     */
+    public function structure($structure): array
+    {
+        $structure = [
+            'table' => ['rate_id', 'year', 'month', 'token', 'type', 'max_limit', 'is_processed'],
+            'filter' => ['rate_id', 'year', 'month', 'is_processed'],
+        ];
+
+        return $structure;
     }
 
 }

@@ -43,7 +43,7 @@ class InvoiceItemRate extends BaseModel
      * @param Blueprint $table
      * @return void
      */
-    public function fields(Blueprint $table): void
+    public function fields(Blueprint $table = null): void
     {
 
         $this->fields = $table ?? new Blueprint($this->table);
@@ -60,4 +60,16 @@ class InvoiceItemRate extends BaseModel
         $this->fields->tinyInteger('on_total')->default(false)->html('switch');
     }
 
+    /**
+     * List of structure for this model.
+     */
+    public function structure($structure): array
+    {
+        $structure = [
+            'table' => ['title', 'slug', 'rate_id', 'invoice_item_id', 'method', 'value', 'ordering', 'on_total'],
+            'filter' => ['title', 'slug', 'rate_id', 'invoice_item_id', 'method'],
+        ];
+
+        return $structure;
+    }
 }

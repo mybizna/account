@@ -44,7 +44,7 @@ class InvoiceItem extends BaseModel
      * @param Blueprint $table
      * @return void
      */
-    public function fields(Blueprint $table): void
+    public function fields(Blueprint $table = null): void
     {
 
         $this->fields = $table ?? new Blueprint($this->table);
@@ -59,6 +59,19 @@ class InvoiceItem extends BaseModel
         $this->fields->string('model')->nullable()->html('text');
         $this->fields->foreignId('item_id')->nullable()->html('text');
         $this->fields->integer('quantity')->nullable()->html('number');
+    }
+
+    /**
+     * List of structure for this model.
+     */
+    public function structure($structure): array
+    {
+        $structure = [
+            'table' => ['title', 'invoice_id', 'ledger_id', 'price', 'amount', 'quantity'],
+            'filter' => ['title', 'invoice_id', 'ledger_id'],
+        ];
+
+        return $structure;
     }
 
 }

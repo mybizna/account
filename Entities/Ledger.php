@@ -50,9 +50,9 @@ class Ledger extends BaseModel
      * @param Blueprint $table
      * @return void
      */
-    public function fields(Blueprint $table): void
+    public function fields(Blueprint $table = null): void
     {
-        
+
         $this->fields = $table ?? new Blueprint($this->table);
 
         $this->fields->increments('id')->html('text');
@@ -63,6 +63,19 @@ class Ledger extends BaseModel
         $this->fields->integer('code')->nullable()->html('text');
         $this->fields->tinyInteger('unused')->default(1)->html('switch');
         $this->fields->tinyInteger('is_system')->default(0)->html('switch');
+    }
+
+    /**
+     * List of structure for this model.
+     */
+    public function structure($structure): array
+    {
+        $structure = [
+            'table' => ['chart_id', 'category_id', 'name', 'slug', 'code', 'unused', 'is_system'],
+            'filter' => ['chart_id', 'category_id', 'name'],
+        ];
+
+        return $structure;
     }
 
     /**

@@ -48,9 +48,8 @@ class Coupon extends BaseModel
      *
      * @return void
      */
-    public function fields(Blueprint $table): void
+    public function fields(Blueprint $table = null): void
     {
-
         $this->fields = $table ?? new Blueprint($this->table);
 
         $this->fields->increments('id')->html('text');
@@ -66,5 +65,18 @@ class Coupon extends BaseModel
         $this->fields->tinyInteger('published')->default(0)->html('switch');
         $this->fields->tinyInteger('is_visible')->default(0)->html('switch');
 
+    }
+
+    /**
+     * List of structure for this model.
+     */
+    public function structure($structure): array
+    {
+        $structure = [
+            'table' => ['code', 'value', 'start_date', 'end_date', 'applied', 'is_percent', 'published', 'is_visible'],
+            'filter' => ['code', 'value', 'applied', 'is_percent', 'published'],
+        ];
+
+        return $structure;
     }
 }

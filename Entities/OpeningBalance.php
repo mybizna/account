@@ -42,7 +42,7 @@ class OpeningBalance extends BaseModel
      * @param Blueprint $table
      * @return void
      */
-    public function fields(Blueprint $table): void
+    public function fields(Blueprint $table = null): void
     {
 
         $this->fields = $table ?? new Blueprint($this->table);
@@ -54,6 +54,19 @@ class OpeningBalance extends BaseModel
         $this->fields->string('type', 50)->nullable()->html('number');
         $this->fields->decimal('debit', 20, 2)->default(0.00)->html('amount');
         $this->fields->decimal('credit', 20, 2)->default(0.00)->html('amount');
+    }
+
+    /**
+     * List of structure for this model.
+     */
+    public function structure($structure): array
+    {
+        $structure = [
+            'table' => ['financial_year_id', 'chart_id', 'ledger_id', 'type', 'debit', 'credit'],
+            'filter' => ['financial_year_id', 'chart_id', 'ledger_id'],
+        ];
+
+        return $structure;
     }
 
 }

@@ -45,7 +45,7 @@ class Invoice extends BaseModel
      * @param Blueprint $table
      * @return void
      */
-    public function fields(Blueprint $table): void
+    public function fields(Blueprint $table = null): void
     {
         $this->fields = $table ?? new Blueprint($this->table);
 
@@ -60,6 +60,19 @@ class Invoice extends BaseModel
         $this->fields->string('description')->nullable()->html('textarea');
         $this->fields->tinyInteger('is_posted')->default(0)->html('switch');
         $this->fields->decimal('total', 20, 2)->nullable()->html('amount');
+    }
+
+    /**
+     * List of structure for this model.
+     */
+    public function structure($structure): array
+    {
+        $structure = [
+            'table' => ['title', 'invoice_no', 'partner_id', 'due_date', 'status', 'is_posted', 'total'],
+            'filter' => ['title', 'invoice_no', 'partner_id', 'due_date', 'status'],
+        ];
+
+        return $structure;
     }
 
 }
