@@ -72,6 +72,11 @@ class Invoice extends BaseModel
     {
         $structure = [
             'table' => ['title', 'invoice_no', 'partner_id', 'due_date', 'status', 'is_posted', 'total'],
+            'form' => [
+                ['label' => 'Title', 'class' => 'w-full', 'fields' => ['title']],
+                ['label' => 'Invoice', 'class' => 'w-1/6', 'fields' => ['invoice_no', 'partner_id', 'due_date']],
+                ['label' => 'Setting', 'class' => 'w-1/6', 'fields' => ['status', 'is_posted', 'total']],
+            ],
             'filter' => ['title', 'invoice_no', 'partner_id', 'due_date', 'status'],
         ];
 

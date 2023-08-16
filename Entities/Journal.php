@@ -73,6 +73,11 @@ class Journal extends BaseModel
     {
         $structure = [
             'table' => ['title', 'grouping_id', 'partner_id', 'ledger_id', 'payment_id', 'invoice_id', 'debit', 'credit'],
+            'form' => [
+                ['label' => 'Title', 'class' => 'w-full', 'fields' => ['title']],
+                ['label' => 'Journal', 'class' => 'w-1/6', 'fields' => ['grouping_id', 'partner_id', 'ledger_id', 'payment_id', 'invoice_id']],
+                ['label' => 'Amount', 'class' => 'w-1/6', 'fields' => ['debit', 'credit']],
+            ],
             'filter' => ['title', 'grouping_id', 'partner_id', 'ledger_id', 'payment_id', 'invoice_id'],
         ];
 

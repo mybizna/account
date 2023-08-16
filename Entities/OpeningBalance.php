@@ -63,6 +63,10 @@ class OpeningBalance extends BaseModel
     {
         $structure = [
             'table' => ['financial_year_id', 'chart_id', 'ledger_id', 'type', 'debit', 'credit'],
+            'form' => [
+                ['label' => 'Opening Balance', 'class' => 'w-1/6', 'fields' => ['financial_year_id', 'chart_id', 'ledger_id']],
+                ['label' => 'Setting', 'class' => 'w-1/6', 'fields' => ['type', 'debit', 'credit']],
+            ],
             'filter' => ['financial_year_id', 'chart_id', 'ledger_id'],
         ];
 

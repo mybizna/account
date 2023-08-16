@@ -74,6 +74,11 @@ class Coupon extends BaseModel
     {
         $structure = [
             'table' => ['code', 'value', 'start_date', 'end_date', 'applied', 'is_percent', 'published', 'is_visible'],
+            'form' => [
+                ['label' => 'Code', 'class' => 'w-full', 'fields' => ['code']],
+                ['label' => 'Coupon', 'class' => 'w-1/6', 'fields' => ['value', 'start_date', 'end_date', 'published']],
+                ['label' => 'Setting', 'class' => 'w-1/6', 'fields' => ['applied', 'is_percent', 'published', 'is_visible']],
+            ],
             'filter' => ['code', 'value', 'applied', 'is_percent', 'published'],
         ];
 

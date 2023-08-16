@@ -75,6 +75,12 @@ class Transaction extends BaseModel
     {
         $structure = [
             'table' => ['amount', 'partner_id', 'ledger_setting_id', 'left_chart_of_account_id', 'left_ledger_id', 'right_chart_of_account_id', 'right_ledger_id', 'is_processed'],
+            'form' => [
+                ['label' => 'Left', 'class' => 'w-1/6', 'fields' => ['left_chart_of_account_id', 'left_ledger_id']],
+                ['label' => 'Right', 'class' => 'w-1/6', 'fields' => ['right_chart_of_account_id', 'right_ledger_id']],
+                ['label' => 'Transaction', 'class' => 'w-1/6', 'fields' => ['amount', 'partner_id', 'ledger_setting_id']],
+                ['label' => 'Setting', 'class' => 'w-1/6', 'fields' => ['is_processed']],
+            ],
             'filter' => ['partner_id', 'ledger_setting_id', 'left_chart_of_account_id', 'left_ledger_id', 'right_chart_of_account_id', 'right_ledger_id'],
         ];
 

@@ -81,6 +81,11 @@ class Gateway extends BaseModel
     {
         $structure = [
             'table' => ['title', 'slug', 'ledger_id', 'currency_id', 'image', 'ordering', 'published'],
+            'form' => [
+                ['label' => 'Title', 'class' => 'w-full', 'fields' => ['title']],
+                ['label' => 'Gateway', 'class' => 'w-1/6', 'fields' => ['slug', 'ledger_id', 'currency_id']],
+                ['label' => 'Image & Setting', 'class' => 'w-1/6', 'fields' => ['image', 'ordering', 'published']],
+            ],
             'filter' => ['title', 'slug', 'ledger_id', 'currency_id', 'published'],
         ];
 

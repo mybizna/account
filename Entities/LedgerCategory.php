@@ -62,6 +62,11 @@ class LedgerCategory extends BaseModel
     {
         $structure = [
             'table' => ['name', 'slug', 'chart_id', 'parent_id', 'is_system'],
+            'form' => [
+                ['label' => 'Name', 'class' => 'w-full', 'fields' => ['name']],
+                ['label' => 'Ledger Category', 'class' => 'w-1/6', 'fields' => ['slug', 'chart_id', 'parent_id']],
+                ['label' => 'Setting', 'class' => 'w-1/6', 'fields' => ['is_system']],
+            ],
             'filter' => ['name', 'slug', 'chart_id'],
         ];
 
