@@ -67,15 +67,13 @@ class InvoiceItemRate extends BaseModel
      */
     public function structure($structure): array
     {
-        $structure = [
-            'table' => ['title', 'slug', 'rate_id', 'invoice_item_id', 'method', 'value', 'ordering', 'on_total'],
-            'form' => [
-                ['label' => 'Title', 'class' => 'w-full', 'fields' => ['title']],
-                ['label' => 'Invoice Item Rate', 'class' => 'w-1/6', 'fields' => ['slug', 'rate_id', 'invoice_item_id', 'method']],
-                ['label' => 'Setting', 'class' => 'w-1/6', 'fields' => ['value', 'ordering', 'on_total']],
-            ],
-            'filter' => ['title', 'slug', 'rate_id', 'invoice_item_id', 'method'],
+        $structure['table'] = ['title', 'slug', 'rate_id', 'invoice_item_id', 'method', 'value', 'ordering', 'on_total'];
+        $structure['form'] = [
+            ['label' => 'Title', 'class' => 'col-span-full', 'fields' => ['title']],
+            ['label' => 'Invoice Item Rate', 'class' => 'col-span-6', 'fields' => ['slug', 'rate_id', 'invoice_item_id', 'method']],
+            ['label' => 'Setting', 'class' => 'col-span-6', 'fields' => ['value', 'ordering', 'on_total']],
         ];
+        $structure['filter'] = ['title', 'slug', 'rate_id', 'invoice_item_id', 'method'];
 
         return $structure;
     }

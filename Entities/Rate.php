@@ -69,15 +69,13 @@ class Rate extends BaseModel
      */
     public function structure($structure): array
     {
-        $structure = [
-            'table' => ['title', 'slug', 'value', 'ledger_id', 'method', 'published'],
-            'form' => [
-                ['label' => 'Title', 'class' => 'w-full', 'fields' => ['title']],
-                ['label' => 'Rate', 'class' => 'w-1/6', 'fields' => ['slug', 'value', 'ledger_id']],
-                ['label' => 'Setting', 'class' => 'w-1/6', 'fields' => ['method', 'published']],
-            ],
-            'filter' => ['title', 'value', 'ledger_id', 'published'],
+        $structure['table'] = ['title', 'slug', 'value', 'ledger_id', 'method', 'published'];
+        $structure['form'] = [
+            ['label' => 'Title', 'class' => 'col-span-full', 'fields' => ['title']],
+            ['label' => 'Rate', 'class' => 'col-span-6', 'fields' => ['slug', 'value', 'ledger_id']],
+            ['label' => 'Setting', 'class' => 'col-span-6', 'fields' => ['method', 'published']],
         ];
+        $structure['filter'] = ['title', 'value', 'ledger_id', 'published'];
 
         return $structure;
     }

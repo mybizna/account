@@ -7,7 +7,7 @@
     <input id="invoice_id" type="hidden" name="invoice_id" value="{{ $invoice->id }}" />
 
     <section class="bg-blue-50 dark:bg-blue-900 h-full h-screen">
-        <div class="w-full md:w-4/5 lg:w-2/4 mx-auto pt-10">
+        <div class="col-span-full md:w-4/5 lg:w-2/4 mx-auto pt-10">
 
             <div class="bg-white pt-4 mb-4">
                 <h1 class="text-center text-2xl text-blue-800 py-3 font-extrabold"> Make Payment </h1>

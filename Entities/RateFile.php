@@ -63,15 +63,13 @@ class RateFile extends BaseModel
      */
     public function structure($structure): array
     {
-        $structure = [
-            'table' => ['rate_id', 'year', 'month', 'token', 'type', 'max_limit', 'is_processed'],
-            'form' => [
-                ['label' => 'Title', 'class' => 'w-full', 'fields' => ['title']],
-                ['label' => 'Rate File', 'class' => 'w-1/6', 'fields' => ['rate_id', 'year', 'month', 'token']],
-                ['label' => 'Setting', 'class' => 'w-1/6', 'fields' => ['type', 'max_limit', 'is_processed']],
-            ],
-            'filter' => ['rate_id', 'year', 'month', 'is_processed'],
+        $structure['table'] = ['rate_id', 'year', 'month', 'token', 'type', 'max_limit', 'is_processed'];
+        $structure['form'] = [
+            ['label' => 'Title', 'class' => 'col-span-full', 'fields' => ['title']],
+            ['label' => 'Rate File', 'class' => 'col-span-6', 'fields' => ['rate_id', 'year', 'month', 'token']],
+            ['label' => 'Setting', 'class' => 'col-span-6', 'fields' => ['type', 'max_limit', 'is_processed']],
         ];
+        $structure['filter'] = ['rate_id', 'year', 'month', 'is_processed'];
 
         return $structure;
     }

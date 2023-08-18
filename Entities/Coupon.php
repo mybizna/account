@@ -72,15 +72,13 @@ class Coupon extends BaseModel
      */
     public function structure($structure): array
     {
-        $structure = [
-            'table' => ['code', 'value', 'start_date', 'end_date', 'applied', 'is_percent', 'published', 'is_visible'],
-            'form' => [
-                ['label' => 'Code', 'class' => 'w-full', 'fields' => ['code']],
-                ['label' => 'Coupon', 'class' => 'w-1/6', 'fields' => ['value', 'start_date', 'end_date', 'published']],
-                ['label' => 'Setting', 'class' => 'w-1/6', 'fields' => ['applied', 'is_percent', 'published', 'is_visible']],
-            ],
-            'filter' => ['code', 'value', 'applied', 'is_percent', 'published'],
+        $structure['table'] = ['code', 'value', 'start_date', 'end_date', 'applied', 'is_percent', 'published', 'is_visible'];
+        $structure['form'] = [
+            ['label' => 'Code', 'class' => 'col-span-full', 'fields' => ['code']],
+            ['label' => 'Coupon', 'class' => 'col-span-6', 'fields' => ['value', 'start_date', 'end_date', 'published']],
+            ['label' => 'Setting', 'class' => 'col-span-6', 'fields' => ['applied', 'is_percent', 'published', 'is_visible']],
         ];
+        $structure['filter'] = ['code', 'value', 'applied', 'is_percent', 'published'];
 
         return $structure;
     }

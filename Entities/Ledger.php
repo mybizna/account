@@ -70,15 +70,13 @@ class Ledger extends BaseModel
      */
     public function structure($structure): array
     {
-        $structure = [
-            'table' => ['chart_id', 'category_id', 'name', 'slug', 'code', 'unused', 'is_system'],
-            'form' => [
-                ['label' => 'Name', 'class' => 'w-full', 'fields' => ['name']],
-                ['label' => 'Ledger', 'class' => 'w-1/6', 'fields' => ['category_id', 'name', 'slug']],
-                ['label' => 'Setting', 'class' => 'w-1/6', 'fields' => ['code', 'unused', 'is_system']],
-            ],
-            'filter' => ['chart_id', 'category_id', 'name'],
+        $structure['table'] = ['chart_id', 'category_id', 'name', 'slug', 'code', 'unused', 'is_system'];
+        $structure['form'] = [
+            ['label' => 'Name', 'class' => 'col-span-full', 'fields' => ['name']],
+            ['label' => 'Ledger', 'class' => 'col-span-6', 'fields' => ['category_id', 'name', 'slug']],
+            ['label' => 'Setting', 'class' => 'col-span-6', 'fields' => ['code', 'unused', 'is_system']],
         ];
+        $structure['filter'] = ['chart_id', 'category_id', 'name'];
 
         return $structure;
     }
