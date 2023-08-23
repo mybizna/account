@@ -16,7 +16,9 @@ class ChartOfAccount
      */
     public function getChart($chart_id)
     {
-        if (Cache::has("account_chart_" . $chart_id)) {
+
+       
+        if (!Cache::has("account_chart_" . $chart_id)) {
             $chart = Cache::get("account_chart_" . $chart_id);
             return $chart;
         } else {
@@ -26,8 +28,7 @@ class ChartOfAccount
                 if (empty($chart)) {
                     throw new \Exception("Chart of Account not found", 1);
                 }
-
-                Cache::put("account_chart_" . $chart_id, (array) $chart, 3600);
+                Cache::put("account_chart_" . $chart_id, $chart, 3600);
                 return $chart;
             } catch (\Throwable $th) {
                 throw $th;
@@ -106,6 +107,7 @@ class ChartOfAccount
             return (array) $chart_total;
         } else {
             try {
+                
                 $separator = (isset($data['separator'])) ? $data['separator'] : '';
 
                 $chart = $this->getChart($chart_id);
