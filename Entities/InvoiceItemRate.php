@@ -50,7 +50,7 @@ class InvoiceItemRate extends BaseModel
 
         $methods = ['+' => '+', '+%' => '+%', '-' => '-', '-%' => '-%'];
 
-        $this->fields->increments('id')->html('text');
+        $this->fields->increments('id')->html('hidden');
         $this->fields->integer('title')->html('text');
         $this->fields->integer('slug')->html('text');
         $this->fields->foreignId('rate_id')->html('recordpicker')->relation(['account', 'rate']);

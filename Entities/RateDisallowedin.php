@@ -47,7 +47,7 @@ class RateDisallowedin extends BaseModel
     {
         $this->fields = $table ?? new Blueprint($this->table);
 
-        $this->fields->increments('id')->html('text');
+        $this->fields->increments('id')->html('hidden');
         $this->fields->foreignId('country_id')->html('recordpicker')->relation(['core', 'country']);
         $this->fields->foreignId('rate_id')->html('recordpicker')->relation(['account', 'rate']);
     }

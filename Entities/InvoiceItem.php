@@ -49,7 +49,7 @@ class InvoiceItem extends BaseModel
 
         $this->fields = $table ?? new Blueprint($this->table);
 
-        $this->fields->increments('id')->html('text');
+        $this->fields->increments('id')->html('hidden');
         $this->fields->string('title')->html('text');
         $this->fields->foreignId('invoice_id')->html('recordpicker')->relation(['account', 'invoice']);
         $this->fields->foreignId('ledger_id')->html('recordpicker')->relation(['account', 'ledger']);

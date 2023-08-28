@@ -56,7 +56,7 @@ class Transaction extends BaseModel
     {
         $this->fields = $table ?? new Blueprint($this->table);
 
-        $this->fields->increments('id')->html('text');
+        $this->fields->increments('id')->html('hidden');
         $this->fields->decimal('amount', 20, 2)->default(0.00)->html('amount');
         $this->fields->string('description')->html('textarea');
         $this->fields->foreignId('partner_id')->html('recordpicker')->relation(['partner']);

@@ -52,7 +52,7 @@ class Coupon extends BaseModel
     {
         $this->fields = $table ?? new Blueprint($this->table);
 
-        $this->fields->increments('id')->html('text');
+        $this->fields->increments('id')->html('hidden');
         $this->fields->string('code')->nullable()->html('text');
         $this->fields->string('description')->nullable()->html('textarea');
         $this->fields->string('value')->nullable()->html('text');

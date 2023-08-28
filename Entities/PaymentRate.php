@@ -46,7 +46,7 @@ class PaymentRate extends BaseModel
     {
         $this->fields = $table ?? new Blueprint($this->table);
 
-        $this->fields->increments('id')->html('text');
+        $this->fields->increments('id')->html('hidden');
         $this->fields->foreignId('payment_id')->html('recordpicker')->relation(['account', 'payment']);
         $this->fields->foreignId('rate_id')->html('recordpicker')->relation(['account', 'rate']);
     }

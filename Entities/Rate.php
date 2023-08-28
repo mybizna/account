@@ -52,7 +52,7 @@ class Rate extends BaseModel
 
         $methods = ['+' => '+', '+%' => '+%', '-' => '-', '-%' => '-%'];
 
-        $this->fields->increments('id')->html('text');
+        $this->fields->increments('id')->html('hidden');
         $this->fields->string('title')->html('text');
         $this->fields->string('slug')->html('text');
         $this->fields->foreignId('ledger_id')->html('recordpicker')->relation(['account', 'ledger']);

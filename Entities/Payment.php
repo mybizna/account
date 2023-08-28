@@ -59,7 +59,7 @@ class Payment extends BaseModel
         $stage_colors = ['pending' => 'red', 'wallet' => 'green', 'posted' => 'blue'];
         $status_colors = ['pending' => 'red', 'paid' => 'green', 'reversed' => 'blue', 'canceled' => 'gray'];
 
-        $this->fields->increments('id')->html('text');
+        $this->fields->increments('id')->html('hidden');
         $this->fields->string('title')->html('text');
         $this->fields->decimal('amount', 20, 2)->html('amount');
         $this->fields->foreignId('ledger_id')->html('recordpicker')->relation(['account', 'ledger']);

@@ -47,7 +47,7 @@ class RateFile extends BaseModel
     {
         $this->fields = $table ?? new Blueprint($this->table);
 
-        $this->fields->increments('id')->html('text');
+        $this->fields->increments('id')->html('hidden');
         $this->fields->foreignId('rate_id')->html('recordpicker')->relation(['account', 'rate']);
         $this->fields->string('year')->html('text');
         $this->fields->string('month')->html('text');

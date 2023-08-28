@@ -54,7 +54,7 @@ class Journal extends BaseModel
 
         $this->fields = $table ?? new Blueprint($this->table);
 
-        $this->fields->increments('id')->html('text');
+        $this->fields->increments('id')->html('hidden');
         $this->fields->string('title')->html('text');
         $this->fields->char('grouping_id')->html('text');
         $this->fields->foreignId('partner_id')->html('recordpicker')->relation(['partner']);
