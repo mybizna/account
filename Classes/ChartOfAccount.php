@@ -18,7 +18,7 @@ class ChartOfAccount
     {
 
        
-        if (!Cache::has("account_chart_" . $chart_id)) {
+        if (Cache::has("account_chart_" . $chart_id)) {
             $chart = Cache::get("account_chart_" . $chart_id);
             return $chart;
         } else {
