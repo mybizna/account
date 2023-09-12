@@ -1,6 +1,6 @@
 <template>
-    <div class="bg-white relative shadow rounded-lg">
-        <apexchart ref="realtimeChart" width="100%" height="120px" type="area" :options="options" :series="series">
+    <div class="bg-white relative shadow rounded">
+        <apexchart ref="realtimeChart" width="100%" height="80px" type="area" :options="options" :series="series">
         </apexchart>
     </div>
 </template>

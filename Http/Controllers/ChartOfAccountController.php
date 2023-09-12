@@ -16,6 +16,8 @@ class ChartOfAccountController extends BaseController
 
         $data = $request->all();
 
+        $data['has_chart'] = $data['has_chart'] ?? true;
+
         $start = new \DateTime('now - 1 year');
         $end = new \DateTime();
 
@@ -25,31 +27,34 @@ class ChartOfAccountController extends BaseController
         $data['start_date'] = $start->modify('first day of this month')->format('Y-m-d 00:00:00');
         $data['end_date'] = $end->modify('last day of this month')->format('Y-m-d 23.59.59');
         $data['separator'] = ',';
-        
 
         $result = $chart_of_account->getChartTotalBySlug($slug, $data);
 
-        $labels = [];
-        $r_data = [];
-        foreach ($period as $dt) {
-            $data['separator'] = '';
-            $data['start_date'] = $dt->modify('first day of this month')->format('Y-m-d 00:00:00');
-            $data['end_date'] = $dt->modify('last day of this month')->format('Y-m-d 23.59.59');
-            $tmp_result = $chart_of_account->getChartTotalBySlug($slug, $data);
+        if (isset($data['has_chart']) && $data['has_chart']) {
 
-            $labels[] = $dt->format('m/y');
-            $r_data[] = $tmp_result['total'];
+            $labels = [];
+            $r_data = [];
+
+            foreach ($period as $dt) {
+                $data['separator'] = '';
+                $data['start_date'] = $dt->modify('first day of this month')->format('Y-m-d 00:00:00');
+                $data['end_date'] = $dt->modify('last day of this month')->format('Y-m-d 23.59.59');
+                $tmp_result = $chart_of_account->getChartTotalBySlug($slug, $data);
+
+                $labels[] = $dt->format('m/y');
+                $r_data[] = $tmp_result['total'];
+            }
+
+            $data['start_date'] = $end->modify('first day of this month')->format('Y-m-d 00:00:00');
+            $data['end_date'] = $end->modify('last day of this month')->format('Y-m-d 23.59.59');
+            $cur_result = $chart_of_account->getChartTotalBySlug($slug, $data);
+
+            $labels[] = $end->format('m/y');
+            $r_data[] = $cur_result['total'];
+
+            $result['labels'] = $labels;
+            $result['data'] = $r_data;
         }
-
-        $data['start_date'] = $end->modify('first day of this month')->format('Y-m-d 00:00:00');
-        $data['end_date'] = $end->modify('last day of this month')->format('Y-m-d 23.59.59');
-        $cur_result = $chart_of_account->getChartTotalBySlug($slug, $data);
-
-        $labels[] = $end->format('m/y');
-        $r_data[] = $cur_result['total'];
-
-        $result['labels'] = $labels;
-        $result['data'] = $r_data;
 
         return response()->json($result);
 
@@ -93,7 +98,7 @@ class ChartOfAccountController extends BaseController
             $result['status'] = 1;
             $result['records'] = $list;
             $result['message'] = 'Records Found Successfully.';
-        } catch (\Throwable$th) {
+        } catch (\Throwable $th) {
             //throw $th;
         }
 
