@@ -1,13 +1,15 @@
 <template>
-    <apexchart width="100%" height="240" type="bar" :options="options" :series="series"></apexchart>
+    <div class="bg-white relative shadow rounded-lg">
+        <apexchart width="100%" height="240" type="bar" :options="options" :series="series"></apexchart>
+    </div>
 </template>
 
 <script>
 export default {
     async created() {
 
-       // var asset = [];
-       // var liability = [];
+        // var asset = [];
+        // var liability = [];
 
         var expense = [];
         var income = [];
@@ -27,22 +29,22 @@ export default {
                 expense = response.data.data;
             }).catch((response) => { });
 
-    /*
-    await window.axios
-        .get("/chart_of_account/summation/asset")
-        .then((response) => {
-           
-            asset = response.data.data;
-        }).catch((response) => { });
-
-
- 
-    await window.axios
-        .get("/chart_of_account/summation/liability")
-        .then((response) => {
-            liability = response.data.data;
-        }).catch((response) => { });
-        */
+        /*
+        await window.axios
+            .get("/chart_of_account/summation/asset")
+            .then((response) => {
+               
+                asset = response.data.data;
+            }).catch((response) => { });
+    
+    
+     
+        await window.axios
+            .get("/chart_of_account/summation/liability")
+            .then((response) => {
+                liability = response.data.data;
+            }).catch((response) => { });
+            */
 
         this.series = [
             {

@@ -1,5 +1,8 @@
 <template>
-    <apexchart width="100%" height="120px" type="area" :options="options" :series="series"></apexchart>
+    <div class="bg-white relative shadow rounded-lg">
+        <apexchart ref="realtimeChart" width="100%" height="120px" type="area" :options="options" :series="series">
+        </apexchart>
+    </div>
 </template>
 
 <script>
@@ -8,7 +11,7 @@ export default {
         var t = this;
 
         window.axios
-            .get("/chart_of_account/summation/income")
+            .get("/chart_of_account/summation/expense")
             .then((response) => {
                 t.debit = response.data.debit;
                 t.credit = response.data.credit;
@@ -31,9 +34,12 @@ export default {
     },
     data() {
         return {
+            debit: 0.00,
+            credit: 0.00,
+            total: 0.00,
             options: {
                 chart: {
-                    id: 'vuechart-income',
+                    id: 'vuechart-expense',
                     sparkline: {
                         enabled: true
                     },
@@ -58,7 +64,7 @@ export default {
                     }
                 },
                 subtitle: {
-                    text: 'Income',
+                    text: 'Expenses',
                     offsetX: 30,
                     style: {
                         fontSize: '14px',
