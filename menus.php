@@ -13,7 +13,11 @@ $this->add_module_info("account", [
 
 //$this->add_menu("module", "key", "title","path", "icon", "position");
 $this->add_menu("account", "invoice", "Invoice", "/account/admin/invoice", "fas fa-cogs", 1);
+$this->add_menu("dashboard", "invoice", "Invoice", "/account/admin/invoice", "fas fa-cogs", 1);
+
 $this->add_menu("account", "payment", "Payment", "/account/admin/payment", "fas fa-cogs", 1);
+$this->add_menu("dashboard", "payment", "Payment", "/account/admin/payment", "fas fa-cogs", 1);
+
 /*$this->add_menu("account", "transaction", "Transaction", "/account/admin/transaction", "fas fa-cogs", 1);*/
 $this->add_menu("account", "journal", "Journal", "/account/admin/journal", "fas fa-cogs", 1);
 /*$this->add_menu("account", "coupon", "Coupon", "/account/admin/coupon", "fas fa-cogs", 1);*/
