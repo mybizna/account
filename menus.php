@@ -40,3 +40,9 @@ $this->add_submenu("account", "setting", "Ledger Category", "/account/admin/ledg
 //$this->add_submenu("account", "reports", "Income Statement", "/account/reports/balance-sheet", 5);
 //$this->add_submenu("account", "reports", "Ledger Report", "/account/reports/ledger-report", 5);
 //$this->add_submenu("account", "reports", "Trail Balance", "/account/reports/trail-balance", 5);
+
+$this->group('frontend', function () {
+    $this->add_menu("account", "payment", "Payment", "/account/front/payment", "fas fa-cogs", 5);
+    $this->add_menu("account", "invoice", "Invoice", "/account/front/invoice", "fas fa-cogs", 1);
+});
+
