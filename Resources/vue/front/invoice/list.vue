@@ -1,13 +1,27 @@
 <template>
-    <table-render :path_param="['account', 'invoice']" title="Invoice" :model="model" :table_fields="table_fields"
+    <h1 class="my-3 text-3xl font-bold">Invoice</h1>
+
+    <table-render :path_param="['account', 'invoice']" title="Invoice" :table_fields="table_fields"
         :setting="{ hide_delete_button: true }">
 
         <template #header>
-            <th-render v-for="column in columns" :key="column.name">
-                {{ column.label }}
-            </th-render>
+            <th-render>Title</th-render>
+            <th-render>Invoice No</th-render>
+            <th-render>Partner Id</th-render>
+            <th-render>Status</th-render>
+            <th-render>Is Posted</th-render>
+            <th-render>Total</th-render>
+            <th-render>Longitude</th-render>
         </template>
-
+        
+        <template #body="{ item }">
+            <td>{{ item.title }}</td>
+            <td>{{ item.invoice_no }}</td>
+            <td>{{ item.partner_id }}</td>
+            <td>{{ item.status }}</td>
+            <td>{{ item.is_posted }}</td>
+            <td>{{ item.total }}</td>
+        </template>
 
 
     </table-render>
@@ -20,31 +34,8 @@ export default {
     },
     data() {
         return {
-            model: {
-                title: "",
-                partner_id: "",
-                invoice_no: "",
-                status: "",
-                is_posted: "",
-                total: "",
-            },
-
             table_fields: [
                 "title", "invoice_no", "partner_id", "status", "is_posted", "total",
-            ],
-
-            columns: [
-                { label: "Title", prop: "title", name: "title", },
-                { label: "invoice_no", prop: "invoice_no", name: "invoice_no", },
-                {
-                    label: "Partner",
-                    prop: "[partner__first_name] [partner__last_name]",
-                    name: "partner_id",
-                    foreign: ['partner__first_name', 'partner__last_name'],
-                },
-                { label: "status", prop: "status", name: "status", },
-                { label: "is_posted", prop: "is_posted", name: "is_posted", is_boolean: true, },
-                { label: "total", prop: "total", name: "total", },
             ],
         };
     },
