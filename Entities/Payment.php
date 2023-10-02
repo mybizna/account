@@ -43,7 +43,14 @@ class Payment extends BaseModel
      *
      * @var bool
      */
-    protected $can_delete = false;
+    protected bool $can_delete = false;
+
+    /**
+     * Set if model is visible from frontend.
+     *
+     * @var bool
+     */
+    protected bool $show_frontend = true;
 
     /**
      * List of field for this model.

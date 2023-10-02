@@ -40,6 +40,13 @@ class Invoice extends BaseModel
     protected $table = "account_invoice";
 
     /**
+     * Set if model is visible from frontend.
+     *
+     * @var bool
+     */
+    protected bool $show_frontend = true;
+
+    /**
      * List of fields to be migrated to the datebase when creating or updating model during migration.
      *
      * @param Blueprint $table

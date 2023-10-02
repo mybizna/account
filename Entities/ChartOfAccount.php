@@ -40,7 +40,7 @@ class ChartOfAccount extends BaseModel
      *
      * @var bool
      */
-    protected string $can_delete = "false";
+    protected bool $can_delete = false;
 
     /**
      * Migration for creating table.

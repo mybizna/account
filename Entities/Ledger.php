@@ -42,7 +42,7 @@ class Ledger extends BaseModel
      *
      * @var bool
      */
-    protected $can_delete = false;
+    protected bool $can_delete = false;
 
     /**
      * List of fields to be migrated to the datebase when creating or updating model during migration.
