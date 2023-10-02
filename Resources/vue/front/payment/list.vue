@@ -1,15 +1,19 @@
 <template>
-    <table-list :path_param="['account', 'payment']" title="Payment" :search_fields="search_fields" :model="model"
-        :table_fields="table_fields" :setting="{ hide_delete_button: true }"></table-list>
+    <table-render :path_param="['account', 'payment']" title="Payment" :model="model" :table_fields="table_fields"
+        :setting="{ hide_delete_button: true }">
+
+        <template #header>
+            <th-render v-for="column in columns" :key="column.name">
+                {{ column.label }}
+            </th-render>
+        </template>
+
+
+    </table-render>
 </template>
 
 <script>
 export default {
-    components: {
-        TableList: window.$func.fetchComponent(
-            "components/common/TableList.vue"
-        ),
-    },
 
     data() {
         return {
@@ -25,11 +29,8 @@ export default {
                 type: "",
                 is_posted: "",
             },
-
-            search_fields: [
-                { type: "text", name: "title", label: "title", ope: "", },
-                { type: "text", name: "receipt_no", label: "receipt_no", ope: "", },
-                { type: "text", name: "code", label: "code", ope: "", },
+            table_fields: [
+                "title", "invoice_no", "partner_id", "receipt_no", "code", "gateway_id", "ledger_id", "status", "type", "amount"
             ],
             table_fields: [
                 { text: "title", prop: "title", name: "title", },
