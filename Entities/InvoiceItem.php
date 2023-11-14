@@ -30,7 +30,7 @@ class InvoiceItem extends BaseModel
      *
      * @var array<string>
      */
-    public array $migrationDependancy = ['account_invoice', 'account_transaction'];
+    public array $migrationDependancy = ['account_invoice', 'account_ledger'];
     /**
      * The table associated with the model.
      *
