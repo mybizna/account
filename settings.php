@@ -17,6 +17,8 @@ if (!$sales_revenue_id) {
 return [
     'sales_default_ledger' => [
         "title" => "Sales Default Ledger",
+        "description" => "Enter the default Ledger for Sales.",
+        "info" => "Enter the default Ledger for Sales.",
         "type" => "recordpicker",
         "value" => $sales_revenue_id,
         "comp_url" => "account/admin/ledger/list.vue",
