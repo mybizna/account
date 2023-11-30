@@ -5,6 +5,7 @@
     "keywords": [],
     "priority": 0,
     "providers": [
+        "Modules\\Account\\Providers\\EventServiceProvider"
     ],
     "aliases": {},
     "files": [],

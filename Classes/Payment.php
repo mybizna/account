@@ -125,10 +125,9 @@ class Payment
                 }
 
                 $gateway = $gateway_cls->getGatewayById($data['gateway_id']);
-                $currency = $this->getCurrency($gateway->currency_id);
+                $rate = $this->getCurrencyRate($gateway->currency_id);
 
-                $amount = $amount / ($currency->rate ?? 1);
-                $data['amount'] = $amount;
+                $data['amount'] = $amount * $rate;
 
                 $payment = DBPayment::create($data);
 
@@ -145,6 +144,32 @@ class Payment
         }
 
         return $payment;
+    }
+    /**
+     * Get Currency Rate
+     *
+     * @param int $currency_id
+     *
+     * @return object|bool
+     */
+    public function getCurrencyRate($currency_id = null)
+    {
+        $default_currency_id = \Config::get('core.default_currency');
+
+        $usdcurrency = Currency::where('code', 'USD')->first();
+        $defcurrency = Currency::where('id', $default_currency_id)->first();
+        $curcurrency = Currency::where('id', $currency_id)->first();
+
+
+        if ($curcurrency->id == $defcurrency->id) {
+            return 1;
+        }
+
+        if ($defcurrency->id != $usdcurrency->id) {
+            return 1 / $curcurrency->rate * $defcurrency->rate;
+        } else {
+            return 1 / $curcurrency->rate;
+        }
     }
 
     /**

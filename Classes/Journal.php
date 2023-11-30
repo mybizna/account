@@ -2,8 +2,10 @@
 namespace Modules\Account\Classes;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Modules\Account\Classes\Ledger;
 use Modules\Account\Entities\Journal as DBJournal;
+use Modules\Core\Entities\Currency;
 
 class Journal
 {
@@ -86,5 +88,56 @@ class Journal
         $unique = strtoupper(uniqid($rand . '-'));
 
         return $unique;
+    }
+
+    public function changeCurrency($old, $new)
+    {
+        $usdcurrency = Currency::where('code', 'USD')->first();
+        $oldcurrency = Currency::where('id', $old)->first();
+        $newcurrency = Currency::where('id', $new)->first();
+
+        $rate = 1;
+
+        if ($usdcurrency->id == $oldcurrency->id) {
+            $rate = $newcurrency->rate;
+        } else if ($usdcurrency->id != $oldcurrency->id) {
+            if ($newcurrency->id != $usdcurrency->id) {
+                $rate = $usdcurrency->rate/$oldcurrency->rate * $newcurrency->rate;
+            }else{
+                $rate = $usdcurrency->rate / $oldcurrency->rate;
+            }
+        }
+
+        DB::table('account_journal')->update([
+            'debit' => DB::raw('debit * ' . $rate),
+            'credit' => DB::raw('credit * ' . $rate),
+        ]);
+
+        DB::table('account_payment')->update([
+            'amount' => DB::raw('amount * ' . $rate),
+        ]);
+
+        DB::table('account_invoice')->update([
+            'total' => DB::raw('total * ' . $rate),
+            'amount' => DB::raw('amount * ' . $rate),
+        ]);
+
+        DB::table('account_invoice_item')->update([
+            'price' => DB::raw('price * ' . $rate),
+            'amount' => DB::raw('amount * ' . $rate),
+        ]);
+
+        DB::table('account_invoice_item_rate')->update([
+            'value' => DB::raw('value * ' . $rate),
+        ]);
+
+        DB::table('account_opening_balance')->update([
+            'debit' => DB::raw('debit * ' . $rate),
+            'credit' => DB::raw('credit * ' . $rate),
+        ]);
+
+        DB::table('account_transaction')->update([
+            'amount' => DB::raw('amount * ' . $rate),
+        ]);
     }
 }
