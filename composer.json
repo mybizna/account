@@ -2,14 +2,14 @@
   "name": "mybizna/account",
   "description": "",
   "type": "asgard-module",
-  "version": "23.12.002",
+  "version": "24.01.001",
   "license": "GPL-3.0-or-later",
   "authors": [
     {
       "name": "Mybizna",
       "homepage": "https://mybizna.com",
       "email": "info@mybizna.com"
-    }, 
+    },
     {
       "name": "Dedan Irungu",
       "email": "dedanirungu@gmail.com"
