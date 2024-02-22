@@ -50,7 +50,7 @@ class Payment extends BaseModel
      *
      * @var bool
      */
-    protected bool $show_frontend = true;
+    public bool $show_frontend = true;
 
     /**
      * List of field for this model.
