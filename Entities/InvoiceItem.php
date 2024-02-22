@@ -69,8 +69,8 @@ class InvoiceItem extends BaseModel
         $structure['table'] = ['title', 'invoice_id', 'ledger_id', 'price', 'amount', 'quantity'];
         $structure['form'] = [
             ['label' => 'Title', 'class' => 'col-span-full', 'fields' => ['title']],
-            ['label' => 'Invoice Item', 'class' => 'col-span-6', 'fields' => ['invoice_id', 'ledger_id', 'quantity']],
-            ['label' => 'Amount', 'class' => 'col-span-6', 'fields' => ['price', 'amount']],
+            ['label' => 'Invoice Item', 'class' => 'col-span-full md:col-span-6', 'fields' => ['invoice_id', 'ledger_id', 'quantity']],
+            ['label' => 'Amount', 'class' => 'col-span-full md:col-span-6', 'fields' => ['price', 'amount']],
         ];
         $structure['filter'] = ['title', 'invoice_id', 'ledger_id'];
 

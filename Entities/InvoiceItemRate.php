@@ -70,8 +70,8 @@ class InvoiceItemRate extends BaseModel
         $structure['table'] = ['title', 'slug', 'rate_id', 'invoice_item_id', 'method', 'value', 'ordering', 'on_total'];
         $structure['form'] = [
             ['label' => 'Title', 'class' => 'col-span-full', 'fields' => ['title']],
-            ['label' => 'Invoice Item Rate', 'class' => 'col-span-6', 'fields' => ['slug', 'rate_id', 'invoice_item_id', 'method']],
-            ['label' => 'Setting', 'class' => 'col-span-6', 'fields' => ['value', 'ordering', 'on_total']],
+            ['label' => 'Invoice Item Rate', 'class' => 'col-span-full md:col-span-6', 'fields' => ['slug', 'rate_id', 'invoice_item_id', 'method']],
+            ['label' => 'Setting', 'class' => 'col-span-full md:col-span-6', 'fields' => ['value', 'ordering', 'on_total']],
         ];
         $structure['filter'] = ['title', 'slug', 'rate_id', 'invoice_item_id', 'method'];
 
