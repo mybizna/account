@@ -81,10 +81,10 @@ class Gateway extends BaseModel
     {
         $structure['table'] = ['title', 'slug', 'ledger_id', 'currency_id', 'image', 'ordering', 'published'];
         $structure['form'] = [
-            ['label' => 'Title', 'class' => 'col-span-full', 'fields' => ['title']],
-            ['label' => 'Gateway', 'class' => 'col-span-full md:col-span-6 md:pr-2', 'fields' => ['slug', 'ledger_id', 'currency_id', 'module', 'image']],
-            ['label' => 'Image & Setting', 'class' => 'col-span-full md:col-span-6 md:pr-2', 'fields' => ['image', 'ordering', 'is_default', 'is_hidden', 'is_hide_in_invoice', 'published']],
-            ['label' => 'Instruction', 'class' => 'col-span-full', 'fields' => ['instruction', 'url']],
+            ['label' => 'Gateway Title', 'class' => 'col-span-full', 'fields' => ['title']],
+            ['label' => 'Gateway Details', 'class' => 'col-span-full md:col-span-6 md:pr-2', 'fields' => ['slug', 'ledger_id', 'currency_id', 'module', 'image']],
+            ['label' => 'Gateway Image & Setting', 'class' => 'col-span-full md:col-span-6 md:pr-2', 'fields' => ['image', 'ordering', 'is_default', 'is_hidden', 'is_hide_in_invoice', 'published']],
+            ['label' => 'Gateway Payment Instruction', 'class' => 'col-span-full', 'fields' => ['instruction', 'url']],
         ];
         $structure['filter'] = ['title', 'slug', 'ledger_id', 'currency_id', 'published'];
 

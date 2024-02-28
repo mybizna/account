@@ -71,9 +71,9 @@ class Rate extends BaseModel
     {
         $structure['table'] = ['title', 'slug', 'value', 'ledger_id', 'method', 'published'];
         $structure['form'] = [
-            ['label' => 'Title', 'class' => 'col-span-full', 'fields' => ['title']],
-            ['label' => 'Rate', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['slug', 'value', 'ledger_id']],
-            ['label' => 'Setting', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['method', 'published']],
+            ['label' => 'Rate Title', 'class' => 'col-span-full', 'fields' => ['title']],
+            ['label' => 'Rate Details', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['slug', 'value', 'ledger_id']],
+            ['label' => 'Rate Other Setting', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['method', 'published']],
         ];
         $structure['filter'] = ['title', 'value', 'ledger_id', 'published'];
 

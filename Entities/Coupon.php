@@ -74,9 +74,9 @@ class Coupon extends BaseModel
     {
         $structure['table'] = ['code', 'value', 'start_date', 'end_date', 'applied', 'is_percent', 'published', 'is_visible'];
         $structure['form'] = [
-            ['label' => 'Code', 'class' => 'col-span-full', 'fields' => ['code']],
-            ['label' => 'Coupon', 'class' => 'col-span-full md:col-span-6 md:pr-2', 'fields' => ['value', 'start_date', 'end_date', 'published']],
-            ['label' => 'Setting', 'class' => 'col-span-full md:col-span-6 md:pr-2', 'fields' => ['applied', 'is_percent', 'published', 'is_visible']],
+            ['label' => 'Coupon Code', 'class' => 'col-span-full', 'fields' => ['code']],
+            ['label' => 'Coupon Details', 'class' => 'col-span-full md:col-span-6 md:pr-2', 'fields' => ['value', 'start_date', 'end_date', 'published']],
+            ['label' => 'Coupon Other Setting', 'class' => 'col-span-full md:col-span-6 md:pr-2', 'fields' => ['applied', 'is_percent', 'published', 'is_visible']],
         ];
         $structure['filter'] = ['code', 'value', 'applied', 'is_percent', 'published'];
 

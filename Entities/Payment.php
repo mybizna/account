@@ -88,9 +88,9 @@ class Payment extends BaseModel
     {
         $structure['table'] = ['receipt_no', 'code', 'amount', 'ledger_id', 'partner_id', 'gateway_id', 'stage', 'status', 'type', 'is_posted'];
         $structure['form'] = [
-            ['label' => 'Title', 'class' => 'col-span-full', 'fields' => ['title']],
-            ['label' => 'Main', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['receipt_no', 'code', 'amount', 'ledger_id', 'partner_id']],
-            ['label' => 'Setting', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['gateway_id', 'stage', 'status', 'type', 'is_posted']],
+            ['label' => 'Payment Title', 'class' => 'col-span-full', 'fields' => ['title']],
+            ['label' => 'Payment Detail', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['receipt_no', 'code', 'amount', 'ledger_id', 'partner_id']],
+            ['label' => 'Payment Other Setting', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['gateway_id', 'stage', 'status', 'type', 'is_posted']],
         ];
         $structure['filter'] = ['receipt_no', 'code', 'ledger_id', 'partner_id', 'gateway_id', 'stage'];
 
