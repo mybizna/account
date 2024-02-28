@@ -75,10 +75,10 @@ class Transaction extends BaseModel
     {
         $structure['table'] = ['amount', 'partner_id', 'ledger_setting_id', 'left_chart_of_account_id', 'left_ledger_id', 'right_chart_of_account_id', 'right_ledger_id', 'is_processed'];
         $structure['form'] = [
-            ['label' => 'Left', 'class' => 'col-span-full md:col-span-6', 'fields' => ['left_chart_of_account_id', 'left_ledger_id']],
-            ['label' => 'Right', 'class' => 'col-span-full md:col-span-6', 'fields' => ['right_chart_of_account_id', 'right_ledger_id']],
-            ['label' => 'Transaction', 'class' => 'col-span-full md:col-span-6', 'fields' => ['amount', 'partner_id', 'ledger_setting_id']],
-            ['label' => 'Setting', 'class' => 'col-span-full md:col-span-6', 'fields' => ['is_processed']],
+            ['label' => 'Left', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['left_chart_of_account_id', 'left_ledger_id']],
+            ['label' => 'Right', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['right_chart_of_account_id', 'right_ledger_id']],
+            ['label' => 'Transaction', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['amount', 'partner_id', 'ledger_setting_id']],
+            ['label' => 'Setting', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['is_processed']],
         ];
         $structure['filter'] = ['partner_id', 'ledger_setting_id', 'left_chart_of_account_id', 'left_ledger_id', 'right_chart_of_account_id', 'right_ledger_id'];
 

@@ -73,8 +73,8 @@ class Ledger extends BaseModel
         $structure['table'] = ['chart_id', 'category_id', 'name', 'slug', 'code', 'unused', 'is_system'];
         $structure['form'] = [
             ['label' => 'Name', 'class' => 'col-span-full', 'fields' => ['name']],
-            ['label' => 'Ledger', 'class' => 'col-span-full md:col-span-6', 'fields' => ['category_id', 'name', 'slug']],
-            ['label' => 'Setting', 'class' => 'col-span-full md:col-span-6', 'fields' => ['code', 'unused', 'is_system']],
+            ['label' => 'Ledger', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['category_id', 'name', 'slug']],
+            ['label' => 'Setting', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['code', 'unused', 'is_system']],
         ];
         $structure['filter'] = ['chart_id', 'category_id', 'name'];
 
