@@ -21,12 +21,13 @@ $this->add_menu("dashboard", "payment", "Payment", "/account/admin/payment", "fa
 /*$this->add_menu("account", "transaction", "Transaction", "/account/admin/transaction", "fas fa-cogs", 1);*/
 $this->add_menu("account", "journal", "Journal", "/account/admin/journal", "fas fa-cogs", 1);
 /*$this->add_menu("account", "coupon", "Coupon", "/account/admin/coupon", "fas fa-cogs", 1);*/
+$this->add_menu("account", "gateway", "Gateway", "//account/admin/gateway", "fas fa-cogs", 5);
 $this->add_menu("account", "setting", "Settings", "/settings", "fas fa-cogs", 5);
 $this->add_menu("account", "reports", "Reports", "/reports", "fas fa-cogs", 5);
 
 //$this->add_submenu("module", "key", "title","path", "position");
 
-$this->add_submenu("account", "setting", "Gateway", "/account/admin/gateway", 5);
+$this->add_submenu("account", "gateway", "Gateway List", "/account/admin/gateway", 5);
 $this->add_submenu("account", "setting", "", "", 5);
 $this->add_submenu("account", "setting", "Financial Year", "/account/admin/financial_year", 5);
 $this->add_submenu("account", "setting", "Chart of Accounts", "/account/admin/chart_of_account", 5);

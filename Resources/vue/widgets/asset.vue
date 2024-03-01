@@ -1,7 +1,36 @@
 <template>
-    <div class="bg-white relative shadow rounded">
-        <apexchart width="100%" height="80px" type="area" :options="options" :series="series"></apexchart>
+    <div class="bg-white relative shadow rounded p-3">
+        <div class="flex items-top justify-between">
+            <div>
+                <span
+                    class="!text-[0.8rem]  !w-[2.5rem] !h-[2.5rem] !leading-[2.5rem] !rounded-full inline-flex items-center justify-center bg-primary">
+                    <i class="fas fa-user text-[1rem] text-white"></i>
+                </span>
+            </div>
+            <div class="flex-grow ms-4">
+                <div class="flex items-center justify-between flex-wrap">
+                    <div>
+                        <p class="text-[#8c9097] dark:text-white/50 text-[0.813rem] mb-0">Total Assets</p>
+                        <h4 class="font-semibold  text-[1.5rem] !mb-2 ">{{ total }}</h4>
+                    </div>
+                    <div id="crm-total-customers" style="min-height: 40px;">
+                        <apexchart width="100px" height="40px" type="line" :options="options" :series="series">
+                            </apexchart>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between !mt-1">
+                    <div> <a class="text-primary text-[0.813rem]" href="javascript:void(0);">View All<i
+                                class="ti ti-arrow-narrow-right ms-2 font-semibold inline-block"></i></a> </div>
+                    <div class="text-end">
+                        <p class="mb-0 text-success text-[0.813rem] font-semibold">+40%</p>
+                        <p class="text-[#8c9097] dark:text-white/50 opacity-[0.7] text-[0.6875rem]">this month</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+
 </template>
 
 <script>
@@ -17,9 +46,9 @@ export default {
                 t.total = response.data.total;
 
                 t.options = {
-                    title: {
+                   /* title: {
                         text: t.total.toString(),
-                    },
+                    },*/
                     labels: response.data.labels
                 };
 
@@ -33,6 +62,9 @@ export default {
     },
     data() {
         return {
+            debit:'',
+            credit:'',
+            total:'',
             options: {
                 chart: {
                     id: 'vuechart-asset',
@@ -40,34 +72,39 @@ export default {
                         enabled: true
                     },
                 },
-                stroke: {
-                    curve: 'straight'
-                },
                 fill: {
                     opacity: 1,
                 },
-                labels: ['0'],
-                xaxis: {
-                    type: 'string',
-                },
                 colors: ['#008FFB'],
-                title: {
-                    text: '0.000',
-                    offsetX: 30,
-                    style: {
-                        fontSize: '24px',
-                        cssClass: 'apexcharts-yaxis-title'
+                stroke: {
+                    width: 1,
+                    curve: 'smooth',
+
+                },
+                tooltip: {
+                    x: {
+                        show: false
+                    },
+                    fixed: {
+                        enabled: false
+                    },
+                },
+
+                x: {
+                    show: false
+                },
+                y: {
+                    title: {
+                        formatter: function (seriesName) {
+                            return ''
+                        }
                     }
                 },
-                subtitle: {
-                    text: 'Asset',
-                    offsetX: 30,
-                    style: {
-                        fontSize: '14px',
-                        cssClass: 'apexcharts-yaxis-title'
-                    }
+                marker: {
+                    show: false
                 }
             },
+
             series: [{
                 name: 'Amt',
                 data: [0]
