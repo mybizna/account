@@ -3,18 +3,17 @@
 
         <div class="row mb-2">
             <div class="col-sm-6">
-                <FormKit label="Invoice Title"  id="title" type="text" v-model="model.title" validation="required"
-                    inner-class="$reset formkit-inner" wrapper-class="$reset formkit-wrapper" input-class="h-10" />
+                <TextElement name="title" label="Invoice Title" id="title" :debounce="500" rules="required" />
+
             </div>
             <div class="col-sm-6">
-                <FormKit label="Select Partner" button_label="Select Partner" id="partner_id" type="recordpicker"
-                    comp_url="partner/admin/partner/list.vue" :setting="setting.partner_id" v-model="model.partner_id"
-                    validation="required" inner-class="$reset formkit-inner" wrapper-class="$reset formkit-wrapper" />
+                <RecordpickerElement name="partner_id" :valdata="model['partner_id']" :label="Select Partner"
+                    id="partner_id" :setting=" setting " />
             </div>
 
         </div>
 
-        <div v-if="has_partner" class="invoice-form p-1 border border-dotted border-dashed border-green-600 rounded">
+        <div v-if=" has_partner " class="invoice-form p-1 border border-dotted border-dashed border-green-600 rounded">
             <div class="row">
                 <div class="col-md-4">
                     <span class="underline">From</span>
@@ -28,7 +27,7 @@
                 </div>
                 <div class="col-md-4">
                     <span class="underline">To</span>
-                    <address v-if="partner">
+                    <address v-if=" partner ">
                         <strong>{{ partner.first_name }} {{ partner.last_name }}</strong><br>
                         <strong>{{ partner.company }} </strong><br>
                         {{ partner.address }} {{ partner.postal_code }}<br>
@@ -40,10 +39,10 @@
                 </div>
                 <div class="col-md-4">
                     <div
-                        :class="model.status == 'paid' ? 'bg-green' : (model.status == 'draft' ? 'bg-grey' : 'bg-red')">
+                        :class=" model.status == 'paid' ? 'bg-green' : (model.status == 'draft' ? 'bg-grey' : 'bg-red') ">
                         <h3 class="text-center p-2 uppercase font-semibold text-white"> {{ model.status }} </h3>
                     </div>
-                    <b v-if="invoice.created_at">Invoice #{{ invoice.created_at }}</b>
+                    <b v-if=" invoice.created_at ">Invoice #{{ invoice.created_at }}</b>
                     <b v-else>Invoice #{{ invoice.id }}</b>
                     <br>
                     <br>
@@ -63,37 +62,38 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="( item, index) in model.items" :key="index">
+                    <tr v-for="(    item, index    ) in     model.items    " :key=" index ">
                         <td>
-                            <FormKit id="title" type="text" v-model="item.title" validation="required" />
+                            <TextElement name="title" label="Title" id="title" :debounce=" 500 " rules="required" />
                         </td>
                         <td>
-                            <FormKit id="ledger_id" type="select" v-model="item.ledger_id" :options="ledgers"
-                                validation="required" />
+                            <SelectElement name="ledger_id" :items=" ledgers " id="ledger_id" :debounce=" 500 "
+                                rules="required" />
                         </td>
                         <td class="w-28">
-                            <FormKit id="quantity" type="number" v-model="item.quantity" @blur="addCalculate(rate)"
-                                validation="required" min="0" />
+                            <TextElement name="quantity" id="quantity" input-type="number" min="0" :debounce=" 500 "
+                                rules="required" @blur="addCalculate(rate)" />
                         </td>
                         <td>
-                            <FormKit id="price" type="number" v-model="item.price" @blur="addCalculate(rate)"
-                                validation="required" min="0" step="0.01" />
+                            <TextElement name="price" id="price" input-type="number" min="0" step="0.01"
+                                :debounce=" 500 " rules="required" @blur="addCalculate(rate)" />
                         </td>
                         <td>
-                            <span v-for="( item_rate, rate_index) in item.rates" :key="rate_index"
-                                class="badge bg-secondary mr-1">{{ item_rate.title }} ({{ item_rate.value }}<span
-                                    v-if="item_rate.is_percent">%</span>)</span>
+                            <template v-for="(  item_rate, rate_index  ) in   item.rates  " :key=" rate_index ">
+                                <span class="badge bg-secondary mr-1">{{ item_rate.title }} ({{ item_rate.value }}<span
+                                        v-if=" item_rate.is_percent ">%</span>)</span>
+                            </template>
                             <a class="badge bg-blue-700 text-white cursor-pointer" data-bs-toggle="modal"
-                                :data-bs-target="'#' + 'Modal' + index">
+                                :data-bs-target=" '#' + 'Modal' + index ">
                                 <i class="fa-solid fa-plus"></i> Add Rate
                             </a>
 
-                            <div class="modal fade" :id="'Modal' + index" tabindex="-1"
-                                :aria-labelledby="index + 'ModalLabel'" aria-hidden="true">
+                            <div class="modal fade" :id=" 'Modal' + index " tabindex="-1"
+                                :aria-labelledby=" index + 'ModalLabel' " aria-hidden="true">
                                 <div class="modal-dialog ">
                                     <div class="modal-content shadow-2xl shadow-indigo-500/50">
                                         <div class="modal-header p-2">
-                                            <h5 class="modal-title font-semibold" :id="index + 'ModalLabel'">Select
+                                            <h5 class="modal-title font-semibold" :id=" index + 'ModalLabel' ">Select
                                                 Rate</h5>
                                             <button type="button" class="" data-bs-dismiss="modal" aria-label="Close">
                                                 <i class="fa-solid fa-circle-xmark text-2xl	text-red"></i>
@@ -110,9 +110,10 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="( rate, r_index) in rates" :key="r_index">
+                                                    <tr v-for="(          rate, r_index         ) in          rates         "
+                                                        :key=" r_index ">
                                                         <td>
-                                                            <a v-if="item.rate_ids.includes(rate.id)"
+                                                            <a v-if=" item.rate_ids.includes(rate.id) "
                                                                 class="btn btn-danger btn-sm">Remove</a>
                                                             <a v-else class="btn btn-primary btn-sm"
                                                                 @click="addRate(index, item, rate)">Add</a>
@@ -121,7 +122,7 @@
                                                             {{ rate.title }}
                                                         </td>
                                                         <td>
-                                                            {{ rate.value }} <span v-if="rate.is_percent">%</span>
+                                                            {{ rate.value }} <span v-if=" rate.is_percent ">%</span>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -149,28 +150,34 @@
 
                     <div>
                         <ul class="nav nav-tabs" id="myPayment" role="tablist">
-                            <li v-for="(gateway, g_index) in model.gateways" v-bind:key="g_index" class="nav-item"
-                                role="presentation">
-                                <button :class="!g_index ? 'nav-link active' : 'nav-link'" :id="gateway.slug + '-tab'"
-                                    data-bs-toggle="tab" :data-bs-target="'#' + gateway.slug" type="button" role="tab"
-                                    :aria-controls="gateway.slug" :aria-selected="!g_index ? 'true' : 'false'">
-                                    <i v-if="gateway.paid_amount > 0" class="fas fa-check-circle"></i>
+                            <li v-for="(         gateway, g_index         ) in          model.gateways         "
+                                v-bind:key=" g_index " class="nav-item" role="presentation">
+                                <button :class=" !g_index ? 'nav-link active' : 'nav-link' "
+                                    :id=" gateway.slug + '-tab' " data-bs-toggle="tab"
+                                    :data-bs-target=" '#' + gateway.slug " type="button" role="tab"
+                                    :aria-controls=" gateway.slug " :aria-selected=" !g_index ? 'true' : 'false' ">
+                                    <i v-if=" gateway.paid_amount > 0 " class="fas fa-check-circle"></i>
                                     {{
-                                            gateway.title
+                                    gateway.title
                                     }}</button>
                             </li>
                         </ul>
                         <div class="tab-content" id="myPaymentContent">
-                            <div v-for="(gateway, g_index) in model.gateways" v-bind:key="g_index"
-                                :class="!g_index ? 'tab-pane fade show active' : 'tab-pane fade'" :id="gateway.slug"
-                                role="tabpanel" :aria-labelledby="gateway.slug + '-tab'">
+                            <div v-for="(         gateway, g_index         ) in          model.gateways         "
+                                v-bind:key=" g_index "
+                                :class=" !g_index ? 'tab-pane fade show active' : 'tab-pane fade' " :id=" gateway.slug "
+                                role="tabpanel" :aria-labelledby=" gateway.slug + '-tab' ">
                                 <div class="p-2">
-                                    <FormKit label="Amount" id="amount" type="number" validation="required"
-                                        v-model="gateway.paid_amount" @keyup="calculateTotal" />
-                                    <template v-if="gateway.slug != 'cash'">
-                                        <FormKit label="Reference" id="reference" type="text"
-                                            v-model="gateway.reference" />
-                                        <FormKit label="Others" id="others" type="text" v-model="gateway.others" />
+                                    <TextElement name="amount" label="Amount" id="amount" input-type="number"
+                                        v-model=" gateway.amount " :debounce=" 500 " rules="required"
+                                        @keyup=" calculateTotal " />
+
+                                    <template v-if=" gateway.slug != 'cash' ">
+                                        <TextElement name="reference" label="Reference" id="reference"
+                                            v-model=" gateway.reference " :debounce=" 500 " rules="required" />
+
+                                        <TextElement name="others" label="Others" id="others" v-model=" gateway.others "
+                                            :debounce=" 500 " rules="required" />
                                     </template>
 
                                     <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
@@ -193,11 +200,11 @@
                                     <th style="width:60%">Subtotal:</th>
                                     <td class="text-right font-semibold">{{ this.$func.money(model.subtotal) }}</td>
                                 </tr>
-                                <template v-for="( rate, index) in rates" :key="index">
-                                    <tr v-if="rate.total > 0 || rate.total < 0">
+                                <template v-for="(          rate, index         ) in          rates         " :key="index">
+                                    <tr v-if=" rate.total > 0 || rate.total < 0 ">
                                         <th>{{ rate.title }} (<span
-                                                v-if="rate.method == '-' || rate.method == '-%'">-</span>{{ rate.value
-                                                }}<span v-if="rate.method == '-%' || rate.method == '+%'">%</span>)
+                                                v-if=" rate.method == '-' || rate.method == '-%' ">-</span>{{ rate.value
+                                            }}<span v-if=" rate.method == '-%' || rate.method == '+%' ">%</span>)
                                         </th>
                                         <td class="text-right font-semibold">{{ this.$func.money(rate.total) }}</td>
                                     </tr>
@@ -215,20 +222,21 @@
                                 <tr>
                                     <th colspan="2">Paid:</th>
                                 </tr>
-                                <template v-for="(gateway, g_index) in model.gateways" v-bind:key="g_index">
-                                    <tr v-if="gateway.paid_amount > 0">
+                                <template v-for="(         gateway, g_index         ) in          model.gateways         "
+                                    v-bind:key="g_index">
+                                    <tr v-if=" gateway.paid_amount > 0 ">
                                         <th>{{ gateway.title }} on Now:</th>
                                         <td class="text-right font-semibold">{{ this.$func.money(gateway.paid_amount) }}
                                             {{ gateway.paid_amount }}
                                         </td>
                                     </tr>
                                 </template>
-                                <tr v-if="model.balance > 0" class="bg-red-200">
+                                <tr v-if=" model.balance > 0 " class="bg-red-200">
                                     <th>Balance:</th>
                                     <td class="text-right font-semibold">{{ model.balance }}
                                     </td>
                                 </tr>
-                                <tr v-else-if="model.balance < 0" class="bg-green-200">
+                                <tr v-else-if=" model.balance < 0 " class="bg-green-200">
                                     <th>OverPayment:</th>
                                     <td class="text-right font-semibold">{{ Math.abs(model.balance) }}
                                     </td>
@@ -242,8 +250,8 @@
 
             <div class="row mt-7">
                 <div class="col-md-12">
-                    <FormKit label="Notations" id="description" type="textarea" validation="required"
-                        v-model="model.notation" />
+                    <TextareaElement name="notation" label="Notations" id="notation" :debounce=" 500 "
+                        rules="required" />
                 </div>
             </div>
 
@@ -264,7 +272,7 @@
 
 <script>
 export default {
-    data () {
+    data() {
         return {
             id: null,
             timestamp: "",
@@ -312,7 +320,7 @@ export default {
             },
         };
     },
-    updated () {
+    updated() {
         var t = this;
 
         this.invoice = {
@@ -333,7 +341,7 @@ export default {
     },
     watch: {
         // whenever question changes, this function will run
-        'model.partner_id' (newQuestion, oldQuestion) {
+        'model.partner_id'(newQuestion, oldQuestion) {
 
             console.log(this.model);
 
@@ -350,7 +358,7 @@ export default {
             const dateTime = date + ' ' + time;
             this.timestamp = dateTime;
         },
-        calculateTotal () {
+        calculateTotal() {
             var paid_amount = 0.00;
 
             this.model.gateways.forEach(gateway => {
@@ -375,7 +383,7 @@ export default {
 
         },
 
-        fetchData () {
+        fetchData() {
 
             var comp_url = 'invoice/fetchdata/';
 
@@ -403,7 +411,7 @@ export default {
             getdata(this);
         },
 
-        addRow () {
+        addRow() {
 
             this.model.items.push({
                 id: "",
@@ -419,7 +427,7 @@ export default {
             this.addCalculate();
 
         },
-        addRate (r_index, item, rate) {
+        addRate(r_index, item, rate) {
             window.$Modal.getOrCreateInstance(document.getElementById('Modal' + r_index)).hide()
 
             item.rates.push(rate);
@@ -431,7 +439,7 @@ export default {
 
             this.addCalculate();
         },
-        addCalculate () {
+        addCalculate() {
             this.model.total = 0;
             this.model.subtotal = 0;
 

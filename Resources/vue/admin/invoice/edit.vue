@@ -1,12 +1,14 @@
 <template>
     <edit-render :path_param="['account', 'invoice']" :model="model" passed_form_url="invoice/savedata">
 
-        <div class="relative invoice-form p-1 border border-dotted border-dashed border-green-600 rounded overflow-hidden">
-            
-            <div style="margin-right: -45px; !important" 
-                class="absolute w-48  p-1 top-7 right-0 rotate-45"
+        <div
+            class="relative invoice-form p-1 border border-dotted border-dashed border-green-600 rounded overflow-hidden">
+
+            <div style="margin-right: -45px; !important" class="absolute w-48  p-1 top-7 right-0 rotate-45"
                 :class="getStatusClass">
-                <h3 class="text-center p-1 uppercase font-semibold text-white  text-xl border-b border-t border-dashed border-gray-50"> {{ model.status }} </h3>
+                <h3
+                    class="text-center p-1 uppercase font-semibold text-white  text-xl border-b border-t border-dashed border-gray-50">
+                    {{ model.status }} </h3>
             </div>
 
             <div class="row">
@@ -122,8 +124,8 @@
                                     :aria-controls="gateway.slug" :aria-selected="!g_index ? 'true' : 'false'">
                                     <i v-if="gateway.paid_amount > 0" class="fas fa-check-circle"></i>
                                     {{
-                                        gateway.title
-                                    }}</button>
+        gateway.title
+    }}</button>
                             </li>
                         </ul>
                         <div class="tab-content" id="myPaymentContent">
@@ -131,11 +133,16 @@
                                 :class="!g_index ? 'tab-pane fade show active' : 'tab-pane fade'" :id="gateway.slug"
                                 role="tabpanel" :aria-labelledby="gateway.slug + '-tab'">
                                 <div class="p-2">
-                                    <FormKit label="Amount" id="amount" type="number" validation="required"
-                                        v-model="gateway.paid_amount" @keyup="calculateTotal" />
+                                    <TextElement name="amount" label="Amount" id="amount" input-type="number"
+                                        v-model="gateway.amount" :debounce="500" rules="required"
+                                        @keyup="calculateTotal" />
+
                                     <template v-if="gateway.slug != 'cash'">
-                                        <FormKit label="Reference" id="reference" type="text" v-model="gateway.reference" />
-                                        <FormKit label="Others" id="others" type="text" v-model="gateway.others" />
+                                        <TextElement name="reference" label="Reference" id="reference"
+                                            v-model="gateway.reference" :debounce="500" rules="required" />
+
+                                        <TextElement name="others" label="Others" id="others" v-model="gateway.others"
+                                            :debounce="500" rules="required" />
                                     </template>
 
                                     <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
@@ -158,7 +165,7 @@
                                     <tr v-if="rate.total > 0 || rate.total < 0">
                                         <th>{{ rate.title }} (<span
                                                 v-if="rate.method == '-' || rate.method == '-%'">-</span>{{ rate.value
-                                                }}<span v-if="rate.method == '-%' || rate.method == '+%'">%</span>)
+                                            }}<span v-if="rate.method == '-%' || rate.method == '+%'">%</span>)
                                         </th>
                                         <td class="text-right font-semibold">{{ this.$func.money(rate.total) }}</td>
                                     </tr>
@@ -203,8 +210,8 @@
 
             <div class="row mt-7">
                 <div class="col-md-12">
-                    <FormKit label="Notations" id="description" type="textarea" validation="required"
-                        v-model="model.notation" />
+                    <TextareaElement name="notation" label="Notations" id="notation" :debounce="500"
+                        rules="required" />
                 </div>
             </div>
 
