@@ -16,7 +16,7 @@
     }
   ],
   "require": {
-    "mybizna/partner": ">=24.02.001"
+    "mybizna/partner": "^24.2"
   },
   "extra": {
     "laravel": {
