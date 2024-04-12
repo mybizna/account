@@ -52,4 +52,14 @@ class InvoiceCoupon extends BaseModel
         $this->fields->foreignId('coupon_id')->html('recordpicker')->relation(['account', 'coupon']);
     }
 
+    /**
+     * Define rights for this model.
+     *
+     * @return array
+     */
+    public function rights(): array
+    {
+
+    }
+
 }

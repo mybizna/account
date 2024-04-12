@@ -57,4 +57,14 @@ class ChartOfAccount extends BaseModel
         $this->fields->string('name')->nullable()->html('text');
         $this->fields->string('slug')->nullable()->html('text');
     }
+
+    /**
+     * Define rights for this model.
+     *
+     * @return array
+     */
+    public function rights(): array
+    {
+
+    }
 }

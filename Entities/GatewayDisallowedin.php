@@ -52,4 +52,14 @@ class GatewayDisallowedin extends BaseModel
         $this->fields->foreignId('gateway_id')->html('recordpicker')->relation(['account', 'gateway']);
     }
 
+    /**
+     * Define rights for this model.
+     *
+     * @return array
+     */
+    public function rights(): array
+    {
+
+    }
+
 }

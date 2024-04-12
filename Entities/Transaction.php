@@ -44,7 +44,7 @@ class Transaction extends BaseModel
      *
      * @var bool
      */
-    protected  bool $can_delete = false;
+    protected bool $can_delete = false;
 
     /**
      * List of fields to be migrated to the datebase when creating or updating model during migration.
@@ -83,6 +83,16 @@ class Transaction extends BaseModel
         $structure['filter'] = ['partner_id', 'ledger_setting_id', 'left_chart_of_account_id', 'left_ledger_id', 'right_chart_of_account_id', 'right_ledger_id'];
 
         return $structure;
+    }
+
+    /**
+     * Define rights for this model.
+     *
+     * @return array
+     */
+    public function rights(): array
+    {
+
     }
 
 }
