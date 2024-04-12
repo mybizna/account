@@ -61,8 +61,8 @@ class InvoiceCoupon extends BaseModel
     {
         $rights = parent::rights();
 
-        $rights['staff'] = ['view' => true];
-        $rights['registered'] = ['view' => true];
+        $rights['staff'] = ['view' => true, 'add'=>true];
+        $rights['registered'] = ['view' => true, 'add'=>true];
         $rights['guest'] = [];
 
         return $rights;

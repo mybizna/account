@@ -80,8 +80,8 @@ class FinancialYear extends BaseModel
     {
         $rights = parent::rights();
 
-        $rights['staff'] = ['view' => true];
-        $rights['registered'] = ['view' => true];
+        $rights['staff'] = [];
+        $rights['registered'] = [];
         $rights['guest'] = [];
 
         return $rights;
