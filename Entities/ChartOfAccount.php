@@ -65,6 +65,12 @@ class ChartOfAccount extends BaseModel
      */
     public function rights(): array
     {
+        $rights = parent::rights();
 
+        $rights['staff'] = [];
+        $rights['registered'] = [];
+        $rights['guest'] = [];
+
+        return $rights;
     }
 }

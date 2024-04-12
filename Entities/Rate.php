@@ -87,7 +87,13 @@ class Rate extends BaseModel
      */
     public function rights(): array
     {
+        $rights = parent::rights();
 
+        $rights['staff'] = [];
+        $rights['registered'] = [s];
+        $rights['guest'] = [];
+
+        return $rights;
     }
 
 }
