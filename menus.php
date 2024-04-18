@@ -28,7 +28,6 @@ $this->add_menu("account", "reports", "Reports", "/reports", "fas fa-cogs", 5);
 //$this->add_submenu("module", "key", "title","path", "position");
 
 $this->add_submenu("account", "gateway", "Gateway List", "/account/admin/gateway", 5);
-$this->add_submenu("account", "setting", "", "", 5);
 $this->add_submenu("account", "setting", "Financial Year", "/account/admin/financial_year", 5);
 $this->add_submenu("account", "setting", "Chart of Accounts", "/account/admin/chart_of_account", 5);
 $this->add_submenu("account", "setting", "", "", 5);
