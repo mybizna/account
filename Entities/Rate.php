@@ -90,7 +90,7 @@ class Rate extends BaseModel
         $rights = parent::rights();
 
         $rights['staff'] = [];
-        $rights['registered'] = [s];
+        $rights['registered'] = [];
         $rights['guest'] = [];
 
         return $rights;
