@@ -9,7 +9,7 @@ $this->add_module_info("account", [
     'path' => '/account/admin/invoice',
     'class_str' => 'text-primary border-primary',
     'position' => 1,
-]);
+]); 
 
 //$this->add_menu("module", "key", "title","path", "icon", "position");
 $this->add_menu("account", "invoice", "Invoice", "/account/admin/invoice", "fas fa-cogs", 1);
