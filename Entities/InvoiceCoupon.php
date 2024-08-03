@@ -13,7 +13,7 @@ class InvoiceCoupon extends BaseModel
      *
      * @var array<string>
      */
-    protected $fillable = ['payment_id', 'coupon_id'];
+    protected $fillable = ['invoice_id', 'coupon_id'];
 
     /**
      * The table associated with the model.
@@ -22,22 +22,7 @@ class InvoiceCoupon extends BaseModel
      */
     protected $table = "account_invoice_coupon";
 
-    /**
-     * List of fields to be migrated to the datebase when creating or updating model during migration.
-     *
-     * @param Blueprint $table
-     * @return void
-     */
-    public function fields(Blueprint $table = null): void
-    {
-
-        $this->fields = $table ?? new Blueprint($this->table);
-
-        $this->fields->increments('id')->html('hidden');
-        $this->fields->foreignId('payment_id')->html('recordpicker')->relation(['account', 'payment']);
-        $this->fields->foreignId('coupon_id')->html('recordpicker')->relation(['account', 'coupon']);
-    }
-
+ 
 
 
 }

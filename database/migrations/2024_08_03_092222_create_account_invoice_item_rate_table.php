@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('account_rate', function (Blueprint $table) {
+        Schema::create('account_invoice_item_rate', function (Blueprint $table) {
             $table->id();
 
             $table->string('title');
             $table->string('slug');
-            $table->foreignId('ledger_id');
-            $table->decimal('value', 20, 2);
+            $table->foreignId('rate_id');
+            $table->foreignId('invoice_item_id');
             $table->enum('method', ['+', '+%', '-', '-%'])->default('+');
+            $table->decimal('value', 20, 2)->default(0.00);
             $table->string('params')->nullable();
             $table->tinyInteger('ordering')->nullable();
             $table->tinyInteger('on_total')->default(false);
-            $table->tinyInteger('published')->default(false);
 
             $table->timestamps();
         });
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('account_rate');
+        Schema::dropIfExists('account_invoice_item_rate');
     }
 };

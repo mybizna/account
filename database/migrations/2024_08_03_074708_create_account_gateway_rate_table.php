@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('account_gateway_rate', function (Blueprint $table) {
             $table->id();
-            
+
+            $table->foreignId('gateway_id');
+            $table->foreignId('rate_id');
+
             $table->timestamps();
         });
     }

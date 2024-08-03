@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('account_ledger', function (Blueprint $table) {
             $table->id();
-            
+
+            $table->foreignId('chart_id')->nullable();
+            $table->foreignId('category_id')->nullable();
+            $table->string('name')->nullable();
+            $table->string('slug')->nullable();
+            $table->integer('code')->nullable();
+            $table->tinyInteger('unused')->default(1);
+            $table->tinyInteger('is_system')->default(0);
+
             $table->timestamps();
         });
     }

@@ -28,22 +28,6 @@ class FinancialYear extends BaseModel
      */
     protected bool $can_delete = false;
 
-    /**
-     * List of fields to be migrated to the datebase when creating or updating model during migration.
-     *
-     * @param Blueprint $table
-     *
-     * @return void
-     */
-    public function fields(Blueprint $table = null): void
-    {
-        $this->fields = $table ?? new Blueprint($this->table);
 
-        $this->fields->increments('id')->html('hidden');
-        $this->fields->string('name')->nullable()->html('text');
-        $this->fields->date('start_date')->nullable()->html('datetime');
-        $this->fields->date('end_date')->nullable()->html('datetime');
-        $this->fields->string('description')->nullable()->html('textarea');
-    }
 
 }

@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('account_payment_rate', function (Blueprint $table) {
             $table->id();
-            
+
+            $table->foreignId('payment_id');
+            $table->foreignId('rate_id');
+
             $table->timestamps();
         });
     }

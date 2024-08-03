@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('account_financial_year', function (Blueprint $table) {
             $table->id();
+
+            $table->string('name')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+            $table->string('description')->nullable();
             
             $table->timestamps();
         });

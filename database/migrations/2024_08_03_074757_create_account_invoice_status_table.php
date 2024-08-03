@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('account_invoice_status', function (Blueprint $table) {
             $table->id();
+
+            $table->string('name');
+            $table->string('color');
+            $table->string('status');
+            $table->string('description')->nullable();
+            
             
             $table->timestamps();
         });

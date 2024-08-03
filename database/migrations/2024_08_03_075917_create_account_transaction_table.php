@@ -13,7 +13,17 @@ return new class extends Migration
     {
         Schema::create('account_transaction', function (Blueprint $table) {
             $table->id();
-            
+
+            $table->decimal('amount', 20, 2)->default(0.00);
+            $table->string('description');
+            $table->foreignId('partner_id');
+            $table->foreignId('ledger_setting_id')->nullable();
+            $table->foreignId('left_chart_of_account_id')->nullable();
+            $table->foreignId('left_ledger_id')->nullable();
+            $table->foreignId('right_chart_of_account_id')->nullable();
+            $table->foreignId('right_ledger_id')->nullable();
+            $table->tinyInteger('is_processed')->nullable();
+
             $table->timestamps();
         });
     }

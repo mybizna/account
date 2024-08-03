@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('account_invoice_coupon', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('invoice_id');
+            $table->foreignId('coupon_id');
+    
             
             $table->timestamps();
         });

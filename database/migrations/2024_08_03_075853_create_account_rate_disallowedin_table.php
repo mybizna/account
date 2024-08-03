@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('account_rate_disallowedin', function (Blueprint $table) {
             $table->id();
-            
+
+            $table->foreignId('country_id');
+            $table->foreignId('rate_id');
+
             $table->timestamps();
         });
     }

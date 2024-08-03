@@ -30,27 +30,6 @@ class Ledger extends BaseModel
      */
     protected bool $can_delete = false;
 
-    /**
-     * List of fields to be migrated to the datebase when creating or updating model during migration.
-     *
-     * @param Blueprint $table
-     * @return void
-     */
-    public function fields(Blueprint $table = null): void
-    {
-
-        $this->fields = $table ?? new Blueprint($this->table);
-
-        $this->fields->increments('id')->html('hidden');
-        $this->fields->foreignId('chart_id')->nullable()->html('recordpicker')->relation(['account', 'chart_of_account']);
-        $this->fields->foreignId('category_id')->nullable()->html('recordpicker')->relation(['account', 'ledger_category']);
-        $this->fields->string('name')->nullable()->html('text');
-        $this->fields->string('slug')->nullable()->html('text');
-        $this->fields->integer('code')->nullable()->html('text');
-        $this->fields->tinyInteger('unused')->default(1)->html('switch');
-        $this->fields->tinyInteger('is_system')->default(0)->html('switch');
-    }
-
 
     /**
      * Function for deleting a record.

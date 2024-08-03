@@ -13,7 +13,16 @@ return new class extends Migration
     {
         Schema::create('account_rate_file', function (Blueprint $table) {
             $table->id();
-            
+
+            $table->foreignId('rate_id')->nullable();
+            $table->string('year')->nullable();
+            $table->string('month')->nullable();
+            $table->string('token')->nullable();
+            $table->string('type')->nullable();
+            $table->integer('max_limit')->nullable();
+            $table->string('file')->nullable();
+            $table->tinyInteger('is_processed')->nullable();
+
             $table->timestamps();
         });
     }

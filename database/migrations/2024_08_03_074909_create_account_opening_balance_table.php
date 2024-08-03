@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('account_opening_balance', function (Blueprint $table) {
             $table->id();
-            
+
+            $table->foreignId('financial_year_id')->nullable();
+            $table->foreignId('chart_id')->nullable();
+            $table->foreignId('ledger_id')->nullable();
+            $table->string('type', 50)->nullable();
+            $table->decimal('debit', 20, 2)->default(0.00);
+            $table->decimal('credit', 20, 2)->default(0.00);
+
             $table->timestamps();
         });
     }

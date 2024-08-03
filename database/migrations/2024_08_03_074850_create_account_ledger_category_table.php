@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('account_ledger_category', function (Blueprint $table) {
             $table->id();
-            
+
+            $table->string('name');
+            $table->string('slug');
+            $table->foreignId('chart_id');
+            $table->foreignId('parent_id');
+            $table->tinyInteger('is_system');
+
             $table->timestamps();
         });
     }
