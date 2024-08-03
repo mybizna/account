@@ -18,28 +18,19 @@ class Coupon extends BaseModel
     ];
 
     /**
-     * The fields that are to be render when performing relationship queries.
-     *
-     * @var array<string>
-     */
-    public $rec_names = [
-        'format' => '%s (%s)',
-        'fields' => ['code', 'value'],
-    ];
-
-    /**
-     * List of this->fieldss names that are need in this model during migration.
-     *
-     * @var array<string>
-     */
-    public array $migrationDependancy = [];
-
-    /**
      * The this->fields associated with the model.
      *
      * @var string
      */
     protected $table = "account_coupon";
+
+    /**
+     * This model is not deletable.
+     *
+     * @var bool
+     */
+    protected bool $can_delete = false;
+
 
     /**
      * List of fields to be migrated to the datebase when creating or updating model during migration.
@@ -67,35 +58,5 @@ class Coupon extends BaseModel
 
     }
 
-    /**
-     * List of structure for this model.
-     */
-    public function structure($structure): array
-    {
-        $structure['table'] = ['code', 'value', 'start_date', 'end_date', 'applied', 'is_percent', 'published', 'is_visible'];
-        $structure['form'] = [
-            ['label' => 'Coupon Code', 'class' => 'col-span-full', 'fields' => ['code']],
-            ['label' => 'Coupon Details', 'class' => 'col-span-full md:col-span-6 md:pr-2', 'fields' => ['value', 'start_date', 'end_date', 'published']],
-            ['label' => 'Coupon Other Setting', 'class' => 'col-span-full md:col-span-6 md:pr-2', 'fields' => ['applied', 'is_percent', 'published', 'is_visible']],
-        ];
-        $structure['filter'] = ['code', 'value', 'applied', 'is_percent', 'published'];
 
-        return $structure;
-    }
-
-    /**
-     * Define rights for this model.
-     *
-     * @return array
-     */
-    public function rights(): array
-    {
-        $rights = parent::rights();
-
-        $rights['staff'] = ['view' => true];
-        $rights['registered'] = ['view' => true];
-        $rights['guest'] = [];
-
-        return $rights;
-    }
 }

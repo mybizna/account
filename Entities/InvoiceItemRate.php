@@ -18,19 +18,6 @@ class InvoiceItemRate extends BaseModel
     ];
 
     /**
-     * The fields that are to be render when performing relationship queries.
-     *
-     * @var array<string>
-     */
-    public $rec_names = ['title'];
-
-    /**
-     * List of tables names that are need in this model during migration.
-     *
-     * @var array<string>
-     */
-    public array $migrationDependancy = ['account_invoice_item', 'account_rate'];
-    /**
      * The table associated with the model.
      *
      * @var string
@@ -62,35 +49,7 @@ class InvoiceItemRate extends BaseModel
         $this->fields->tinyInteger('on_total')->default(false)->html('switch');
     }
 
-    /**
-     * List of structure for this model.
-     */
-    public function structure($structure): array
-    {
-        $structure['table'] = ['title', 'slug', 'rate_id', 'invoice_item_id', 'method', 'value', 'ordering', 'on_total'];
-        $structure['form'] = [
-            ['label' => 'Invoice Item Rate Title', 'class' => 'col-span-full', 'fields' => ['title']],
-            ['label' => 'Invoice Item Rate Detail', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['slug', 'rate_id', 'invoice_item_id', 'method']],
-            ['label' => 'Invoice Item Rate Setting', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['value', 'ordering', 'on_total']],
-        ];
-        $structure['filter'] = ['title', 'slug', 'rate_id', 'invoice_item_id', 'method'];
 
-        return $structure;
-    }
     
-    /**
-     * Define rights for this model.
-     *
-     * @return array
-     */
-    public function rights(): array
-    {
-        $rights = parent::rights();
 
-        $rights['staff'] = ['view' => true, 'add' => true];
-        $rights['registered'] = ['view' => true, 'add' => true];
-        $rights['guest'] = [];
-
-        return $rights;
-    }
 }

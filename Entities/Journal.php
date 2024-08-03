@@ -16,20 +16,6 @@ class Journal extends BaseModel
     protected $fillable = ['title', 'grouping_id', 'partner_id', 'ledger_id', 'payment_id', 'invoice_id', 'debit', 'credit', 'params'];
 
     /**
-     * The fields that are to be render when performing relationship queries.
-     *
-     * @var array<string>
-     */
-    public $rec_names = ['title'];
-
-    /**
-     * List of tables names that are need in this model during migration.
-     *
-     * @var array<string>
-     */
-    public array $migrationDependancy = ['partner', 'account_ledger'];
-
-    /**
      * The fields that can be filled
      *
      * @var string
@@ -66,36 +52,8 @@ class Journal extends BaseModel
         $this->fields->string('params')->nullable()->html('text');
     }
 
-    /**
-     * List of structure for this model.
-     */
-    public function structure($structure): array
-    {
-        $structure['table'] = ['title', 'grouping_id', 'partner_id', 'ledger_id', 'payment_id', 'invoice_id', 'debit', 'credit'];
-        $structure['form'] = [
-            ['label' => 'Journal Title', 'class' => 'col-span-full', 'fields' => ['title']],
-            ['label' => 'Journal Detail', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['grouping_id', 'partner_id', 'ledger_id', 'payment_id', 'invoice_id']],
-            ['label' => 'Journal Amount', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['debit', 'credit']],
-        ];
-        $structure['filter'] = ['title', 'grouping_id', 'partner_id', 'ledger_id', 'payment_id', 'invoice_id'];
+ 
 
-        return $structure;
-    }
 
-    /**
-     * Define rights for this model.
-     *
-     * @return array
-     */
-    public function rights(): array
-    {
-        $rights = parent::rights();
-
-        $rights['staff'] = ['view' => true];
-        $rights['registered'] = ['view' => true];
-        $rights['guest'] = [];
-
-        return $rights;
-    }
 
 }

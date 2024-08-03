@@ -20,20 +20,6 @@ class Gateway extends BaseModel
     ];
 
     /**
-     * The fields that are to be render when performing relationship queries.
-     *
-     * @var array<string>
-     */
-    public $rec_names = ['title'];
-
-    /**
-     * List of tables names that are need in this model during migration.
-     *
-     * @var array<string>
-     */
-    public array $migrationDependancy = ['core_currency', 'account_ledger'];
-
-    /**
      * The table associated with the model.
      *
      * @var string
@@ -74,37 +60,8 @@ class Gateway extends BaseModel
         $this->fields->tinyInteger('published')->default(0)->html('switch');
     }
 
-    /**
-     * List of structure for this model.
-     */
-    public function structure($structure): array
-    {
-        $structure['table'] = ['title', 'slug', 'ledger_id', 'currency_id', 'image', 'ordering', 'published'];
-        $structure['form'] = [
-            ['label' => 'Gateway Title', 'class' => 'col-span-full', 'fields' => ['title']],
-            ['label' => 'Gateway Details', 'class' => 'col-span-full md:col-span-6 md:pr-2', 'fields' => ['slug', 'ledger_id', 'currency_id', 'module', 'image']],
-            ['label' => 'Gateway Image & Setting', 'class' => 'col-span-full md:col-span-6 md:pr-2', 'fields' => ['image', 'ordering', 'is_default', 'is_hidden', 'is_hide_in_invoice', 'published']],
-            ['label' => 'Gateway Payment Instruction', 'class' => 'col-span-full', 'fields' => ['instruction', 'url']],
-        ];
-        $structure['filter'] = ['title', 'slug', 'ledger_id', 'currency_id', 'published'];
 
-        return $structure;
-    }
 
-    /**
-     * Define rights for this model.
-     *
-     * @return array
-     */
-    public function rights(): array
-    {
-        $rights = parent::rights();
 
-        $rights['staff'] = ['view' => true];
-        $rights['registered'] = ['view' => true];
-        $rights['guest'] = [];
-
-        return $rights;
-    }
 
 }

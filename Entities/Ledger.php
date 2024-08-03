@@ -17,20 +17,6 @@ class Ledger extends BaseModel
     protected $fillable = ['chart_id', 'category_id', 'name', 'slug', 'code', 'unused', 'is_system'];
 
     /**
-     * The fields that are to be render when performing relationship queries.
-     *
-     * @var array<string>
-     */
-    public $rec_names = ['name'];
-
-    /**
-     * List of tables names that are need in this model during migration.
-     *
-     * @var array<string>
-     */
-    public array $migrationDependancy = ['account_chart_of_account', 'account_ledger_category'];
-
-    /**
      * The fields that can be filled
      *
      * @var string
@@ -65,21 +51,6 @@ class Ledger extends BaseModel
         $this->fields->tinyInteger('is_system')->default(0)->html('switch');
     }
 
-    /**
-     * List of structure for this model.
-     */
-    public function structure($structure): array
-    {
-        $structure['table'] = ['chart_id', 'category_id', 'name', 'slug', 'code', 'unused', 'is_system'];
-        $structure['form'] = [
-            ['label' => 'Ledger Name', 'class' => 'col-span-full', 'fields' => ['name']],
-            ['label' => 'Ledger Detail', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['category_id', 'name', 'slug']],
-            ['label' => 'Ledger Other Setting', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['code', 'unused', 'is_system']],
-        ];
-        $structure['filter'] = ['chart_id', 'category_id', 'name'];
-
-        return $structure;
-    }
 
     /**
      * Function for deleting a record.
@@ -108,19 +79,5 @@ class Ledger extends BaseModel
 
     }
 
-    /**
-     * Define rights for this model.
-     *
-     * @return array
-     */
-    public function rights(): array
-    {
-        $rights = parent::rights();
 
-        $rights['staff'] = [];
-        $rights['registered'] = [];
-        $rights['guest'] = [];
-
-        return $rights;
-    }
 }

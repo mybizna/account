@@ -18,20 +18,6 @@ class Payment extends BaseModel
     ];
 
     /**
-     * The fields that are to be render when performing relationship queries.
-     *
-     * @var array<string>
-     */
-    public $rec_names = ['title'];
-
-    /**
-     * List of tables names that are need in this model during migration.
-     *
-     * @var array<string>
-     */
-    public array $migrationDependancy = ['account_gateway', 'account_ledger', 'partner'];
-
-    /**
      * The fields that can be filled
      *
      * @var string
@@ -81,36 +67,8 @@ class Payment extends BaseModel
         $this->fields->tinyInteger('is_posted')->html('switch')->default(false);
     }
 
-    /**
-     * List of structure for this model.
-     */
-    public function structure($structure): array
-    {
-        $structure['table'] = ['receipt_no', 'code', 'amount', 'ledger_id', 'partner_id', 'gateway_id', 'stage', 'status', 'type', 'is_posted'];
-        $structure['form'] = [
-            ['label' => 'Payment Title', 'class' => 'col-span-full', 'fields' => ['title']],
-            ['label' => 'Payment Detail', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['receipt_no', 'code', 'amount', 'ledger_id', 'partner_id']],
-            ['label' => 'Payment Other Setting', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['gateway_id', 'stage', 'status', 'type', 'is_posted']],
-        ];
-        $structure['filter'] = ['receipt_no', 'code', 'ledger_id', 'partner_id', 'gateway_id', 'stage'];
+ 
 
-        return $structure;
-    }
 
-    /**
-     * Define rights for this model.
-     *
-     * @return array
-     */
-    public function rights(): array
-    {
-        $rights = parent::rights();
-
-        $rights['staff'] = ['view' => true, 'add' => true];
-        $rights['registered'] = ['view' => true, 'add' => true];
-        $rights['guest'] = [];
-
-        return $rights;
-    }
 
 }

@@ -15,20 +15,6 @@ class FinancialYear extends BaseModel
     protected $fillable = ['name', 'start_date', 'end_date', 'description'];
 
     /**
-     * The fields that are to be render when performing relationship queries.
-     *
-     * @var array<string>
-     */
-    public $rec_names = ['name'];
-
-    /**
-     * List of tables names that are need in this model during migration.
-     *
-     * @var array<string>
-     */
-    public array $migrationDependancy = [];
-
-    /**
      * The table associated with the model.
      *
      * @var string
@@ -58,33 +44,6 @@ class FinancialYear extends BaseModel
         $this->fields->date('start_date')->nullable()->html('datetime');
         $this->fields->date('end_date')->nullable()->html('datetime');
         $this->fields->string('description')->nullable()->html('textarea');
-    }
-
-    /**
-     * List of structure for this model.
-     */
-    public function structure($structure): array
-    {
-        $structure['table'] = ['name', 'start_date', 'end_date'];
-        $structure['filter'] = ['name', 'start_date', 'end_date'];
-
-        return $structure;
-    }
-
-    /**
-     * Define rights for this model.
-     *
-     * @return array
-     */
-    public function rights(): array
-    {
-        $rights = parent::rights();
-
-        $rights['staff'] = [];
-        $rights['registered'] = [];
-        $rights['guest'] = [];
-
-        return $rights;
     }
 
 }

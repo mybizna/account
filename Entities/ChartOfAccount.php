@@ -15,32 +15,11 @@ class ChartOfAccount extends BaseModel
     protected $fillable = ['name', 'slug'];
 
     /**
-     * The fields that are to be render when performing relationship queries.
-     *
-     * @var array<string>
-     */
-    public $rec_names = ['name'];
-
-    /**
-     * List of tables names that are need in this model during migration.
-     *
-     * @var array<string>
-     */
-    public array $migrationDependancy = [];
-
-    /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = "account_chart_of_account";
-
-    /**
-     * This model is not deletable.
-     *
-     * @var bool
-     */
-    protected bool $can_delete = false;
 
     /**
      * Migration for creating table.
@@ -58,19 +37,5 @@ class ChartOfAccount extends BaseModel
         $this->fields->string('slug')->nullable()->html('text');
     }
 
-    /**
-     * Define rights for this model.
-     *
-     * @return array
-     */
-    public function rights(): array
-    {
-        $rights = parent::rights();
 
-        $rights['staff'] = [];
-        $rights['registered'] = [];
-        $rights['guest'] = [];
-
-        return $rights;
-    }
 }

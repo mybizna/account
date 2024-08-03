@@ -19,20 +19,6 @@ class Transaction extends BaseModel
     ];
 
     /**
-     * The fields that are to be render when performing relationship queries.
-     *
-     * @var array<string>
-     */
-    public $rec_names = ['description', 'amount'];
-
-    /**
-     * List of tables names that are need in this model during migration.
-     *
-     * @var array<string>
-     */
-    public array $migrationDependancy = ['partner', 'account_payment', 'account_rate'];
-
-    /**
      * The table associated with the model.
      *
      * @var string
@@ -68,37 +54,7 @@ class Transaction extends BaseModel
         $this->fields->tinyInteger('is_processed')->nullable()->html('switch');
     }
 
-    /**
-     * List of structure for this model.
-     */
-    public function structure($structure): array
-    {
-        $structure['table'] = ['amount', 'partner_id', 'ledger_setting_id', 'left_chart_of_account_id', 'left_ledger_id', 'right_chart_of_account_id', 'right_ledger_id', 'is_processed'];
-        $structure['form'] = [
-            ['label' => 'Transaction Left Move ', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['left_chart_of_account_id', 'left_ledger_id']],
-            ['label' => 'Transaction Right Move ', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['right_chart_of_account_id', 'right_ledger_id']],
-            ['label' => 'Transaction Details', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['amount', 'partner_id', 'ledger_setting_id']],
-            ['label' => 'Transaction Setting', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['is_processed']],
-        ];
-        $structure['filter'] = ['partner_id', 'ledger_setting_id', 'left_chart_of_account_id', 'left_ledger_id', 'right_chart_of_account_id', 'right_ledger_id'];
 
-        return $structure;
-    }
 
-    /**
-     * Define rights for this model.
-     *
-     * @return array
-     */
-    public function rights(): array
-    {
-        $rights = parent::rights();
-
-        $rights['staff'] = ['view' => true, 'add' => true];
-        $rights['registered'] = ['view' => true, 'add' => true];
-        $rights['guest'] = [];
-
-        return $rights;
-    }
 
 }

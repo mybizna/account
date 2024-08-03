@@ -16,20 +16,6 @@ class InvoiceCoupon extends BaseModel
     protected $fillable = ['payment_id', 'coupon_id'];
 
     /**
-     * The fields that are to be render when performing relationship queries.
-     *
-     * @var array<string>
-     */
-    public $rec_names = ['payment_id', 'coupon_id'];
-
-    /**
-     * List of tables names that are need in this model during migration.
-     *
-     * @var array<string>
-     */
-    public array $migrationDependancy = ['account_payment', 'account_coupon'];
-
-    /**
      * The table associated with the model.
      *
      * @var string
@@ -52,20 +38,6 @@ class InvoiceCoupon extends BaseModel
         $this->fields->foreignId('coupon_id')->html('recordpicker')->relation(['account', 'coupon']);
     }
 
-    /**
-     * Define rights for this model.
-     *
-     * @return array
-     */
-    public function rights(): array
-    {
-        $rights = parent::rights();
 
-        $rights['staff'] = ['view' => true, 'add'=>true];
-        $rights['registered'] = ['view' => true, 'add'=>true];
-        $rights['guest'] = [];
-
-        return $rights;
-    }
 
 }

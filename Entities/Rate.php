@@ -20,20 +20,6 @@ class Rate extends BaseModel
     ];
 
     /**
-     * The fields that are to be render when performing relationship queries.
-     *
-     * @var array<string>
-     */
-    public $rec_names = ['title', 'value'];
-
-    /**
-     * List of tables names that are need in this model during migration.
-     *
-     * @var array<string>
-     */
-    public array $migrationDependancy = ['account_ledger'];
-
-    /**
      * The table associated with the model.
      *
      * @var string
@@ -64,36 +50,7 @@ class Rate extends BaseModel
         $this->fields->tinyInteger('published')->default(false)->html('switch');
     }
 
-    /**
-     * List of structure for this model.
-     */
-    public function structure($structure): array
-    {
-        $structure['table'] = ['title', 'slug', 'value', 'ledger_id', 'method', 'published'];
-        $structure['form'] = [
-            ['label' => 'Rate Title', 'class' => 'col-span-full', 'fields' => ['title']],
-            ['label' => 'Rate Details', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['slug', 'value', 'ledger_id']],
-            ['label' => 'Rate Other Setting', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['method', 'published']],
-        ];
-        $structure['filter'] = ['title', 'value', 'ledger_id', 'published'];
 
-        return $structure;
-    }
 
-    /**
-     * Define rights for this model.
-     *
-     * @return array
-     */
-    public function rights(): array
-    {
-        $rights = parent::rights();
-
-        $rights['staff'] = [];
-        $rights['registered'] = [];
-        $rights['guest'] = [];
-
-        return $rights;
-    }
 
 }

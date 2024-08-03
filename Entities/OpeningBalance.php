@@ -16,20 +16,6 @@ class OpeningBalance extends BaseModel
     protected $fillable = ['financial_year_id', 'chart_id', 'ledger_id', 'type', 'debit', 'credit'];
 
     /**
-     * The fields that are to be render when performing relationship queries.
-     *
-     * @var array<string>
-     */
-    public $rec_names = ['financial_year_id', 'chart_id', 'ledger_id'];
-
-    /**
-     * List of tables names that are need in this model during migration.
-     *
-     * @var array<string>
-     */
-    public array $migrationDependancy = ['account_ledger', 'account_chart_of_account', 'account_financial_year'];
-
-    /**
      * The fields that can be filled
      *
      * @var string
@@ -56,35 +42,8 @@ class OpeningBalance extends BaseModel
         $this->fields->decimal('credit', 20, 2)->default(0.00)->html('amount');
     }
 
-    /**
-     * List of structure for this model.
-     */
-    public function structure($structure): array
-    {
-        $structure['table'] = ['financial_year_id', 'chart_id', 'ledger_id', 'type', 'debit', 'credit'];
-        $structure['form'] = [
-            ['label' => 'Opening Balance Info', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['financial_year_id', 'chart_id', 'ledger_id']],
-            ['label' => 'Opening Balance Other Setting', 'class' => 'col-span-full  md:col-span-6 md:pr-2', 'fields' => ['type', 'debit', 'credit']],
-        ];
-        $structure['filter'] = ['financial_year_id', 'chart_id', 'ledger_id'];
 
-        return $structure;
-    }
 
-    /**
-     * Define rights for this model.
-     *
-     * @return array
-     */
-    public function rights(): array
-    {
-        $rights = parent::rights();
 
-        $rights['staff'] = [];
-        $rights['registered'] = [];
-        $rights['guest'] = [];
-
-        return $rights;
-    }
 
 }
