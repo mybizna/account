@@ -19,7 +19,7 @@ The Account module offers a range of features for managing financial accounts. S
 To utilize these features, integrate the Account module into your MyBizna ERP system and explore the available options within the module.
 
 ## Requirements
-Mybizna ERP version 1.0 or above
+Mybizna ERP version 2024.1 or above
 
 ## Support
 If you have any questions or need assistance, please contact our support team. We're always happy to help!
