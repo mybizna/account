@@ -17,7 +17,6 @@ return new class extends Migration
             $table->decimal('amount', 20, 2)->default(0.00);
             $table->string('description');
             $table->foreignId('partner_id')->constrained('partner_partner')->onDelete('cascade')->index('account_transaction_partner_id');
-            $table->foreignId('ledger_setting_id')->nullable()->constrained('account_ledger_setting')->onDelete('cascade')->index('account_transaction_ledger_setting_id');
             $table->foreignId('left_chart_of_account_id')->constrained('account_chart_of_account')->onDelete('cascade')->nullable()->index('account_transaction_left_chart_of_account_id');
             $table->foreignId('left_ledger_id')->constrained('account_ledger')->onDelete('cascade')->nullable()->index('account_transaction_left_ledger_id');
             $table->foreignId('right_chart_of_account_id')->constrained('account_chart_of_account')->onDelete('cascade')->nullable()->index('account_transaction_right_chart_of_account_id');

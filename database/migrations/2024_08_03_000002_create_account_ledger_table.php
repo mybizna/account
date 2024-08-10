@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('chart_id')->constrained('account_chart_of_account')->onDelete('cascade')->nullable()->index('account_ledger_chart_id');
-            $table->foreignId('category_id')->constrained('account_category')->onDelete('cascade')->nullable()->index('account_ledger_category_id');
+            $table->foreignId('category_id')->constrained('account_ledger_category')->onDelete('cascade')->nullable()->index('account_ledger_category_id');
             $table->string('name')->nullable();
             $table->string('slug')->nullable();
             $table->integer('code')->nullable();

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('financial_year_id')->constrained('account_financial_year')->onDelete('cascade')->nullable()->index('account_opening_balance_financial_year_id');
-            $table->foreignId('chart_id')->constrained('account_chart')->onDelete('cascade')->nullable()->index('account_opening_balance_chart_id');
+            $table->foreignId('chart_id')->constrained('account_chart_of_account')->onDelete('cascade')->nullable()->index('account_opening_balance_chart_id');
             $table->foreignId('ledger_id')->constrained('account_ledger')->onDelete('cascade')->nullable()->index('account_opening_balance_ledger_id');
             $table->string('type', 50)->nullable();
             $table->decimal('debit', 20, 2)->default(0.00);
