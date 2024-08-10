@@ -7,7 +7,5 @@
     "providers": [
         "Modules\\Account\\Providers\\EventServiceProvider"
     ],
-    "aliases": {},
-    "files": [],
-    "requires": []
+    "files": []
 }

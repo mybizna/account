@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('account_invoice_item_rate', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('item_id')->constrained('account_invoice_item')->onDelete('cascade')->index('item_id');
-            $table->foreignId('rate_id')->constrained('account_rate')->onDelete('cascade')->index('rate_id');
-            
+            $table->foreignId('item_id')->constrained('account_invoice_item')->onDelete('cascade')->index('account_invoice_coupon_item_id');
+            $table->foreignId('rate_id')->constrained('account_rate')->onDelete('cascade')->index('account_invoice_coupon_rate_id');
+
             $table->timestamps();
         });
     }

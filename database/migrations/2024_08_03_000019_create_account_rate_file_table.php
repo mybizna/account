@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('account_rate_file', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('rate_id')->nullable()->constrained('account_rate')->onDelete('cascade')->index('rate_id');
+            $table->foreignId('rate_id')->nullable()->constrained('account_rate')->onDelete('cascade')->index('account_rate_file_rate_id');
             $table->string('year')->nullable();
             $table->string('month')->nullable();
             $table->string('token')->nullable();

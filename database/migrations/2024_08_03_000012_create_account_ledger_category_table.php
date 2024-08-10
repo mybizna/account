@@ -16,8 +16,8 @@ return new class extends Migration
 
             $table->string('name');
             $table->string('slug');
-            $table->foreignId('chart_id')->constrained('account_chart_of_account')->onDelete('cascade')->index('chart_id');
-            $table->foreignId('parent_id')->constrained('account_ledger_category')->onDelete('cascade')->index('parent_id');
+            $table->foreignId('chart_id')->constrained('account_chart_of_account')->onDelete('cascade')->index('account_ledger_category_chart_id');
+            $table->foreignId('parent_id')->constrained('account_ledger_category')->onDelete('cascade')->index('account_ledger_category_parent_id');
             $table->tinyInteger('is_system');
 
             $table->timestamps();

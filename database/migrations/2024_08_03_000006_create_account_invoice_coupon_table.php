@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('account_invoice_coupon', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('invoice_id')->constrained('account_invoice')->index('invoice_id');
-            $table->foreignId('coupon_id')->constrained('account_coupon')->index('coupon_id');
-    
-            
+            $table->foreignId('invoice_id')->constrained('account_invoice')->index('account_invoice_coupon_invoice_id');
+            $table->foreignId('coupon_id')->constrained('account_coupon')->index('account_invoice_coupon_coupon_id');
+
             $table->timestamps();
         });
     }

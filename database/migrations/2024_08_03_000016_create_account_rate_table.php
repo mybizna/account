@@ -16,7 +16,7 @@ return new class extends Migration
 
             $table->string('title');
             $table->string('slug');
-            $table->foreignId('ledger_id')->constrained('account_ledger')->onDelete('cascade')->index('ledger_id');
+            $table->foreignId('ledger_id')->constrained('account_ledger')->onDelete('cascade')->index('account_rate_ledger_id');
             $table->decimal('value', 20, 2);
             $table->enum('method', ['+', '+%', '-', '-%'])->default('+');
             $table->string('params')->nullable();

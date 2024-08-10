@@ -16,7 +16,7 @@ return new class extends Migration
 
             $table->string('title');
             $table->char('invoice_no', 100);
-            $table->foreignId('partner_id')->constrained('partner_partner')->index('partner_id');
+            $table->foreignId('partner_id')->constrained('partner_partner')->index('account_invoice_partner_id');
             $table->date('due_date');
             $table->string('module')->default('Account');
             $table->string('model')->default('Invoice');
