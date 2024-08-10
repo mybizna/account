@@ -16,9 +16,9 @@ return new class extends Migration
 
             $table->string('title');
             $table->decimal('amount', 20, 2);
-            $table->foreignId('ledger_id');
-            $table->foreignId('partner_id');
-            $table->foreignId('gateway_id');
+            $table->foreignId('ledger_id')->constrained('account_ledger')->onDelete('cascade')->index('ledger_id');
+            $table->foreignId('partner_id')->constrained('partner_partner')->onDelete('cascade')->index('partner_id');
+            $table->foreignId('gateway_id')->constrained('account_gateway')->onDelete('cascade')->index('gateway_id');
             $table->string('receipt_no')->nullable();
             $table->string('code')->nullable();
             $table->string('others')->nullable();

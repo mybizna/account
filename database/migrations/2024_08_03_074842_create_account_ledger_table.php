@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('account_ledger', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('chart_id')->nullable();
-            $table->foreignId('category_id')->nullable();
+            $table->foreignId('chart_id')->constrained('account_chart')->onDelete('cascade')->nullable()->index('chart_id');
+            $table->foreignId('category_id')->constrained('account_category')->onDelete('cascade')->nullable()->index('category_id');
             $table->string('name')->nullable();
             $table->string('slug')->nullable();
             $table->integer('code')->nullable();

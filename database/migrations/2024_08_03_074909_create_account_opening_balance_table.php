@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('financial_year_id')->nullable();
-            $table->foreignId('chart_id')->nullable();
-            $table->foreignId('ledger_id')->nullable();
+            $table->foreignId('chart_id')->constrained('account_chart')->onDelete('cascade')->nullable()->index('chart_id');
+            $table->foreignId('ledger_id')->constrained('account_ledger')->onDelete('cascade')->nullable()->index('ledger_id');
             $table->string('type', 50)->nullable();
             $table->decimal('debit', 20, 2)->default(0.00);
             $table->decimal('credit', 20, 2)->default(0.00);

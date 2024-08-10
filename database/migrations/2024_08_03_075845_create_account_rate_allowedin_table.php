@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('account_rate_allowedin', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('country_id');
-            $table->foreignId('rate_id');
+            $table->foreignId('country_id')->constrained('core_country')->onDelete('cascade')->index('country_id');
+            $table->foreignId('rate_id')->constrained('account_rate')->onDelete('cascade')->index('rate_id');
 
             $table->timestamps();
         });

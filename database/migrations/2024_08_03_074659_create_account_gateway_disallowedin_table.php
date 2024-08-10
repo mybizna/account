@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('account_gateway_disallowedin', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('country_id');
-            $table->foreignId('gateway_id');
+            $table->foreignId('country_id')->constrained('core_country')->index('country_id');
+            $table->foreignId('gateway_id')->constrained('account_gateway')->index('gateway_id');
 
             $table->timestamps();
         });

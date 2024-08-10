@@ -16,10 +16,10 @@ return new class extends Migration
 
             $table->string('title');
             $table->char('grouping_id');
-            $table->foreignId('partner_id');
-            $table->foreignId('ledger_id');
-            $table->foreignId('payment_id')->nullable();
-            $table->foreignId('invoice_id')->nullable();
+            $table->foreignId('partner_id')->constrained('partner_partner')->onDelete('cascade')->index('partner_id');
+            $table->foreignId('ledger_id')->constrained('account_ledger')->onDelete('cascade')->index('ledger_id');
+            $table->foreignId('payment_id')->constrained('account_payment')->onDelete('cascade')->nullable()->index('payment_id');
+            $table->foreignId('invoice_id')->constrained('account_invoice')->onDelete('cascade')->nullable()->index('invoice_id');
             $table->decimal('debit', 20, 2)->nullable();
             $table->decimal('credit', 20, 2)->nullable();
             $table->string('params')->nullable();

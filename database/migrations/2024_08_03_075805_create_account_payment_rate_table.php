@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('account_payment_rate', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('payment_id');
-            $table->foreignId('rate_id');
+            $table->foreignId('payment_id')->constrained('account_payment')->onDelete('cascade')->index('payment_id');
+            $table->foreignId('rate_id')->constrained('account_rate')->onDelete('cascade')->index('rate_id');
 
             $table->timestamps();
         });
