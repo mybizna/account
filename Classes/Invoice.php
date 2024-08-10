@@ -7,13 +7,13 @@ use Illuminate\Support\Facades\DB;
 use Modules\Account\Classes\Journal;
 use Modules\Account\Classes\Ledger;
 use Modules\Account\Classes\Payment;
-use Modules\Account\Entities\Invoice as DBInvoice;
-use Modules\Account\Entities\InvoiceItem as DBInvoiceItem;
-use Modules\Account\Entities\InvoiceItemRate as DBInvoiceItemRate;
-use Modules\Account\Entities\Journal as DBJournal;
-use Modules\Account\Entities\Payment as DBPayment;
 use Modules\Account\Events\InvoiceItemPaid;
 use Modules\Account\Events\InvoicePaid;
+use Modules\Account\Models\Invoice as DBInvoice;
+use Modules\Account\Models\InvoiceItem as DBInvoiceItem;
+use Modules\Account\Models\InvoiceItemRate as DBInvoiceItemRate;
+use Modules\Account\Models\Journal as DBJournal;
+use Modules\Account\Models\Payment as DBPayment;
 use Modules\Core\Classes\Notification;
 use Modules\Partner\Classes\Partner;
 
@@ -335,8 +335,6 @@ class Invoice
 
     }
 
-    
-
     /**
      * Get amount used from payment
      *
@@ -442,7 +440,7 @@ class Invoice
      *
      * @param int $partner_id
      * @param boolean $invoice_id
-     * 
+     *
      * @return array
      */
     public function getPartnerInvoices(int $partner_id, $invoice_id = false)
@@ -517,12 +515,11 @@ class Invoice
         }
     }
 
-
     /**
      * Function for  deleting Invoice
      *
      * @param int $invoice_id
-     * 
+     *
      * @return void
      */
     public function deleteInvoice($invoice_id)

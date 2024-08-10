@@ -2,7 +2,7 @@
 namespace Modules\Account\Classes;
 
 use Illuminate\Support\Facades\Cache;
-use Modules\Account\Entities\Gateway as DBGateway;
+use Modules\Account\Models\Gateway as DBGateway;
 
 class Gateway
 {
@@ -50,7 +50,7 @@ class Gateway
      *
      * @return object|bool
      */
-    public function getGateway($gateway_id) 
+    public function getGateway($gateway_id)
     {
         if (Cache::has("account_gateway_" . $gateway_id)) {
             $gateway = Cache::get("account_gateway_" . $gateway_id);
@@ -89,7 +89,7 @@ class Gateway
      *
      * @return array|bool
      */
-    public function getGatewayBySlug($gateway_slug) 
+    public function getGatewayBySlug($gateway_slug)
     {
         $gateway = DBGateway::where('slug', $gateway_slug)->first();
 
@@ -137,7 +137,7 @@ class Gateway
         }
         return false;
     }
- 
+
     /**
      * Get Class Name
      *

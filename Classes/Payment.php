@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Modules\Account\Classes\Gateway;
 use Modules\Account\Classes\Invoice;
-use Modules\Account\Entities\Payment as DBPayment;
+use Modules\Account\Models\Payment as DBPayment;
 use Modules\Core\Classes\Notification;
-use Modules\Core\Entities\Currency;
+use Modules\Core\Models\Currency;
 use Modules\Partner\Classes\Partner;
 
 class Payment
@@ -159,7 +159,6 @@ class Payment
         $usdcurrency = Currency::where('code', 'USD')->first();
         $defcurrency = Currency::where('id', $default_currency_id)->first();
         $curcurrency = Currency::where('id', $currency_id)->first();
-
 
         if ($curcurrency->id == $defcurrency->id) {
             return 1;

@@ -3,8 +3,8 @@
 namespace Modules\Account\Classes;
 
 use Illuminate\Support\Facades\Cache;
-use Modules\Account\Entities\Journal as DBJournal;
-use Modules\Account\Entities\Ledger as DBLedger;
+use Modules\Account\Models\Journal as DBJournal;
+use Modules\Account\Models\Ledger as DBLedger;
 
 class Ledger
 {

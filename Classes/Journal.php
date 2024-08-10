@@ -4,8 +4,8 @@ namespace Modules\Account\Classes;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Modules\Account\Classes\Ledger;
-use Modules\Account\Entities\Journal as DBJournal;
-use Modules\Core\Entities\Currency;
+use Modules\Account\Models\Journal as DBJournal;
+use Modules\Core\Models\Currency;
 
 class Journal
 {
@@ -102,8 +102,8 @@ class Journal
             $rate = $newcurrency->rate;
         } else if ($usdcurrency->id != $oldcurrency->id) {
             if ($newcurrency->id != $usdcurrency->id) {
-                $rate = $usdcurrency->rate/$oldcurrency->rate * $newcurrency->rate;
-            }else{
+                $rate = $usdcurrency->rate / $oldcurrency->rate * $newcurrency->rate;
+            } else {
                 $rate = $usdcurrency->rate / $oldcurrency->rate;
             }
         }

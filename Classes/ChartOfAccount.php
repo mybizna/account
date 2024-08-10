@@ -2,8 +2,8 @@
 namespace Modules\Account\Classes;
 
 use Illuminate\Support\Facades\Cache;
-use Modules\Account\Entities\ChartOfAccount as DBChartOfAccount;
-use Modules\Account\Entities\Journal as DBJournal;
+use Modules\Account\Models\ChartOfAccount as DBChartOfAccount;
+use Modules\Account\Models\Journal as DBJournal;
 
 class ChartOfAccount
 {

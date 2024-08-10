@@ -5,11 +5,11 @@ namespace Modules\Account\Tests\Feature;
 use Modules\Account\Classes\Invoice;
 use Modules\Account\Classes\Ledger;
 use Modules\Account\Classes\Payment;
-use Modules\Account\Entities\Invoice as DBInvoice;
-use Modules\Account\Entities\Journal as DBJournal;
-use Modules\Account\Entities\Payment as DBPayment;
+use Modules\Account\Models\Invoice as DBInvoice;
+use Modules\Account\Models\Journal as DBJournal;
+use Modules\Account\Models\Payment as DBPayment;
 use Modules\Partner\Classes\Partner;
-use Modules\Partner\Entities\Partner as DBPartner;
+use Modules\Partner\Models\Partner as DBPartner;
 use Tests\TestCase;
 
 class AccountTest extends TestCase
