@@ -17,7 +17,6 @@ class ChartOfAccount
     public function getChart($chart_id)
     {
 
-       
         if (Cache::has("account_chart_" . $chart_id)) {
             $chart = Cache::get("account_chart_" . $chart_id);
             return $chart;
@@ -107,7 +106,7 @@ class ChartOfAccount
             return (array) $chart_total;
         } else {
             try {
-                
+
                 $separator = (isset($data['separator'])) ? $data['separator'] : '';
 
                 $chart = $this->getChart($chart_id);
