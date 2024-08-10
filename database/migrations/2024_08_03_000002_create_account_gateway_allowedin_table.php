@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('country_id')->constrained('core_country')->onDelete('cascade')->index('country_id');
-            $table->foreignId('gateway_id')->constrained('account_gateway')->onDelete('cascade')->index('country_id');
+            $table->foreignId('gateway_id')->constrained('account_gateway')->onDelete('cascade')->index('gateway_id');
 
             $table->timestamps();
         });
