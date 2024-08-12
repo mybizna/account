@@ -26,7 +26,14 @@
   },
   "autoload": {
     "psr-4": {
-      "Modules\\Account\\": ""
+      "Modules\\Account\\": "app/",
+      "Modules\\Account\\Database\\Factories\\": "database/factories/",
+      "Modules\\Account\\Database\\Seeders\\": "database/seeders/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Modules\\Account\\Tests\\": "tests/"
     }
   }
 }
