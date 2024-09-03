@@ -6,6 +6,7 @@ use Modules\Base\Models\BaseModel;
 
 class InvoiceItemRate extends BaseModel
 {
+
     /**
      * The fields that can be filled
      *
@@ -21,5 +22,4 @@ class InvoiceItemRate extends BaseModel
      * @var string
      */
     protected $table = "account_invoice_item_rate";
-
 }

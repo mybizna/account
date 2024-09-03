@@ -6,6 +6,7 @@ use Modules\Base\Models\BaseModel;
 
 class Transaction extends BaseModel
 {
+
     /**
      * The fields that can be filled
      *
@@ -29,5 +30,4 @@ class Transaction extends BaseModel
      * @var bool
      */
     protected bool $can_delete = false;
-
 }

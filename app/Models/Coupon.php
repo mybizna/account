@@ -6,6 +6,7 @@ use Modules\Base\Models\BaseModel;
 
 class Coupon extends BaseModel
 {
+
     /**
      * The fields that can be filled
      *
@@ -29,5 +30,4 @@ class Coupon extends BaseModel
      * @var bool
      */
     protected bool $can_delete = false;
-
 }

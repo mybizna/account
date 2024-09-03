@@ -6,6 +6,7 @@ use Modules\Base\Models\BaseModel;
 
 class RateAllowedin extends BaseModel
 {
+
     /**
      * The fields that can be filled
      *
@@ -19,5 +20,4 @@ class RateAllowedin extends BaseModel
      * @var string
      */
     protected $table = "account_rate_allowedin";
-
 }

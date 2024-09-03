@@ -6,6 +6,7 @@ use Modules\Base\Models\BaseModel;
 
 class RateFile extends BaseModel
 {
+
     /**
      * The fields that can be filled
      *
@@ -21,5 +22,4 @@ class RateFile extends BaseModel
      * @var string
      */
     protected $table = "account_rate_file";
-
 }

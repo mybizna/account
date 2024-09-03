@@ -6,6 +6,7 @@ use Modules\Base\Models\BaseModel;
 
 class Payment extends BaseModel
 {
+
     /**
      * The fields that can be filled
      *
@@ -36,5 +37,4 @@ class Payment extends BaseModel
      * @var bool
      */
     public bool $show_frontend = true;
-
 }

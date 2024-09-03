@@ -6,6 +6,7 @@ use Modules\Base\Models\BaseModel;
 
 class InvoiceCoupon extends BaseModel
 {
+
     /**
      * The fields that can be filled
      *
@@ -19,5 +20,4 @@ class InvoiceCoupon extends BaseModel
      * @var string
      */
     protected $table = "account_invoice_coupon";
-
 }

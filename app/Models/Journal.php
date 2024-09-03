@@ -6,6 +6,7 @@ use Modules\Base\Models\BaseModel;
 
 class Journal extends BaseModel
 {
+
     /**
      * The fields that can be filled
      *
@@ -26,5 +27,4 @@ class Journal extends BaseModel
      * @var bool
      */
     protected bool $can_delete = false;
-
 }
