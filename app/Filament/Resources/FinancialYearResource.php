@@ -2,9 +2,6 @@
 
 namespace Modules\Account\Filament\Resources;
 
-use Modules\Account\Filament\Resources\FinancialYearResource\Pages;
-use Modules\Account\Filament\Resources\FinancialYearResource\RelationManagers;
-use Modules\Account\Models\FinancialYear;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,12 +9,16 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Modules\Account\Filament\Resources\FinancialYearResource\Pages;
+use Modules\Account\Models\FinancialYear;
 
 class FinancialYearResource extends Resource
 {
     protected static ?string $model = FinancialYear::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationGroup = 'Account';
 
     public static function form(Form $form): Form
     {

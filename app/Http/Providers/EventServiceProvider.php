@@ -3,16 +3,15 @@
 namespace Modules\Account\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Modules\Account\Listeners\CoreSettingModified;
-use Modules\Core\Events\Setting;
 
 class EventServiceProvider extends ServiceProvider
 {
-    protected $listen = [
-        Setting::class => [
-            CoreSettingModified::class,
-        ],
-    ];
+    /**
+     * The event handler mappings for the application.
+     *
+     * @var array<string, array<int, string>>
+     */
+    protected $listen = [];
 
     /**
      * Indicates if events should be discovered.
@@ -30,5 +29,4 @@ class EventServiceProvider extends ServiceProvider
     {
 
     }
-
 }
