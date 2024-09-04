@@ -2,9 +2,6 @@
 
 namespace Modules\Account\Filament\Resources;
 
-use Modules\Account\Filament\Resources\GatewayRateResource\Pages;
-use Modules\Account\Filament\Resources\GatewayRateResource\RelationManagers;
-use Modules\Account\Models\GatewayRate;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,12 +9,18 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Modules\Account\Filament\Resources\GatewayRateResource\Pages;
+use Modules\Account\Models\GatewayRate;
 
 class GatewayRateResource extends Resource
 {
     protected static ?string $model = GatewayRate::class;
 
+    protected static ?string $slug = 'account/gateway/rate';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationParentItem = 'Gateway';
 
     public static function form(Form $form): Form
     {

@@ -2,9 +2,6 @@
 
 namespace Modules\Account\Filament\Resources;
 
-use Modules\Account\Filament\Resources\TransactionResource\Pages;
-use Modules\Account\Filament\Resources\TransactionResource\RelationManagers;
-use Modules\Account\Models\Transaction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,12 +9,21 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Modules\Account\Filament\Resources\TransactionResource\Pages;
+use Modules\Account\Models\Transaction;
 
 class TransactionResource extends Resource
 {
     protected static ?string $model = Transaction::class;
 
+    protected static ?string $slug = 'account/invoice/transaction';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationGroup = 'Account';
+    protected static ?string $navigationLabel = 'Transaction';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

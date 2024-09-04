@@ -2,9 +2,6 @@
 
 namespace Modules\Account\Filament\Resources;
 
-use Modules\Account\Filament\Resources\GatewayDisallowedinResource\Pages;
-use Modules\Account\Filament\Resources\GatewayDisallowedinResource\RelationManagers;
-use Modules\Account\Models\GatewayDisallowedin;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,12 +9,18 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Modules\Account\Filament\Resources\GatewayDisallowedinResource\Pages;
+use Modules\Account\Models\GatewayDisallowedin;
 
 class GatewayDisallowedinResource extends Resource
 {
     protected static ?string $model = GatewayDisallowedin::class;
 
+    protected static ?string $slug = 'account/gateway/disallowedin';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationParentItem = 'Gateway';
 
     public static function form(Form $form): Form
     {

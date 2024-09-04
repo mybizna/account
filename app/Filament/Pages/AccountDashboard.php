@@ -14,5 +14,5 @@ class AccountDashboard extends Page
 
     protected static ?string $navigationLabel = 'Dashboard';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = -5;
 }

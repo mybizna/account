@@ -1,14 +1,14 @@
 <?php
 
-namespace Modules\Account\Filament\Resources\InvoiceItemStatusResource\Pages;
+namespace Modules\Account\Filament\Resources\InvoiceStatusResource\Pages;
 
-use Modules\Account\Filament\Resources\InvoiceItemStatusResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Modules\Account\Filament\Resources\InvoiceStatusResource;
 
-class EditInvoiceItemStatus extends EditRecord
+class EditInvoiceStatus extends EditRecord
 {
-    protected static string $resource = InvoiceItemStatusResource::class;
+    protected static string $resource = InvoiceStatusResource::class;
 
     protected function getHeaderActions(): array
     {

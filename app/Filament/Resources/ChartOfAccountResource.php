@@ -16,8 +16,13 @@ class ChartOfAccountResource extends Resource
 {
     protected static ?string $model = ChartOfAccount::class;
 
+    protected static ?string $slug = 'account/chart_of_account';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
     protected static ?string $navigationGroup = 'Account';
+    protected static ?string $navigationLabel = 'Chart Of Account';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

@@ -2,20 +2,20 @@
 
 namespace Modules\Account\Filament\Resources;
 
-use Modules\Account\Filament\Resources\InvoiceItemStatusResource\Pages;
-use Modules\Account\Filament\Resources\InvoiceItemStatusResource\RelationManagers;
-use Modules\Account\Models\InvoiceItemStatus;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Modules\Account\Filament\Resources\InvoiceStatusResource\Pages;
+use Modules\Account\Models\InvoiceStatus;
 
-class InvoiceItemStatusResource extends Resource
+class InvoiceStatusResource extends Resource
 {
-    protected static ?string $model = InvoiceItemStatus::class;
+    protected static ?string $model = InvoiceStatus::class;
+
+    protected static ?string $slug = 'account/invoice/status';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -58,9 +58,9 @@ class InvoiceItemStatusResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListInvoiceItemStatuses::route('/'),
-            'create' => Pages\CreateInvoiceItemStatus::route('/create'),
-            'edit' => Pages\EditInvoiceItemStatus::route('/{record}/edit'),
+            'index' => Pages\ListInvoiceStatuses::route('/'),
+            'create' => Pages\CreateInvoiceStatus::route('/create'),
+            'edit' => Pages\EditInvoiceStatus::route('/{record}/edit'),
         ];
     }
 

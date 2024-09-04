@@ -2,9 +2,6 @@
 
 namespace Modules\Account\Filament\Resources;
 
-use Modules\Account\Filament\Resources\PaymentResource\Pages;
-use Modules\Account\Filament\Resources\PaymentResource\RelationManagers;
-use Modules\Account\Models\Payment;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,12 +9,21 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Modules\Account\Filament\Resources\PaymentResource\Pages;
+use Modules\Account\Models\Payment;
 
 class PaymentResource extends Resource
 {
     protected static ?string $model = Payment::class;
 
+    protected static ?string $slug = 'account/payment';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationGroup = 'Account';
+    protected static ?string $navigationLabel = 'Payment';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

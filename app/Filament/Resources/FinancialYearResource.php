@@ -16,9 +16,14 @@ class FinancialYearResource extends Resource
 {
     protected static ?string $model = FinancialYear::class;
 
+    protected static ?string $slug = 'account/financial_year';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Account';
+    protected static ?string $navigationLabel = 'Financial Year';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

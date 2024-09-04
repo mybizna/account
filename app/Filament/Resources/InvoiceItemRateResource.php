@@ -2,9 +2,6 @@
 
 namespace Modules\Account\Filament\Resources;
 
-use Modules\Account\Filament\Resources\InvoiceItemRateResource\Pages;
-use Modules\Account\Filament\Resources\InvoiceItemRateResource\RelationManagers;
-use Modules\Account\Models\InvoiceItemRate;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,10 +9,14 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Modules\Account\Filament\Resources\InvoiceItemRateResource\Pages;
+use Modules\Account\Models\InvoiceItemRate;
 
 class InvoiceItemRateResource extends Resource
 {
     protected static ?string $model = InvoiceItemRate::class;
+
+    protected static ?string $slug = 'account/invoice/item/rate';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

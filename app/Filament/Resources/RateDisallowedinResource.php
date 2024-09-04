@@ -2,9 +2,6 @@
 
 namespace Modules\Account\Filament\Resources;
 
-use Modules\Account\Filament\Resources\RateDisallowedinResource\Pages;
-use Modules\Account\Filament\Resources\RateDisallowedinResource\RelationManagers;
-use Modules\Account\Models\RateDisallowedin;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,12 +9,19 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Modules\Account\Filament\Resources\RateDisallowedinResource\Pages;
+use Modules\Account\Models\RateDisallowedin;
 
 class RateDisallowedinResource extends Resource
 {
     protected static ?string $model = RateDisallowedin::class;
 
+    protected static ?string $slug = 'account/rate/disallowedin';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationLabel = 'Rate Disallowed In';
+    protected static ?string $navigationParentItem = 'Rate';
 
     public static function form(Form $form): Form
     {

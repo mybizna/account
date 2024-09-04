@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('account_invoice_item', function (Blueprint $table) {
+        Schema::table('account_rate', function (Blueprint $table) {
             $table->softDeletes();
         });
     }
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('account_invoice_item', function (Blueprint $table) {
+        Schema::table('account_rate', function (Blueprint $table) {
             $table->dropColumn('deleted_at');
         });
     }

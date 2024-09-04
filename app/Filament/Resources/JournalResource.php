@@ -2,9 +2,6 @@
 
 namespace Modules\Account\Filament\Resources;
 
-use Modules\Account\Filament\Resources\JournalResource\Pages;
-use Modules\Account\Filament\Resources\JournalResource\RelationManagers;
-use Modules\Account\Models\Journal;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,12 +9,21 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Modules\Account\Filament\Resources\JournalResource\Pages;
+use Modules\Account\Models\Journal;
 
 class JournalResource extends Resource
 {
     protected static ?string $model = Journal::class;
 
+    protected static ?string $slug = 'account/journal';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationGroup = 'Account';
+    protected static ?string $navigationLabel = 'Journal';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

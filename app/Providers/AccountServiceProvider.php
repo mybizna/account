@@ -9,7 +9,7 @@ class AccountServiceProvider extends ServiceProvider
 {
     protected string $moduleName = 'Account';
 
-    protected string $moduleNameLower = 'Account';
+    protected string $moduleNameLower = 'account';
 
     /**
      * Boot the application events.
