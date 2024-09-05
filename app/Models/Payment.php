@@ -2,7 +2,10 @@
 
 namespace Modules\Account\Models;
 
+use Modules\Account\Models\Gateway;
+use Modules\Account\Models\Ledger;
 use Modules\Base\Models\BaseModel;
+use Modules\Partner\Models\Partner;
 
 class Payment extends BaseModel
 {
@@ -37,4 +40,31 @@ class Payment extends BaseModel
      * @var bool
      */
     public bool $show_frontend = true;
+
+    /**
+     * Add relationship to Ledger
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function ledger()
+    {
+        return $this->belongsTo(Ledger::class);
+    }
+
+    /**
+     * Add relationship to Partner
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function partner()
+    {
+        return $this->belongsTo(Partner::class);
+    }
+
+    /**
+     * Add relationship to Gateway
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function gateway()
+    {
+        return $this->belongsTo(Gateway::class);
+    }
 }

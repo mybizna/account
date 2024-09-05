@@ -18,6 +18,8 @@ class InvoiceItemRateResource extends Resource
 
     protected static ?string $slug = 'account/invoice/item/rate';
 
+    protected static ?string $navigationGroup = 'Account';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

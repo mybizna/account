@@ -2,6 +2,7 @@
 
 namespace Modules\Account\Models;
 
+use Modules\Account\Models\Rate;
 use Modules\Base\Models\BaseModel;
 
 class RateFile extends BaseModel
@@ -22,4 +23,13 @@ class RateFile extends BaseModel
      * @var string
      */
     protected $table = "account_rate_file";
+
+    /**
+     * Add relationship to Rate
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function rate()
+    {
+        return $this->belongsTo(Rate::class);
+    }
 }

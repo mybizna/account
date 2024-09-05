@@ -18,6 +18,8 @@ class GatewayRateResource extends Resource
 
     protected static ?string $slug = 'account/gateway/rate';
 
+    protected static ?string $navigationGroup = 'Account';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationParentItem = 'Gateway';

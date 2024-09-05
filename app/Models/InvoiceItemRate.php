@@ -2,6 +2,8 @@
 
 namespace Modules\Account\Models;
 
+use Modules\Account\Models\InvoiceItem;
+use Modules\Account\Models\Rate;
 use Modules\Base\Models\BaseModel;
 
 class InvoiceItemRate extends BaseModel
@@ -22,4 +24,22 @@ class InvoiceItemRate extends BaseModel
      * @var string
      */
     protected $table = "account_invoice_item_rate";
+
+    /**
+     * Add relationship to InvoiceItem
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function invoiceItem()
+    {
+        return $this->belongsTo(InvoiceItem::class);
+    }
+
+    /**
+     * Add relationship to Rate
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function rate()
+    {
+        return $this->belongsTo(Rate::class);
+    }
 }

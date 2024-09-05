@@ -18,6 +18,8 @@ class InvoiceItemResource extends Resource
 
     protected static ?string $slug = 'account/invoice/item';
 
+    protected static ?string $navigationGroup = 'Account';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -30,6 +32,9 @@ class InvoiceItemResource extends Resource
                 Forms\Components\TextInput::make('invoice_id')
                     ->required()
                     ->numeric(),
+                \Codedor\FilamentResourcePicker\Filament\Forms\Components\ResourcePickerInput::make('invoice_id')
+                    ->resource(InvoiceResource::class)
+                    ->required(),
                 Forms\Components\TextInput::make('ledger_id')
                     ->required()
                     ->numeric(),

@@ -17,6 +17,8 @@ class InvoiceStatusResource extends Resource
 
     protected static ?string $slug = 'account/invoice/status';
 
+    protected static ?string $navigationGroup = 'Account';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

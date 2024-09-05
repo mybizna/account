@@ -20,6 +20,8 @@ class RateDisallowedinResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'Account';
+
     protected static ?string $navigationLabel = 'Rate Disallowed In';
     protected static ?string $navigationParentItem = 'Rate';
 

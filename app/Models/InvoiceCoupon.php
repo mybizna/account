@@ -2,6 +2,8 @@
 
 namespace Modules\Account\Models;
 
+use Modules\Account\Models\Coupon;
+use Modules\Account\Models\Invoice;
 use Modules\Base\Models\BaseModel;
 
 class InvoiceCoupon extends BaseModel
@@ -20,4 +22,22 @@ class InvoiceCoupon extends BaseModel
      * @var string
      */
     protected $table = "account_invoice_coupon";
+
+    /**
+     * Add relationship to Invoice
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
+    }
+
+    /**
+     * Add relationship to Coupon
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
+    }
 }

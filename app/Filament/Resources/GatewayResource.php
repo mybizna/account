@@ -21,6 +21,7 @@ class GatewayResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Account';
+
     protected static ?string $navigationLabel = 'Gateway';
 
     protected static ?int $navigationSort = 1;

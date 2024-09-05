@@ -2,6 +2,8 @@
 
 namespace Modules\Account\Models;
 
+use Modules\Account\Models\ChartOfAccount;
+use Modules\Account\Models\LedgerCategory;
 use Modules\Base\Models\BaseModel;
 
 class Ledger extends BaseModel
@@ -27,6 +29,24 @@ class Ledger extends BaseModel
      * @var bool
      */
     protected bool $can_delete = false;
+
+    /**
+     * Add relationship to Chart
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function chart()
+    {
+        return $this->belongsTo(ChartOfAccount::class);
+    }
+
+    /**
+     * Add relationship to Category
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function category()
+    {
+        return $this->belongsTo(LedgerCategory::class);
+    }
 
     /**
      * Function for deleting a record.

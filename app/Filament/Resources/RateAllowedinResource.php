@@ -20,6 +20,8 @@ class RateAllowedinResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'Account';
+
     protected static ?string $navigationLabel = 'Rate Allowed In';
     protected static ?string $navigationParentItem = 'Rate';
 

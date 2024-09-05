@@ -2,6 +2,7 @@
 
 namespace Modules\Account\Models;
 
+use Modules\Account\Models\Ledger;
 use Modules\Base\Models\BaseModel;
 
 class Rate extends BaseModel
@@ -24,4 +25,14 @@ class Rate extends BaseModel
      * @var string
      */
     protected $table = "account_rate";
+
+    /**
+     * Add relationship to Ledger
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function ledger()
+    {
+        return $this->belongsTo(Ledger::class);
+    }
+
 }

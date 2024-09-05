@@ -20,6 +20,8 @@ class GatewayDisallowedinResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'Account';
+
     protected static ?string $navigationParentItem = 'Gateway';
 
     public static function form(Form $form): Form

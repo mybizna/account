@@ -2,6 +2,9 @@
 
 namespace Modules\Account\Models;
 
+use Modules\Account\Models\ChartOfAccount;
+use Modules\Account\Models\FinancialYear;
+use Modules\Account\Models\Ledger;
 use Modules\Base\Models\BaseModel;
 
 class OpeningBalance extends BaseModel
@@ -20,4 +23,31 @@ class OpeningBalance extends BaseModel
      * @var string
      */
     protected $table = "account_opening_balance";
+
+    /**
+     * Add relationship to Ledger
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function ledger()
+    {
+        return $this->belongsTo(Ledger::class);
+    }
+
+    /**
+     * Add relationship to ChartOfAccount
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function chart()
+    {
+        return $this->belongsTo(ChartOfAccount::class);
+    }
+
+    /**
+     * Add relationship to FinancialYear
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function financialYear()
+    {
+        return $this->belongsTo(FinancialYear::class);
+    }
 }
