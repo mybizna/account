@@ -6,6 +6,8 @@ use Filament\Pages\Page;
 
 class AccountDashboard extends Page
 {
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
     protected static string $view = 'account::filament.pages.account-dashboard';

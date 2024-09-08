@@ -29,37 +29,57 @@ class InvoiceResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('title')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('invoice_no')
-                    ->required()
-                    ->maxLength(100),
-                Forms\Components\TextInput::make('partner_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\DatePicker::make('due_date')
-                    ->required(),
-                Forms\Components\TextInput::make('module')
-                    ->required()
-                    ->maxLength(255)
-                    ->default('Account'),
-                Forms\Components\TextInput::make('model')
-                    ->required()
-                    ->maxLength(255)
-                    ->default('Invoice'),
-                Forms\Components\TextInput::make('status')
-                    ->required(),
-                Forms\Components\TextInput::make('description')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('is_posted')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                Forms\Components\TextInput::make('total')
-                    ->numeric()
-                    ->default(null),
+
+                // Title Section
+                Forms\Components\Section::make('Title')
+                    ->schema([
+                        Forms\Components\TextInput::make('title')
+                            ->required()
+                            ->maxLength(255),
+                    ]),
+
+                // Invoice Information Section
+                Forms\Components\Section::make('Invoice Information')
+                    ->schema([
+                        Forms\Components\TextInput::make('invoice_no')
+                            ->required()
+                            ->maxLength(100),
+                        Forms\Components\TextInput::make('partner_id')
+                            ->required()
+                            ->numeric(),
+                        Forms\Components\DatePicker::make('due_date')
+                            ->required(),
+                        Forms\Components\TextInput::make('status')
+                            ->required(),
+
+                        Forms\Components\TextInput::make('is_posted')
+                            ->required()
+                            ->numeric()
+                            ->default(0),
+                    ])->columns(2),
+
+                // Setting Section
+                Forms\Components\Section::make('Setting')
+                    ->schema([
+                        Forms\Components\TextInput::make('module')
+                            ->required()
+                            ->maxLength(255)
+                            ->default('Account'),
+                        Forms\Components\TextInput::make('model')
+                            ->required()
+                            ->maxLength(255)
+                            ->default('Invoice'),
+                    ])->columns(2)
+                ,
+
+                // Description Section
+                Forms\Components\Section::make('Description')
+                    ->schema([
+                        Forms\Components\TextInput::make('description')
+                            ->maxLength(255)
+                            ->default(null),
+                    ]),
+
             ]);
     }
 
@@ -82,8 +102,6 @@ class InvoiceResource extends Resource
                 Tables\Columns\TextColumn::make('model')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status'),
-                Tables\Columns\TextColumn::make('description')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('is_posted')
                     ->numeric()
                     ->sortable(),
