@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Modules\Account\Filament\Resources\InvoiceItemResource\Pages;
 use Modules\Account\Models\InvoiceItem;
+use UnexpectedJourney\FilamentResourcePicker\Forms\Components\ResourcePicker;
 
 class InvoiceItemResource extends Resource
 {
@@ -32,9 +33,12 @@ class InvoiceItemResource extends Resource
                 Forms\Components\TextInput::make('invoice_id')
                     ->required()
                     ->numeric(),
-                \Codedor\FilamentResourcePicker\Filament\Forms\Components\ResourcePickerInput::make('invoice_id')
-                    ->resource(InvoiceResource::class)
-                    ->required(),
+                /* \Codedor\FilamentResourcePicker\Filament\Forms\Components\ResourcePickerInput::make('invoice_id')
+            ->resource(InvoiceResource::class)
+            ->required(),*/
+                ResourcePicker::make('invoice_id')
+                    ->required()
+                    ->resource(InvoiceResource::class),
                 Forms\Components\TextInput::make('ledger_id')
                     ->required()
                     ->numeric(),
