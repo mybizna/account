@@ -14,10 +14,15 @@ return new class extends Migration
         Schema::create('account_rate_allowedin', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('country_id')->constrained('core_country')->onDelete('cascade')->index('account_rate_allowedin_country_id');
-            $table->foreignId('rate_id')->constrained('account_rate')->onDelete('cascade')->index('account_rate_allowedin_rate_id');
+            $table->foreignId('country_id')->nullable()->constrained('core_country')->onDelete('set null');
+            $table->foreignId('rate_id')->nullable()->constrained('account_rate')->onDelete('set null');
+
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

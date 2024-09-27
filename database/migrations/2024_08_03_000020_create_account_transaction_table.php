@@ -16,14 +16,19 @@ return new class extends Migration
 
             $table->decimal('amount', 20, 2)->default(0.00);
             $table->string('description');
-            $table->foreignId('partner_id')->constrained('partner_partner')->onDelete('cascade')->index('account_transaction_partner_id');
-            $table->foreignId('left_chart_of_account_id')->constrained('account_chart_of_account')->onDelete('cascade')->nullable()->index('account_transaction_left_chart_of_account_id');
-            $table->foreignId('left_ledger_id')->constrained('account_ledger')->onDelete('cascade')->nullable()->index('account_transaction_left_ledger_id');
-            $table->foreignId('right_chart_of_account_id')->constrained('account_chart_of_account')->onDelete('cascade')->nullable()->index('account_transaction_right_chart_of_account_id');
-            $table->foreignId('right_ledger_id')->constrained('account_ledger')->onDelete('cascade')->nullable()->index('account_transaction_right_ledger_id');
+            $table->foreignId('partner_id')->nullable()->constrained('partner_partner')->onDelete('set null');
+            $table->foreignId('left_chart_of_account_id')->nullable()->constrained('account_chart_of_account')->onDelete('set null');
+            $table->foreignId('left_ledger_id')->nullable()->constrained('account_ledger')->onDelete('set null');
+            $table->foreignId('right_chart_of_account_id')->nullable()->constrained('account_chart_of_account')->onDelete('set null');
+            $table->foreignId('right_ledger_id')->nullable()->constrained('account_ledger')->onDelete('set null');
             $table->tinyInteger('is_processed')->nullable();
 
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

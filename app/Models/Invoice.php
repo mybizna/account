@@ -2,6 +2,7 @@
 
 namespace Modules\Account\Models;
 
+use Modules\Account\Models\InvoiceItem;
 use Modules\Base\Models\BaseModel;
 use Modules\Partner\Models\Partner;
 
@@ -32,5 +33,14 @@ class Invoice extends BaseModel
     public function partner()
     {
         return $this->belongsTo(Partner::class);
+    }
+
+    /**
+     * Add relationship to InvoiceItem
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function items()
+    {
+        return $this->hasMany(InvoiceItem::class);
     }
 }

@@ -23,28 +23,40 @@ class InvoiceStatus
     public function data(Datasetter $datasetter): void
     {
         $datasetter->add_data('account', 'invoice_status', 'slug', [
-            "type_name" => "Draft",
+            "name" => "Draft",
             "slug" => "draft",
+            "color" => "gray",
+            "status" => "active",
         ]);
         $datasetter->add_data('account', 'invoice_status', 'slug', [
-            "type_name" => "Pending",
+            "name" => "Pending",
             "slug" => "pending",
+            "color" => "orange",
+            "status" => "active",
         ]);
         $datasetter->add_data('account', 'invoice_status', 'slug', [
-            "type_name" => "Paid",
+            "name" => "Paid",
             "slug" => "paid",
+            "color" => "green",
+            "status" => "active",
         ]);
         $datasetter->add_data('account', 'invoice_status', 'slug', [
-            "type_name" => "Partial",
+            "name" => "Partial",
             "slug" => "partial",
+            "color" => "blue",
+            "status" => "active",
         ]);
         $datasetter->add_data('account', 'invoice_status', 'slug', [
-            "type_name" => "Closed",
+            "name" => "Closed",
             "slug" => "closed",
+            "color" => "black",
+            "status" => "active",
         ]);
         $datasetter->add_data('account', 'invoice_status', 'slug', [
-            "type_name" => "Void",
+            "name" => "Void",
             "slug" => "void",
+            "color" => "red",
+            "status" => "active",
         ]);
     }
 }

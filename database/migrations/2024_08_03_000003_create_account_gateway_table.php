@@ -16,8 +16,8 @@ return new class extends Migration
 
             $table->string('title');
             $table->string('slug');
-            $table->foreignId('ledger_id')->constrained('account_ledger')->onDelete('cascade')->index('account_gateway_ledger_id');
-            $table->foreignId('currency_id')->constrained('core_currency')->nullable()->index('account_gateway_currency_id');
+            $table->foreignId('ledger_id')->nullable()->constrained('account_ledger')->onDelete('set null');
+            $table->foreignId('currency_id')->nullable()->constrained('core_currency')->onDelete('set null');
             $table->string('image')->nullable();
             $table->string('url')->nullable();
             $table->string('module')->nullable();
@@ -28,7 +28,12 @@ return new class extends Migration
             $table->tinyInteger('is_hide_in_invoice')->default(1);
             $table->tinyInteger('published')->default(0);
 
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

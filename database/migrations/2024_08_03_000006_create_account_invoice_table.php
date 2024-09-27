@@ -16,7 +16,7 @@ return new class extends Migration
 
             $table->string('title');
             $table->char('invoice_no', 100);
-            $table->foreignId('partner_id')->constrained('partner_partner')->index('account_invoice_partner_id');
+            $table->foreignId('partner_id')->nullable()->constrained('partner_partner');
             $table->date('due_date');
             $table->string('module')->default('Account');
             $table->string('model')->default('Invoice');
@@ -25,7 +25,12 @@ return new class extends Migration
             $table->tinyInteger('is_posted')->default(0);
             $table->decimal('total', 20, 2)->nullable();
 
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -14,14 +14,19 @@ return new class extends Migration
         Schema::create('account_opening_balance', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('financial_year_id')->constrained('account_financial_year')->onDelete('cascade')->nullable()->index('account_opening_balance_financial_year_id');
-            $table->foreignId('chart_id')->constrained('account_chart_of_account')->onDelete('cascade')->nullable()->index('account_opening_balance_chart_id');
-            $table->foreignId('ledger_id')->constrained('account_ledger')->onDelete('cascade')->nullable()->index('account_opening_balance_ledger_id');
+            $table->foreignId('financial_year_id')->nullable()->constrained('account_financial_year')->onDelete('set null');
+            $table->foreignId('chart_id')->nullable()->constrained('account_chart_of_account')->onDelete('set null');
+            $table->foreignId('ledger_id')->nullable()->constrained('account_ledger')->onDelete('set null');
             $table->string('type', 50)->nullable();
             $table->decimal('debit', 20, 2)->default(0.00);
             $table->decimal('credit', 20, 2)->default(0.00);
 
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

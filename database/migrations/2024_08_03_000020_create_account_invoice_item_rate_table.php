@@ -16,15 +16,20 @@ return new class extends Migration
 
             $table->string('title');
             $table->string('slug');
-            $table->foreignId('rate_id')->constrained('account_rate')->onDelete('cascade')->index('account_invoice_item_rate_rate_id');
-            $table->foreignId('invoice_item_id')->constrained('account_invoice_item')->onDelete('cascade')->index('account_invoice_item_rate_invoice_item_id');
+            $table->foreignId('rate_id')->nullable()->constrained('account_rate')->onDelete('set null');
+            $table->foreignId('invoice_item_id')->nullable()->constrained('account_invoice_item')->onDelete('set null');
             $table->enum('method', ['+', '+%', '-', '-%'])->default('+');
             $table->decimal('value', 20, 2)->default(0.00);
             $table->string('params')->nullable();
             $table->tinyInteger('ordering')->nullable();
             $table->tinyInteger('on_total')->default(false);
 
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

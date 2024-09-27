@@ -3,6 +3,7 @@
 namespace Modules\Account\Models;
 
 use Modules\Account\Models\Invoice;
+use Modules\Account\Models\InvoiceItemRate;
 use Modules\Account\Models\Ledger;
 use Modules\Base\Models\BaseModel;
 
@@ -25,6 +26,15 @@ class InvoiceItem extends BaseModel
      * @var string
      */
     protected $table = "account_invoice_item";
+
+    /**
+     * Add relationship for InvoiceItemRate
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function rates()
+    {
+        return $this->hasMany(InvoiceItemRate::class);
+    }
 
     /**
      * Add relationship to Invoice

@@ -16,9 +16,9 @@ return new class extends Migration
 
             $table->string('title');
             $table->decimal('amount', 20, 2);
-            $table->foreignId('ledger_id')->constrained('account_ledger')->onDelete('cascade')->index('account_payment_ledger_id');
-            $table->foreignId('partner_id')->constrained('partner_partner')->onDelete('cascade')->index('account_payment_partner_id');
-            $table->foreignId('gateway_id')->constrained('account_gateway')->onDelete('cascade')->index('account_payment_gateway_id');
+            $table->foreignId('ledger_id')->nullable()->constrained('account_ledger')->onDelete('set null');
+            $table->foreignId('partner_id')->nullable()->constrained('partner_partner')->onDelete('set null');
+            $table->foreignId('gateway_id')->nullable()->constrained('account_gateway')->onDelete('set null');
             $table->string('receipt_no')->nullable();
             $table->string('code')->nullable();
             $table->string('others')->nullable();
@@ -27,7 +27,12 @@ return new class extends Migration
             $table->enum('type', ['in', 'out'])->default('in');
             $table->tinyInteger('is_posted')->default(false);
 
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

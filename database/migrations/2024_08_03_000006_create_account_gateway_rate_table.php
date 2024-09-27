@@ -14,10 +14,15 @@ return new class extends Migration
         Schema::create('account_gateway_rate', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('gateway_id')->constrained('account_gateway')->onDelete('cascade')->index('account_gateway_rate_gateway_id');
-            $table->foreignId('rate_id')->constrained('account_rate')->onDelete('cascade')->index('account_gateway_rate_rate_id');
+            $table->foreignId('gateway_id')->nullable()->constrained('account_gateway')->onDelete('set null');
+            $table->foreignId('rate_id')->nullable()->constrained('account_rate')->onDelete('set null');
+
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

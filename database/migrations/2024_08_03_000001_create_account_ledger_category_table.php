@@ -16,11 +16,16 @@ return new class extends Migration
 
             $table->string('name');
             $table->string('slug');
-            $table->foreignId('chart_id')->constrained('account_chart_of_account')->onDelete('cascade')->index('account_ledger_category_chart_id');
-            $table->foreignId('parent_id')->constrained('account_ledger_category')->onDelete('cascade')->index('account_ledger_category_parent_id');
+            $table->foreignId('chart_id')->nullable()->constrained('account_chart_of_account')->onDelete('set null');
+            $table->foreignId('parent_id')->nullable()->constrained('account_ledger_category')->onDelete('set null');
             $table->tinyInteger('is_system');
 
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

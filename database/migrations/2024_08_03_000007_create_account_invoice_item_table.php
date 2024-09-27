@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
 
             $table->string('title');
-            $table->foreignId('invoice_id')->constrained('account_invoice')->onDelete('cascade')->index('account_invoice_item_invoice_id');
-            $table->foreignId('ledger_id')->constrained('account_ledger')->onDelete('cascade')->index('account_invoice_item_ledger_id');
+            $table->foreignId('invoice_id')->nullable()->constrained('account_invoice')->onDelete('set null');
+            $table->foreignId('ledger_id')->nullable()->constrained('account_ledger')->onDelete('set null');
             $table->decimal('price', 20, 2)->default(0.00);
             $table->decimal('amount', 20, 2)->default(0.00);
             $table->string('module')->nullable();
@@ -24,7 +24,12 @@ return new class extends Migration
             $table->bigInteger('item_id')->nullable();
             $table->integer('quantity')->nullable();
 
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

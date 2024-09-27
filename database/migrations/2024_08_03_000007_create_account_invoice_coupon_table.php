@@ -14,10 +14,15 @@ return new class extends Migration
         Schema::create('account_invoice_coupon', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('invoice_id')->constrained('account_invoice')->index('account_invoice_coupon_invoice_id');
-            $table->foreignId('coupon_id')->constrained('account_coupon')->index('account_invoice_coupon_coupon_id');
+            $table->foreignId('invoice_id')->nullable()->constrained('account_invoice');
+            $table->foreignId('coupon_id')->nullable()->constrained('account_coupon');
+
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -16,7 +16,7 @@ return new class extends Migration
 
             $table->string('title');
             $table->string('slug');
-            $table->foreignId('ledger_id')->constrained('account_ledger')->onDelete('cascade')->index('account_rate_ledger_id');
+            $table->foreignId('ledger_id')->nullable()->constrained('account_ledger')->onDelete('set null');
             $table->decimal('value', 20, 2);
             $table->enum('method', ['+', '+%', '-', '-%'])->default('+');
             $table->string('params')->nullable();
@@ -24,7 +24,12 @@ return new class extends Migration
             $table->tinyInteger('on_total')->default(false);
             $table->tinyInteger('published')->default(false);
 
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -12,7 +12,7 @@ class InvoiceStatus extends BaseModel
      *
      * @var array<string>
      */
-    protected $fillable = ['type_name', 'slug'];
+    protected $fillable = ['name', 'slug', 'color', 'status'];
 
     /**
      * The table associated with the model.

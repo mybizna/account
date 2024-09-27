@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('account_rate_file', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('rate_id')->nullable()->constrained('account_rate')->onDelete('cascade')->index('account_rate_file_rate_id');
+            $table->foreignId('rate_id')->nullable()->constrained('account_rate')->onDelete('set null');
             $table->string('year')->nullable();
             $table->string('month')->nullable();
             $table->string('token')->nullable();
@@ -23,7 +23,12 @@ return new class extends Migration
             $table->string('file')->nullable();
             $table->tinyInteger('is_processed')->nullable();
 
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
