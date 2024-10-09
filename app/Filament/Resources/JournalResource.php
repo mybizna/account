@@ -4,15 +4,12 @@ namespace Modules\Account\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Modules\Account\Filament\Resources\JournalResource\Pages;
 use Modules\Account\Models\Journal;
+use Modules\Base\Filament\Resources\BaseResource;
 
-class JournalResource extends Resource
+class JournalResource extends BaseResource
 {
     protected static ?string $model = Journal::class;
 
@@ -111,27 +108,4 @@ class JournalResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListJournals::route('/'),
-            'create' => Pages\CreateJournal::route('/create'),
-            'edit' => Pages\EditJournal::route('/{record}/edit'),
-        ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
-    }
 }

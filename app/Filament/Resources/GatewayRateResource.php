@@ -4,15 +4,12 @@ namespace Modules\Account\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Modules\Account\Filament\Resources\GatewayRateResource\Pages;
 use Modules\Account\Models\GatewayRate;
+use Modules\Base\Filament\Resources\BaseResource;
 
-class GatewayRateResource extends Resource
+class GatewayRateResource extends BaseResource
 {
     protected static ?string $model = GatewayRate::class;
 
@@ -71,27 +68,4 @@ class GatewayRateResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListGatewayRates::route('/'),
-            'create' => Pages\CreateGatewayRate::route('/create'),
-            'edit' => Pages\EditGatewayRate::route('/{record}/edit'),
-        ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
-    }
 }

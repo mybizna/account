@@ -4,15 +4,12 @@ namespace Modules\Account\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Modules\Account\Filament\Resources\InvoiceCouponResource\Pages;
 use Modules\Account\Models\InvoiceCoupon;
+use Modules\Base\Filament\Resources\BaseResource;
 
-class InvoiceCouponResource extends Resource
+class InvoiceCouponResource extends BaseResource
 {
     protected static ?string $model = InvoiceCoupon::class;
 
@@ -69,27 +66,4 @@ class InvoiceCouponResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListInvoiceCoupons::route('/'),
-            'create' => Pages\CreateInvoiceCoupon::route('/create'),
-            'edit' => Pages\EditInvoiceCoupon::route('/{record}/edit'),
-        ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
-    }
 }

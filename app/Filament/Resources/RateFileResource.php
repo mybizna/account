@@ -4,15 +4,12 @@ namespace Modules\Account\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Modules\Account\Filament\Resources\RateFileResource\Pages;
 use Modules\Account\Models\RateFile;
+use Modules\Base\Filament\Resources\BaseResource;
 
-class RateFileResource extends Resource
+class RateFileResource extends BaseResource
 {
     protected static ?string $model = RateFile::class;
 
@@ -102,27 +99,4 @@ class RateFileResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListRateFiles::route('/'),
-            'create' => Pages\CreateRateFile::route('/create'),
-            'edit' => Pages\EditRateFile::route('/{record}/edit'),
-        ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
-    }
 }

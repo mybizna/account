@@ -3,15 +3,12 @@
 namespace Modules\Account\Filament\Resources;
 
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Modules\Account\Filament\Resources\InvoiceStatusResource\Pages;
 use Modules\Account\Models\InvoiceStatus;
+use Modules\Base\Filament\Resources\BaseResource;
 
-class InvoiceStatusResource extends Resource
+class InvoiceStatusResource extends BaseResource
 {
     protected static ?string $model = InvoiceStatus::class;
 
@@ -50,27 +47,4 @@ class InvoiceStatusResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListInvoiceStatuses::route('/'),
-            'create' => Pages\CreateInvoiceStatus::route('/create'),
-            'edit' => Pages\EditInvoiceStatus::route('/{record}/edit'),
-        ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
-    }
 }

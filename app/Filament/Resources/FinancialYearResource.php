@@ -4,15 +4,13 @@ namespace Modules\Account\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Modules\Account\Filament\Resources\FinancialYearResource\Pages;
 use Modules\Account\Models\FinancialYear;
 
-class FinancialYearResource extends Resource
+use Modules\Base\Filament\Resources\BaseResource;
+
+class FinancialYearResource extends BaseResource
 {
     protected static ?string $model = FinancialYear::class;
 
@@ -78,27 +76,5 @@ class FinancialYearResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
 
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListFinancialYears::route('/'),
-            'create' => Pages\CreateFinancialYear::route('/create'),
-            'edit' => Pages\EditFinancialYear::route('/{record}/edit'),
-        ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
-    }
 }

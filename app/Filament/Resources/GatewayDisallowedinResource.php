@@ -4,15 +4,12 @@ namespace Modules\Account\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Modules\Account\Filament\Resources\GatewayDisallowedinResource\Pages;
 use Modules\Account\Models\GatewayDisallowedin;
+use Modules\Base\Filament\Resources\BaseResource;
 
-class GatewayDisallowedinResource extends Resource
+class GatewayDisallowedinResource extends BaseResource
 {
     protected static ?string $model = GatewayDisallowedin::class;
 
@@ -71,27 +68,4 @@ class GatewayDisallowedinResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListGatewayDisallowedins::route('/'),
-            'create' => Pages\CreateGatewayDisallowedin::route('/create'),
-            'edit' => Pages\EditGatewayDisallowedin::route('/{record}/edit'),
-        ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
-    }
 }

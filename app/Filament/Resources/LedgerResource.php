@@ -4,15 +4,12 @@ namespace Modules\Account\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Modules\Account\Filament\Resources\LedgerResource\Pages;
 use Modules\Account\Models\Ledger;
+use Modules\Base\Filament\Resources\BaseResource;
 
-class LedgerResource extends Resource
+class LedgerResource extends BaseResource
 {
     protected static ?string $model = Ledger::class;
 
@@ -102,27 +99,4 @@ class LedgerResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListLedgers::route('/'),
-            'create' => Pages\CreateLedger::route('/create'),
-            'edit' => Pages\EditLedger::route('/{record}/edit'),
-        ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
-    }
 }

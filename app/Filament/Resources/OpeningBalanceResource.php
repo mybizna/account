@@ -4,15 +4,12 @@ namespace Modules\Account\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Modules\Account\Filament\Resources\OpeningBalanceResource\Pages;
 use Modules\Account\Models\OpeningBalance;
+use Modules\Base\Filament\Resources\BaseResource;
 
-class OpeningBalanceResource extends Resource
+class OpeningBalanceResource extends BaseResource
 {
     protected static ?string $model = OpeningBalance::class;
 
@@ -97,27 +94,4 @@ class OpeningBalanceResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListOpeningBalances::route('/'),
-            'create' => Pages\CreateOpeningBalance::route('/create'),
-            'edit' => Pages\EditOpeningBalance::route('/{record}/edit'),
-        ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
-    }
 }

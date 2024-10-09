@@ -7,13 +7,11 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Modules\Account\Filament\Resources\InvoiceItemResource\Pages;
 use Modules\Account\Models\InvoiceItem;
+use Modules\Base\Filament\Resources\BaseResource;
 use UnexpectedJourney\FilamentResourcePicker\Forms\Components\ResourcePicker;
 
-class InvoiceItemResource extends Resource
+class InvoiceItemResource extends BaseResource
 {
     protected static ?string $model = InvoiceItem::class;
 
@@ -118,27 +116,4 @@ class InvoiceItemResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListInvoiceItems::route('/'),
-            'create' => Pages\CreateInvoiceItem::route('/create'),
-            'edit' => Pages\EditInvoiceItem::route('/{record}/edit'),
-        ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
-    }
 }
