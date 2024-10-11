@@ -8,6 +8,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Modules\Account\Models\ChartOfAccount;
 use Modules\Base\Filament\Resources\BaseResource;
+use Modules\Base\Filament\Resources\Pages;
 
 class ChartOfAccountResource extends BaseResource
 {
@@ -66,5 +67,15 @@ class ChartOfAccountResource extends BaseResource
             ]);
     }
 
+    public static function getPages(): array
+    {
 
+        Pages\ListBase::setResource(static::class);
+
+        return [
+            'index' => Pages\ListBase::route('/'),
+            'create' => Pages\CreateBase::route('/create'),
+            'edit' => Pages\EditBase::route('/{record}/edit'),
+        ];
+    }
 }

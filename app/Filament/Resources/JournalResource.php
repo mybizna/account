@@ -8,6 +8,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Modules\Account\Models\Journal;
 use Modules\Base\Filament\Resources\BaseResource;
+use Modules\Base\Filament\Resources\Pages;
 
 class JournalResource extends BaseResource
 {
@@ -106,6 +107,18 @@ class JournalResource extends BaseResource
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function getPages(): array
+    {
+
+        Pages\ListBase::setResource(static::class);
+
+        return [
+            'index' => Pages\ListBase::route('/'),
+            'create' => Pages\CreateBase::route('/create'),
+            'edit' => Pages\EditBase::route('/{record}/edit'),
+        ];
     }
 
 }

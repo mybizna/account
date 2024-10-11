@@ -9,6 +9,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Modules\Account\Models\InvoiceItem;
 use Modules\Base\Filament\Resources\BaseResource;
+use Modules\Base\Filament\Resources\Pages;
 use UnexpectedJourney\FilamentResourcePicker\Forms\Components\ResourcePicker;
 
 class InvoiceItemResource extends BaseResource
@@ -114,6 +115,18 @@ class InvoiceItemResource extends BaseResource
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function getPages(): array
+    {
+
+        Pages\ListBase::setResource(static::class);
+
+        return [
+            'index' => Pages\ListBase::route('/'),
+            'create' => Pages\CreateBase::route('/create'),
+            'edit' => Pages\EditBase::route('/{record}/edit'),
+        ];
     }
 
 }

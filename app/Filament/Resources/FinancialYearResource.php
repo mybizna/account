@@ -7,8 +7,8 @@ use Filament\Forms\Form;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Modules\Account\Models\FinancialYear;
-
 use Modules\Base\Filament\Resources\BaseResource;
+use Modules\Base\Filament\Resources\Pages;
 
 class FinancialYearResource extends BaseResource
 {
@@ -75,6 +75,16 @@ class FinancialYearResource extends BaseResource
                 ]),
             ]);
     }
+    public static function getPages(): array
+    {
 
+        Pages\ListBase::setResource(static::class);
+
+        return [
+            'index' => Pages\ListBase::route('/'),
+            'create' => Pages\CreateBase::route('/create'),
+            'edit' => Pages\EditBase::route('/{record}/edit'),
+        ];
+    }
 
 }

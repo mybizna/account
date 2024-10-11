@@ -4,7 +4,6 @@ namespace Modules\Account\Models;
 
 use Modules\Account\Models\ChartOfAccount;
 use Modules\Account\Models\Ledger;
-use Modules\Account\Models\LedgerCategory;
 use Modules\Base\Models\BaseModel;
 
 class LedgerCategory extends BaseModel

@@ -8,6 +8,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Modules\Account\Models\InvoiceItemRate;
 use Modules\Base\Filament\Resources\BaseResource;
+use Modules\Base\Filament\Resources\Pages;
 
 class InvoiceItemRateResource extends BaseResource
 {
@@ -102,6 +103,18 @@ class InvoiceItemRateResource extends BaseResource
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function getPages(): array
+    {
+
+        Pages\ListBase::setResource(static::class);
+
+        return [
+            'index' => Pages\ListBase::route('/'),
+            'create' => Pages\CreateBase::route('/create'),
+            'edit' => Pages\EditBase::route('/{record}/edit'),
+        ];
     }
 
 }
