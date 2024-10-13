@@ -14,9 +14,9 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Modules\Account\Filament\Resources\InvoiceResource\Pages;
 use Modules\Account\Models\Invoice;
 use Modules\Base\Filament\Resources\BaseResource;
-use Modules\Base\Filament\Resources\Pages;
 
 class InvoiceResource extends BaseResource
 {
@@ -220,13 +220,10 @@ class InvoiceResource extends BaseResource
 
     public static function getPages(): array
     {
-
-        Pages\ListBase::setResource(static::class);
-
         return [
-            'index' => Pages\ListBase::route('/'),
-            'create' => Pages\CreateBase::route('/create'),
-            'edit' => Pages\EditBase::route('/{record}/edit'),
+            'index' => Pages\Listing::route('/'),
+            'create' => Pages\Creating::route('/create'),
+            'edit' => Pages\Editing::route('/{record}/edit'),
         ];
     }
 
