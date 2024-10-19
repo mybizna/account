@@ -55,7 +55,6 @@ class InvoiceResource extends BaseResource
 
                 Repeater::make('items')
                     ->relationship("items")
-
                     ->schema([
                         Forms\Components\TextInput::make('title')
                             ->required()
@@ -112,6 +111,15 @@ class InvoiceResource extends BaseResource
                     ->label('Invoice Item')
                     ->cloneable()
                     ->columns(5),
+
+                Repeater::make('coupons')
+                    ->relationship("coupons")
+
+                    ->schema([
+                        Forms\Components\TextInput::make('coupon_id')
+                            ->required()
+                            ->maxLength(255),
+                    ]),
 
                 Tabs::make('Tabs')->tabs([
                     Tabs\Tab::make('Payment')

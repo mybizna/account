@@ -2,6 +2,7 @@
 
 namespace Modules\Account\Models;
 
+use Modules\Account\Models\InvoiceCoupon;
 use Modules\Account\Models\InvoiceItem;
 use Modules\Base\Models\BaseModel;
 use Modules\Partner\Models\Partner;
@@ -42,5 +43,14 @@ class Invoice extends BaseModel
     public function items()
     {
         return $this->hasMany(InvoiceItem::class);
+    }
+
+    /**
+     * Add relationship to InvoiceCoupon
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function coupons()
+    {
+        return $this->hasMany(InvoiceCoupon::class);
     }
 }
