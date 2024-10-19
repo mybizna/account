@@ -64,7 +64,16 @@ class ChartOfAccountResource extends BaseResource
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+        ;
+
+    }
+    /**
+     * Control how many records can be loaded per page.
+     */
+    protected function getTableRecordsPerPage(): array
+    {
+        return [10, 25, 50]; // User can select these options.
     }
 
     public static function getPages(): array

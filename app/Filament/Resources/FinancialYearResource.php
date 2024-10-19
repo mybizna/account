@@ -73,7 +73,9 @@ class FinancialYearResource extends BaseResource
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+        ;
+
     }
     public static function getPages(): array
     {
