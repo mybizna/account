@@ -32,4 +32,5 @@ class RateFile extends BaseModel
     {
         return $this->belongsTo(Rate::class);
     }
+
 }

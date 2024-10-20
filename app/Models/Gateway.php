@@ -54,4 +54,30 @@ class Gateway extends BaseModel
         return $this->belongsTo(Currency::class);
     }
 
+    /**
+     * Add relationship to GatewayRate
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function rates()
+    {
+        return $this->hasMany(GatewayRate::class);
+    }
+
+    /**
+     * Add relationship to GatewayAllowedin
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function allowedins()
+    {
+        return $this->hasMany(GatewayAllowedin::class);
+    }
+
+    /**
+     * Add relationship to GatewayDisallowedin
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function disallowedins()
+    {
+        return $this->hasMany(GatewayDisallowedin::class);
+    }
 }

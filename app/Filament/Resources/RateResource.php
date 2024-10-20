@@ -3,6 +3,8 @@
 namespace Modules\Account\Filament\Resources;
 
 use Filament\Forms;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Tabs;
 use Filament\Forms\Form;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -55,6 +57,41 @@ class RateResource extends BaseResource
                     ->required()
                     ->numeric()
                     ->default(0),
+                Tabs::make('Tabs')->tabs([
+                    Tabs\Tab::make('Files')
+                        ->schema([
+
+                            Repeater::make('files')
+                                ->relationship("files")
+                                ->schema([
+                                    Forms\Components\TextInput::make('coupon_id')
+                                        ->required()
+                                        ->maxLength(255),
+                                ]),
+                        ])->columns(2),
+                    Tabs\Tab::make('Allowedin')
+                        ->schema([
+                            Repeater::make('allowedin')
+                                ->relationship("allowedin")
+                                ->schema([
+                                    Forms\Components\TextInput::make('coupon_id')
+                                        ->required()
+                                        ->maxLength(255),
+                                ]),
+
+                        ])->columns(2),
+                    Tabs\Tab::make('Disallowedin')
+                        ->schema([
+                            Repeater::make('disallowedin')
+                                ->relationship("disallowedin")
+                                ->schema([
+                                    Forms\Components\TextInput::make('coupon_id')
+                                        ->required()
+                                        ->maxLength(255),
+                                ]),
+
+                        ])->columns(2),
+                ]),
             ]);
     }
 

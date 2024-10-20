@@ -3,6 +3,8 @@
 namespace Modules\Account\Filament\Resources;
 
 use Filament\Forms;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Tabs;
 use Filament\Forms\Form;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -70,6 +72,42 @@ class GatewayResource extends BaseResource
                     ->required()
                     ->numeric()
                     ->default(0),
+
+                Tabs::make('Tabs')->tabs([
+                    Tabs\Tab::make('Rates')
+                        ->schema([
+
+                            Repeater::make('rates')
+                                ->relationship("rates")
+                                ->schema([
+                                    Forms\Components\TextInput::make('coupon_id')
+                                        ->required()
+                                        ->maxLength(255),
+                                ]),
+                        ])->columns(2),
+                    Tabs\Tab::make('Allowedin')
+                        ->schema([
+                            Repeater::make('allowedin')
+                                ->relationship("allowedin")
+                                ->schema([
+                                    Forms\Components\TextInput::make('coupon_id')
+                                        ->required()
+                                        ->maxLength(255),
+                                ]),
+
+                        ])->columns(2),
+                    Tabs\Tab::make('Disallowedin')
+                        ->schema([
+                            Repeater::make('disallowedin')
+                                ->relationship("disallowedin")
+                                ->schema([
+                                    Forms\Components\TextInput::make('coupon_id')
+                                        ->required()
+                                        ->maxLength(255),
+                                ]),
+
+                        ])->columns(2),
+                ]),
             ]);
     }
 

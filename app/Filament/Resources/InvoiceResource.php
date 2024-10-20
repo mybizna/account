@@ -125,6 +125,13 @@ class InvoiceResource extends BaseResource
                     Tabs\Tab::make('Payment')
                         ->schema([
 
+                            Repeater::make('coupons')
+                                ->relationship("coupons")
+                                ->schema([
+                                    Forms\Components\TextInput::make('coupon_id')
+                                        ->required()
+                                        ->maxLength(255),
+                                ]),
                         ])->columns(2),
                     Tabs\Tab::make('Setting')
                         ->schema([

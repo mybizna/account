@@ -67,4 +67,14 @@ class Payment extends BaseModel
     {
         return $this->belongsTo(Gateway::class);
     }
+
+    /**
+     * Add relationship to PaymentRate
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function files()
+    {
+        return $this->hasMany(PaymentRate::class);
+    }
+
 }

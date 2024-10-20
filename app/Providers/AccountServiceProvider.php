@@ -117,4 +117,5 @@ class AccountServiceProvider extends ServiceProvider
 
         return $paths;
     }
+
 }
