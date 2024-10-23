@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Account\Filament\Resources\RateResource\Pages;
+namespace Modules\Account\Filament\Clusters\Settings\Resources\RateResource\Pages;
 
-use Modules\Account\Filament\Resources\RateResource;
+use Modules\Account\Filament\Clusters\Settings\Resources\RateResource;
 use Modules\Base\Filament\Resources\Pages\CreatingBase;
 
 // Class List that extends ListBase

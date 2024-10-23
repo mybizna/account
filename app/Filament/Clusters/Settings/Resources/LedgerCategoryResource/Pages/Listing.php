@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Account\Filament\Resources\LedgerCategoryResource\Pages;
+namespace Modules\Account\Filament\Clusters\Settings\Resources\LedgerCategoryResource\Pages;
 
-use Modules\Account\Filament\Resources\LedgerCategoryResource;
+use Modules\Account\Filament\Clusters\Settings\Resources\LedgerCategoryResource;
 use Modules\Base\Filament\Resources\Pages\ListingBase;
 
 // Class List that extends ListBase

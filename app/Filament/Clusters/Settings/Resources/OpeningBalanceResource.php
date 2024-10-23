@@ -1,44 +1,54 @@
 <?php
+namespace Modules\Account\Filament\Clusters\Settings\Resources;
 
-namespace Modules\Account\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Modules\Account\Filament\Resources\LedgerCategoryResource\Pages;
-use Modules\Account\Models\LedgerCategory;
+use Modules\Account\Models\OpeningBalance;
 use Modules\Base\Filament\Resources\BaseResource;
+use Modules\Account\Filament\Clusters\Settings\Resources\OpeningBalanceResource\Pages;
+use Modules\Account\Filament\Clusters\Settings\Settings;
 
-class LedgerCategoryResource extends BaseResource
+class OpeningBalanceResource extends BaseResource
 {
-    protected static ?string $model = LedgerCategory::class;
+    protected static ?string $model = OpeningBalance::class;
 
-    protected static ?string $slug = 'account/ledger/category';
+    protected static ?string $cluster = Settings::class;
 
-    protected static ?string $navigationGroup = 'Account';
+    protected static ?string $slug = 'account/opening_balance';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationLabel = 'Opening Balance';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Forms\Components\TextInput::make('financial_year_id')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('slug')
-                    ->required()
-                    ->maxLength(255),
+                    ->numeric(),
                 Forms\Components\TextInput::make('chart_id')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('parent_id')
+                Forms\Components\TextInput::make('ledger_id')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('is_system')
+                Forms\Components\TextInput::make('type')
+                    ->maxLength(50)
+                    ->default(null),
+                Forms\Components\TextInput::make('debit')
                     ->required()
-                    ->numeric(),
+                    ->numeric()
+                    ->default(0.00),
+                Forms\Components\TextInput::make('credit')
+                    ->required()
+                    ->numeric()
+                    ->default(0.00),
             ]);
     }
 
@@ -46,17 +56,21 @@ class LedgerCategoryResource extends BaseResource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('financial_year_id')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('chart_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('parent_id')
+                Tables\Columns\TextColumn::make('ledger_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('is_system')
+                Tables\Columns\TextColumn::make('type')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('debit')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('credit')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -91,5 +105,4 @@ class LedgerCategoryResource extends BaseResource
             'edit' => Pages\Editing::route('/{record}/edit'),
         ];
     }
-
 }

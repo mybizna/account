@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Account\Filament\Resources;
+namespace Modules\Account\Filament\Clusters\Settings\Resources;
 
 use Filament\Forms;
 use Filament\Forms\Components\Repeater;
@@ -8,19 +8,21 @@ use Filament\Forms\Components\Tabs;
 use Filament\Forms\Form;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Modules\Account\Filament\Resources\RateResource\Pages;
 use Modules\Account\Models\Rate;
 use Modules\Base\Filament\Resources\BaseResource;
+use Modules\Account\Filament\Clusters\Settings\Resources\RateResource\Pages;
+use Modules\Account\Filament\Clusters\Settings\Settings;
 
 class RateResource extends BaseResource
 {
     protected static ?string $model = Rate::class;
 
+    protected static ?string $cluster = Settings::class;
+
     protected static ?string $slug = 'account/rate';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'Account';
     protected static ?string $navigationLabel = 'Rate';
 
     protected static ?int $navigationSort = 1;
