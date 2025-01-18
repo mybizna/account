@@ -45,7 +45,6 @@ class InvoiceCoupon extends BaseModel
 
     public function migration(Blueprint $table): void
     {
-        $table->id();
 
         $table->foreignId('invoice_id')->nullable()->constrained(table: 'account_invoice');
         $table->foreignId('coupon_id')->nullable()->constrained(table: 'account_coupon');

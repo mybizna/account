@@ -1,9 +1,8 @@
 <?php
-
 namespace Modules\Account\Models;
 
-use Modules\Base\Models\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
+use Modules\Base\Models\BaseModel;
 
 class InvoiceStatus extends BaseModel
 {
@@ -24,7 +23,6 @@ class InvoiceStatus extends BaseModel
 
     public function migration(Blueprint $table): void
     {
-        $table->id();
 
         $table->string('name');
         $table->string('slug')->nullable();

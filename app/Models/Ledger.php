@@ -77,7 +77,6 @@ class Ledger extends BaseModel
     }
     public function migration(Blueprint $table): void
     {
-        $table->id();
 
         $table->foreignId('chart_id')->nullable()->constrained(table: 'account_chart_of_account')->onDelete('set null');
         $table->foreignId('category_id')->nullable()->constrained(table: 'account_ledger_category')->onDelete('set null');

@@ -37,7 +37,6 @@ class RateFile extends BaseModel
 
     public function migration(Blueprint $table): void
     {
-        $table->id();
 
         $table->foreignId('rate_id')->nullable()->constrained(table: 'account_rate')->onDelete('set null');
         $table->string('year')->nullable();

@@ -1,18 +1,27 @@
 <?php
-
 namespace Modules\Account\Models;
 
+use Base\Casts\Money;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Schema\Blueprint;
 use Modules\Account\Models\Ledger;
 use Modules\Account\Models\RateAllowedin;
 use Modules\Account\Models\RateDisallowedin;
 use Modules\Account\Models\RateFile;
 use Modules\Base\Models\BaseModel;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Rate extends BaseModel
 {
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'total' => Money::class, // Use the custom MoneyCast
+    ];
 
     /**
      * The fields that can be filled
@@ -69,12 +78,12 @@ class Rate extends BaseModel
     }
     public function migration(Blueprint $table): void
     {
-        $table->id();
 
         $table->string('title');
         $table->string('slug');
         $table->foreignId('ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
-        $table->decimal('value', 20, 2);
+        $table->integer('value');
+        $table->string('currency')->default('USD');
         $table->enum('method', ['+', '+%', '-', '-%'])->default('+');
         $table->string('params')->nullable();
         $table->tinyInteger('ordering')->nullable();

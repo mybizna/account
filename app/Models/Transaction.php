@@ -1,17 +1,25 @@
 <?php
-
 namespace Modules\Account\Models;
 
+use Base\Casts\Money;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Schema\Blueprint;
 use Modules\Account\Models\ChartOfAccount;
 use Modules\Account\Models\Ledger;
-use Modules\Account\Models\LedgerSetting;
 use Modules\Base\Models\BaseModel;
 use Modules\Partner\Models\Partner;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Transaction extends BaseModel
 {
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'total' => Money::class, // Use the custom MoneyCast
+    ];
 
     /**
      * The fields that can be filled
@@ -44,15 +52,6 @@ class Transaction extends BaseModel
     public function partner(): BelongsTo
     {
         return $this->belongsTo(Partner::class);
-    }
-
-    /**
-     * Add Relationship to LedgerSetting
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function ledgerSetting(): BelongsTo
-    {
-        return $this->belongsTo(LedgerSetting::class);
     }
 
     /**
@@ -92,9 +91,9 @@ class Transaction extends BaseModel
     }
     public function migration(Blueprint $table): void
     {
-        $table->id();
 
-        $table->decimal('amount', 20, 2)->default(0.00);
+        $table->integer('amount')->default(0);
+        $table->string('currency')->default('USD');
         $table->string('description');
         $table->foreignId('partner_id')->nullable()->constrained(table: 'partner_partner')->onDelete('set null');
         $table->foreignId('left_chart_of_account_id')->nullable()->constrained('account_chart_of_account')->onDelete('set null');

@@ -9,9 +9,20 @@ use Modules\Partner\Models\Partner;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Schema\Blueprint;
+use Base\Casts\Money;
+
 
 class Invoice extends BaseModel
 {
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'total' => Money::class, // Use the custom MoneyCast
+    ];
 
     /**
      * The fields that can be filled
@@ -68,6 +79,7 @@ class Invoice extends BaseModel
         $table->enum('status', ['draft', 'pending', 'partial', 'paid', 'closed', 'void'])->default('draft');
         $table->string('description')->nullable();
         $table->tinyInteger('is_posted')->default(0);
-        $table->decimal('total', 20, 2)->nullable();
+        $table->integer('total')->nullable();
+        $table->string('currency')->default('USD');
     }
 }

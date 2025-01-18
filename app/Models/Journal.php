@@ -1,17 +1,26 @@
 <?php
-
 namespace Modules\Account\Models;
 
+use Base\Casts\Money;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Schema\Blueprint;
 use Modules\Account\Models\Invoice;
 use Modules\Account\Models\Ledger;
 use Modules\Account\Models\Payment;
 use Modules\Base\Models\BaseModel;
 use Modules\Partner\Models\Partner;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Journal extends BaseModel
 {
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'total' => Money::class, // Use the custom MoneyCast
+    ];
 
     /**
      * The fields that can be filled
@@ -72,7 +81,6 @@ class Journal extends BaseModel
 
     public function migration(Blueprint $table): void
     {
-        $table->id();
 
         $table->string('title');
         $table->char('grouping_id');
@@ -80,8 +88,9 @@ class Journal extends BaseModel
         $table->foreignId('ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
         $table->foreignId('payment_id')->nullable()->constrained(table: 'account_payment')->onDelete('set null');
         $table->foreignId('invoice_id')->nullable()->constrained(table: 'account_invoice')->onDelete('set null');
-        $table->decimal('debit', 20, 2)->nullable();
-        $table->decimal('credit', 20, 2)->nullable();
+        $table->integer('debit')->nullable();
+        $table->integer('credit')->nullable();
+        $table->string('currency')->default('USD');
         $table->string('params')->nullable();
 
     }

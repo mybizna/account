@@ -1,12 +1,21 @@
 <?php
-
 namespace Modules\Account\Models;
 
-use Modules\Base\Models\BaseModel;
+use Base\Casts\Money;
 use Illuminate\Database\Schema\Blueprint;
+use Modules\Base\Models\BaseModel;
 
 class Coupon extends BaseModel
 {
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'total' => Money::class, // Use the custom MoneyCast
+    ];
 
     /**
      * The fields that can be filled
@@ -37,8 +46,9 @@ class Coupon extends BaseModel
         $table->string('code')->nullable();
         $table->string('description')->nullable();
         $table->string('value')->nullable();
-        $table->decimal('start_amount', 20, 2)->default(0.00);
-        $table->decimal('end_amount', 20, 2)->default(0.00);
+        $table->integer('start_amount')->default(0);
+        $table->integer('end_amount')->default(0);
+        $table->string('currency')->default('USD');
         $table->date('start_date')->nullable();
         $table->date('end_date')->nullable();
         $table->string('applied')->nullable();

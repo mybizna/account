@@ -59,13 +59,12 @@ class InvoiceItem extends BaseModel
 
     public function migration(Blueprint $table): void
     {
-        $table->id();
 
         $table->string('title');
         $table->foreignId('invoice_id')->nullable()->constrained(table: 'account_invoice')->onDelete('set null');
         $table->foreignId('ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
-        $table->decimal('price', 20, 2)->default(0.00);
-        $table->decimal('amount', 20, 2)->default(0.00);
+        $table->integer('price')->default(0);
+        $table->integer('amount')->default(0);
         $table->string('module')->nullable();
         $table->string('model')->nullable();
         $table->bigInteger('item_id')->nullable();
