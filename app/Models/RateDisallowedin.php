@@ -5,6 +5,8 @@ namespace Modules\Account\Models;
 use Modules\Account\Models\Rate;
 use Modules\Base\Models\BaseModel;
 use Modules\Core\Models\Country;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RateDisallowedin extends BaseModel
 {
@@ -27,7 +29,7 @@ class RateDisallowedin extends BaseModel
      * Add relationship to Rate
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function rate()
+    public function rate(): BelongsTo
     {
         return $this->belongsTo(Rate::class);
     }
@@ -36,9 +38,17 @@ class RateDisallowedin extends BaseModel
      * Add relationship to Country
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function country()
+    public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
+    }
+    public function migration(Blueprint $table): void
+    {
+        $table->id();
+
+        $table->foreignId('country_id')->nullable()->constrained(table: 'core_country')->onDelete('set null');
+        $table->foreignId('rate_id')->nullable()->constrained(table: 'account_rate')->onDelete('set null');
+
     }
 
 }

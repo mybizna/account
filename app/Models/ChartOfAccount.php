@@ -3,6 +3,7 @@
 namespace Modules\Account\Models;
 
 use Modules\Base\Models\BaseModel;
+use Illuminate\Database\Schema\Blueprint;
 
 class ChartOfAccount extends BaseModel
 {
@@ -20,5 +21,12 @@ class ChartOfAccount extends BaseModel
      * @var string
      */
     protected $table = "account_chart_of_account";
+
+    public function migration(Blueprint $table): void
+    {
+        $table->string('name')->nullable();
+        $table->string('slug')->nullable();
+    }
+
 
 }

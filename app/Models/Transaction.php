@@ -7,6 +7,8 @@ use Modules\Account\Models\Ledger;
 use Modules\Account\Models\LedgerSetting;
 use Modules\Base\Models\BaseModel;
 use Modules\Partner\Models\Partner;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Transaction extends BaseModel
 {
@@ -39,7 +41,7 @@ class Transaction extends BaseModel
      * Add Relationship to Partner
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function partner()
+    public function partner(): BelongsTo
     {
         return $this->belongsTo(Partner::class);
     }
@@ -48,7 +50,7 @@ class Transaction extends BaseModel
      * Add Relationship to LedgerSetting
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function ledgerSetting()
+    public function ledgerSetting(): BelongsTo
     {
         return $this->belongsTo(LedgerSetting::class);
     }
@@ -57,7 +59,7 @@ class Transaction extends BaseModel
      * Add Relationship to ChartOfAccount
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function leftChartOfAccount()
+    public function leftChartOfAccount(): BelongsTo
     {
         return $this->belongsTo(ChartOfAccount::class, 'left_chart_of_account_id');
     }
@@ -66,7 +68,7 @@ class Transaction extends BaseModel
      * Add Relationship to Ledger
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function leftLedger()
+    public function leftLedger(): BelongsTo
     {
         return $this->belongsTo(Ledger::class, 'left_ledger_id');
     }
@@ -75,7 +77,7 @@ class Transaction extends BaseModel
      * Add Relationship to ChartOfAccount
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function rightChartOfAccount()
+    public function rightChartOfAccount(): BelongsTo
     {
         return $this->belongsTo(ChartOfAccount::class, 'right_chart_of_account_id');
     }
@@ -84,9 +86,23 @@ class Transaction extends BaseModel
      * Add Relationship to Ledger
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function rightLedger()
+    public function rightLedger(): BelongsTo
     {
         return $this->belongsTo(Ledger::class, 'right_ledger_id');
+    }
+    public function migration(Blueprint $table): void
+    {
+        $table->id();
+
+        $table->decimal('amount', 20, 2)->default(0.00);
+        $table->string('description');
+        $table->foreignId('partner_id')->nullable()->constrained(table: 'partner_partner')->onDelete('set null');
+        $table->foreignId('left_chart_of_account_id')->nullable()->constrained('account_chart_of_account')->onDelete('set null');
+        $table->foreignId('left_ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
+        $table->foreignId('right_chart_of_account_id')->nullable()->constrained('account_chart_of_account')->onDelete('set null');
+        $table->foreignId('right_ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
+        $table->tinyInteger('is_processed')->nullable();
+
     }
 
 }

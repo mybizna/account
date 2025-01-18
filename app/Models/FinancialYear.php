@@ -3,6 +3,7 @@
 namespace Modules\Account\Models;
 
 use Modules\Base\Models\BaseModel;
+use Illuminate\Database\Schema\Blueprint;
 
 class FinancialYear extends BaseModel
 {
@@ -27,4 +28,12 @@ class FinancialYear extends BaseModel
      * @var bool
      */
     protected bool $can_delete = false;
+
+    public function migration(Blueprint $table): void
+    {
+        $table->string('name')->nullable();
+        $table->date('start_date')->nullable();
+        $table->date('end_date')->nullable();
+        $table->string('description')->nullable();
+    }
 }

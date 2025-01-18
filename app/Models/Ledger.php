@@ -1,7 +1,8 @@
 <?php
-
 namespace Modules\Account\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Schema\Blueprint;
 use Modules\Account\Models\ChartOfAccount;
 use Modules\Account\Models\LedgerCategory;
 use Modules\Base\Models\BaseModel;
@@ -34,7 +35,7 @@ class Ledger extends BaseModel
      * Add relationship to Chart
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function chart()
+    public function chart(): BelongsTo
     {
         return $this->belongsTo(ChartOfAccount::class);
     }
@@ -43,7 +44,7 @@ class Ledger extends BaseModel
      * Add relationship to Category
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(LedgerCategory::class);
     }
@@ -55,23 +56,36 @@ class Ledger extends BaseModel
      *
      * @return array
      */
-    public function deleteRecord($id)
+    public function deleteRecord($id): mixed
     {
 
         $ledger = $this->where('id', $id)->first();
 
         if ($ledger->is_system) {
             return [
-                'module' => $this->module,
-                'model' => $this->model,
-                'status' => 0,
-                'error' => 1,
-                'record' => [],
+                'module'  => $this->module,
+                'model'   => $this->model,
+                'status'  => 0,
+                'error'   => 1,
+                'record'  => [],
                 'message' => 'You can not Delete a Lerger Set by system.',
             ];
         }
 
         return parent::deleteRecord($id);
+
+    }
+    public function migration(Blueprint $table): void
+    {
+        $table->id();
+
+        $table->foreignId('chart_id')->nullable()->constrained(table: 'account_chart_of_account')->onDelete('set null');
+        $table->foreignId('category_id')->nullable()->constrained(table: 'account_ledger_category')->onDelete('set null');
+        $table->string('name')->nullable();
+        $table->string('slug')->nullable();
+        $table->integer('code')->nullable();
+        $table->tinyInteger('unused')->default(1);
+        $table->tinyInteger('is_system')->default(0);
 
     }
 }

@@ -5,6 +5,8 @@ namespace Modules\Account\Models;
 use Modules\Account\Models\Gateway;
 use Modules\Base\Models\BaseModel;
 use Modules\Core\Models\Country;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class GatewayDisallowedin extends BaseModel
 {
@@ -27,7 +29,7 @@ class GatewayDisallowedin extends BaseModel
      * Add relationship to Gateway
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function gateway()
+    public function gateway(): BelongsTo
     {
         return $this->belongsTo(Gateway::class);
     }
@@ -36,8 +38,14 @@ class GatewayDisallowedin extends BaseModel
      * Add relationship to Country
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function country()
+    public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
+    }
+
+    public function migration(Blueprint $table): void
+    {
+        $table->foreignId('country_id')->nullable()->constrained(table: 'core_country');
+        $table->foreignId('gateway_id')->nullable()->constrained(table: 'account_gateway');
     }
 }

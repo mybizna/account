@@ -6,6 +6,9 @@ use Modules\Account\Models\Gateway;
 use Modules\Account\Models\Ledger;
 use Modules\Base\Models\BaseModel;
 use Modules\Partner\Models\Partner;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Payment extends BaseModel
 {
@@ -45,7 +48,7 @@ class Payment extends BaseModel
      * Add relationship to Ledger
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function ledger()
+    public function ledger(): BelongsTo
     {
         return $this->belongsTo(Ledger::class);
     }
@@ -54,7 +57,7 @@ class Payment extends BaseModel
      * Add relationship to Partner
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function partner()
+    public function partner(): BelongsTo
     {
         return $this->belongsTo(Partner::class);
     }
@@ -63,7 +66,7 @@ class Payment extends BaseModel
      * Add relationship to Gateway
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function gateway()
+    public function gateway(): BelongsTo
     {
         return $this->belongsTo(Gateway::class);
     }
@@ -72,9 +75,28 @@ class Payment extends BaseModel
      * Add relationship to PaymentRate
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function files()
+    public function files(): HasMany
     {
         return $this->hasMany(PaymentRate::class);
+    }
+
+    public function migration(Blueprint $table): void
+    {
+        $table->id();
+
+        $table->string('title');
+        $table->decimal('amount', 20, 2);
+        $table->foreignId('ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
+        $table->foreignId('partner_id')->nullable()->constrained(table: 'partner_partner')->onDelete('set null');
+        $table->foreignId('gateway_id')->nullable()->constrained(table: 'account_gateway')->onDelete('set null');
+        $table->string('receipt_no')->nullable();
+        $table->string('code')->nullable();
+        $table->string('others')->nullable();
+        $table->enum('stage', ['pending', 'wallet', 'posted'])->default('pending');
+        $table->enum('status', ['pending', 'paid', 'reversed', 'canceled'])->default('pending');
+        $table->enum('type', ['in', 'out'])->default('in');
+        $table->tinyInteger('is_posted')->default(false);
+
     }
 
 }

@@ -1,7 +1,9 @@
 <?php
-
 namespace Modules\Account\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Schema\Blueprint;
 use Modules\Account\Models\ChartOfAccount;
 use Modules\Account\Models\Ledger;
 use Modules\Base\Models\BaseModel;
@@ -28,7 +30,7 @@ class LedgerCategory extends BaseModel
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
 
-    public function ledgers()
+    public function ledgers(): HasMany
     {
         return $this->hasMany(Ledger::class);
     }
@@ -38,7 +40,7 @@ class LedgerCategory extends BaseModel
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
 
-    public function chart()
+    public function chart(): BelongsTo
     {
         return $this->belongsTo(ChartOfAccount::class);
     }
@@ -48,9 +50,19 @@ class LedgerCategory extends BaseModel
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
 
-    public function parent()
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(LedgerCategory::class, 'parent_id');
+    }
+    public function migration(Blueprint $table): void
+    {
+
+        $table->string('name');
+        $table->string('slug');
+        $table->foreignId('chart_id')->nullable()->constrained(table: 'account_chart_of_account')->onDelete('set null');
+        $table->foreignId('parent_id')->nullable()->constrained(table: 'account_ledger_category')->onDelete('set null');
+        $table->tinyInteger('is_system');
+
     }
 
 }

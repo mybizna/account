@@ -5,6 +5,9 @@ namespace Modules\Account\Models;
 use Modules\Account\Models\Ledger;
 use Modules\Base\Models\BaseModel;
 use Modules\Core\Models\Currency;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Gateway extends BaseModel
 {
@@ -39,7 +42,7 @@ class Gateway extends BaseModel
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function ledger()
+    public function ledger(): BelongsTo
     {
         return $this->belongsTo(Ledger::class);
     }
@@ -49,7 +52,7 @@ class Gateway extends BaseModel
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function currency()
+    public function currency(): BelongsTo
     {
         return $this->belongsTo(Currency::class);
     }
@@ -58,7 +61,7 @@ class Gateway extends BaseModel
      * Add relationship to GatewayRate
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function rates()
+    public function rates(): HasMany
     {
         return $this->hasMany(GatewayRate::class);
     }
@@ -67,7 +70,7 @@ class Gateway extends BaseModel
      * Add relationship to GatewayAllowedin
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function allowedins()
+    public function allowedins(): HasMany
     {
         return $this->hasMany(GatewayAllowedin::class);
     }
@@ -79,5 +82,23 @@ class Gateway extends BaseModel
     public function disallowedins()
     {
         return $this->hasMany(GatewayDisallowedin::class);
+    }
+
+    public function migration(Blueprint $table): void
+    {
+        $table->string('title');
+        $table->string('slug');
+        $table->foreignId('ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
+        $table->foreignId('currency_id')->nullable()->constrained(table: 'core_currency')->onDelete('set null');
+        $table->string('image')->nullable();
+        $table->string('url')->nullable();
+        $table->string('module')->nullable();
+        $table->string('instruction')->nullable();
+        $table->integer('ordering')->nullable();
+        $table->tinyInteger('is_default')->default(0);
+        $table->tinyInteger('is_hidden')->default(0);
+        $table->tinyInteger('is_hide_in_invoice')->default(1);
+        $table->tinyInteger('published')->default(0);
+
     }
 }

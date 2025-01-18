@@ -6,6 +6,9 @@ use Modules\Account\Models\Invoice;
 use Modules\Account\Models\InvoiceItemRate;
 use Modules\Account\Models\Ledger;
 use Modules\Base\Models\BaseModel;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Schema\Blueprint;
 
 class InvoiceItem extends BaseModel
 {
@@ -31,7 +34,7 @@ class InvoiceItem extends BaseModel
      * Add relationship for InvoiceItemRate
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function rates()
+    public function rates(): HasMany
     {
         return $this->hasMany(InvoiceItemRate::class);
     }
@@ -40,7 +43,7 @@ class InvoiceItem extends BaseModel
      * Add relationship to Invoice
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function invoice()
+    public function invoice(): BelongsTo
     {
         return $this->belongsTo(Invoice::class);
     }
@@ -49,9 +52,25 @@ class InvoiceItem extends BaseModel
      * Add relationship to Ledger
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function ledger()
+    public function ledger(): BelongsTo
     {
         return $this->belongsTo(Ledger::class);
+    }
+
+    public function migration(Blueprint $table): void
+    {
+        $table->id();
+
+        $table->string('title');
+        $table->foreignId('invoice_id')->nullable()->constrained(table: 'account_invoice')->onDelete('set null');
+        $table->foreignId('ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
+        $table->decimal('price', 20, 2)->default(0.00);
+        $table->decimal('amount', 20, 2)->default(0.00);
+        $table->string('module')->nullable();
+        $table->string('model')->nullable();
+        $table->bigInteger('item_id')->nullable();
+        $table->integer('quantity')->nullable();
+
     }
 
 }

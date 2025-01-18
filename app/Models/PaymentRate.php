@@ -5,6 +5,8 @@ namespace Modules\Account\Models;
 use Modules\Account\Models\Payment;
 use Modules\Account\Models\Rate;
 use Modules\Base\Models\BaseModel;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PaymentRate extends BaseModel
 {
@@ -27,7 +29,7 @@ class PaymentRate extends BaseModel
      * Add relationship to Payment
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function payment()
+    public function payment(): BelongsTo
     {
         return $this->belongsTo(Payment::class);
     }
@@ -36,9 +38,17 @@ class PaymentRate extends BaseModel
      * Add relationship to Rate
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function rate()
+    public function rate(): BelongsTo
     {
         return $this->belongsTo(Rate::class);
+    }
+    public function migration(Blueprint $table): void
+    {
+        $table->id();
+
+        $table->foreignId('payment_id')->nullable()->constrained(table: 'account_payment')->onDelete('set null');
+        $table->foreignId('rate_id')->nullable()->constrained(table: 'account_rate')->onDelete('set null');
+
     }
 
 }

@@ -7,6 +7,8 @@ use Modules\Account\Models\Ledger;
 use Modules\Account\Models\Payment;
 use Modules\Base\Models\BaseModel;
 use Modules\Partner\Models\Partner;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Journal extends BaseModel
 {
@@ -36,7 +38,7 @@ class Journal extends BaseModel
      * Add relationship to Partner
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function partner()
+    public function partner(): BelongsTo
     {
         return $this->belongsTo(Partner::class);
     }
@@ -45,7 +47,7 @@ class Journal extends BaseModel
      * Add relationship to Ledger
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function ledger()
+    public function ledger(): BelongsTo
     {
         return $this->belongsTo(Ledger::class);
     }
@@ -54,7 +56,7 @@ class Journal extends BaseModel
      * Add relationship to Payment
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function payment()
+    public function payment(): BelongsTo
     {
         return $this->belongsTo(Payment::class);
     }
@@ -63,9 +65,25 @@ class Journal extends BaseModel
      * Add relationship to Invoice
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function invoice()
+    public function invoice(): BelongsTo
     {
         return $this->belongsTo(Invoice::class);
+    }
+
+    public function migration(Blueprint $table): void
+    {
+        $table->id();
+
+        $table->string('title');
+        $table->char('grouping_id');
+        $table->foreignId('partner_id')->nullable()->constrained(table: 'partner_partner')->onDelete('set null');
+        $table->foreignId('ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
+        $table->foreignId('payment_id')->nullable()->constrained(table: 'account_payment')->onDelete('set null');
+        $table->foreignId('invoice_id')->nullable()->constrained(table: 'account_invoice')->onDelete('set null');
+        $table->decimal('debit', 20, 2)->nullable();
+        $table->decimal('credit', 20, 2)->nullable();
+        $table->string('params')->nullable();
+
     }
 
 }

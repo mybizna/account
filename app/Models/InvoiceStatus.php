@@ -3,6 +3,7 @@
 namespace Modules\Account\Models;
 
 use Modules\Base\Models\BaseModel;
+use Illuminate\Database\Schema\Blueprint;
 
 class InvoiceStatus extends BaseModel
 {
@@ -20,4 +21,16 @@ class InvoiceStatus extends BaseModel
      * @var string
      */
     protected $table = "account_invoice_status";
+
+    public function migration(Blueprint $table): void
+    {
+        $table->id();
+
+        $table->string('name');
+        $table->string('slug')->nullable();
+        $table->string('color');
+        $table->string('status');
+        $table->string('description')->nullable();
+
+    }
 }

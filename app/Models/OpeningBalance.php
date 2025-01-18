@@ -6,6 +6,8 @@ use Modules\Account\Models\ChartOfAccount;
 use Modules\Account\Models\FinancialYear;
 use Modules\Account\Models\Ledger;
 use Modules\Base\Models\BaseModel;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OpeningBalance extends BaseModel
 {
@@ -28,7 +30,7 @@ class OpeningBalance extends BaseModel
      * Add relationship to Ledger
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function ledger()
+    public function ledger(): BelongsTo
     {
         return $this->belongsTo(Ledger::class);
     }
@@ -37,7 +39,7 @@ class OpeningBalance extends BaseModel
      * Add relationship to ChartOfAccount
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function chart()
+    public function chart(): BelongsTo
     {
         return $this->belongsTo(ChartOfAccount::class);
     }
@@ -46,8 +48,20 @@ class OpeningBalance extends BaseModel
      * Add relationship to FinancialYear
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function financialYear()
+    public function financialYear(): BelongsTo
     {
         return $this->belongsTo(FinancialYear::class);
+    }
+
+    public function migration(Blueprint $table): void
+    {
+
+        $table->foreignId('financial_year_id')->nullable()->constrained(table: 'account_financial_year')->onDelete('set null');
+        $table->foreignId('chart_id')->nullable()->constrained(table: 'account_chart_of_account')->onDelete('set null');
+        $table->foreignId('ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
+        $table->string('type', 50)->nullable();
+        $table->decimal('debit', 20, 2)->default(0.00);
+        $table->decimal('credit', 20, 2)->default(0.00);
+
     }
 }
