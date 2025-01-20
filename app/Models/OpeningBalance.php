@@ -65,13 +65,20 @@ class OpeningBalance extends BaseModel
     public function migration(Blueprint $table): void
     {
 
-        $table->foreignId('financial_year_id')->nullable()->constrained(table: 'account_financial_year')->onDelete('set null');
-        $table->foreignId('chart_id')->nullable()->constrained(table: 'account_chart_of_account')->onDelete('set null');
-        $table->foreignId('ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
+       $table->unsignedBigInteger('financial_year_id')->nullable();
+        $table->unsignedBigInteger('chart_id')->nullable();
+        $table->unsignedBigInteger('ledger_id')->nullable();
         $table->string('type', 50)->nullable();
         $table->integer('debit')->default(0);
         $table->integer('credit')->default(0);
         $table->string('currency')->default('USD');
 
+    }
+
+    public function post_migration(Blueprint $table): void
+    {
+        $table->foreign('financial_year_id')->references('id')->on('account_financial_year')->onDelete('set null');
+        $table->foreign('chart_id')->references('id')->on('account_chart_of_account')->onDelete('set null');
+        $table->foreign('ledger_id')->references('id')->on('account_ledger')->onDelete('set null');
     }
 }

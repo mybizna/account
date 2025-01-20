@@ -78,8 +78,8 @@ class Ledger extends BaseModel
     public function migration(Blueprint $table): void
     {
 
-        $table->foreignId('chart_id')->nullable()->constrained(table: 'account_chart_of_account')->onDelete('set null');
-        $table->foreignId('category_id')->nullable()->constrained(table: 'account_ledger_category')->onDelete('set null');
+        $table->unsignedBigInteger('chart_id')->nullable();
+        $table->unsignedBigInteger('category_id')->nullable();
         $table->string('name')->nullable();
         $table->string('slug')->nullable();
         $table->integer('code')->nullable();
@@ -87,4 +87,11 @@ class Ledger extends BaseModel
         $table->tinyInteger('is_system')->default(0);
 
     }
+
+    public function post_migration(Blueprint $table): void
+    {
+        $table->foreign('chart_id')->references('id')->on('account_chart_of_account')->onDelete('set null');
+        $table->foreign('category_id')->references('id')->on('account_ledger_category')->onDelete('set null');
+    }
 }
+

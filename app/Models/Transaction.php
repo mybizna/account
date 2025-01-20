@@ -95,13 +95,21 @@ class Transaction extends BaseModel
         $table->integer('amount')->default(0);
         $table->string('currency')->default('USD');
         $table->string('description');
-        $table->foreignId('partner_id')->nullable()->constrained(table: 'partner_partner')->onDelete('set null');
-        $table->foreignId('left_chart_of_account_id')->nullable()->constrained('account_chart_of_account')->onDelete('set null');
-        $table->foreignId('left_ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
-        $table->foreignId('right_chart_of_account_id')->nullable()->constrained('account_chart_of_account')->onDelete('set null');
-        $table->foreignId('right_ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
+        $table->unsignedBigInteger('partner_id')->nullable();
+        $table->unsignedBigInteger('left_chart_of_account_id')->nullable();
+        $table->unsignedBigInteger('left_ledger_id')->nullable();
+        $table->unsignedBigInteger('right_chart_of_account_id')->nullable();
+        $table->unsignedBigInteger('right_ledger_id')->nullable();
         $table->tinyInteger('is_processed')->nullable();
 
+    }
+    public function post_migration(Blueprint $table): void
+    {
+        $table->foreign('partner_id')->references('id')->on('partner_partner')->onDelete('set null');
+        $table->foreign('left_chart_of_account_id')->references('id')->on('account_chart_of_account')->onDelete('set null');
+        $table->foreign('left_ledger_id')->references('id')->on('account_ledger')->onDelete('set null');
+        $table->foreign('right_chart_of_account_id')->references('id')->on('account_chart_of_account')->onDelete('set null');
+        $table->foreign('right_ledger_id')->references('id')->on('account_ledger')->onDelete('set null');
     }
 
 }

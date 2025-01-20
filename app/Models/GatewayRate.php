@@ -1,12 +1,11 @@
 <?php
-
 namespace Modules\Account\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Schema\Blueprint;
 use Modules\Account\Models\Gateway;
 use Modules\Account\Models\Rate;
 use Modules\Base\Models\BaseModel;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class GatewayRate extends BaseModel
 {
@@ -46,8 +45,13 @@ class GatewayRate extends BaseModel
     public function migration(Blueprint $table): void
     {
 
-        $table->foreignId('gateway_id')->nullable()->constrained(table: 'account_gateway')->onDelete('set null');
-        $table->foreignId('rate_id')->nullable()->constrained(table: 'account_rate')->onDelete('set null');
+        $table->unsignedBigInteger('gateway_id')->nullable();
+        $table->unsignedBigInteger('rate_id')->nullable();
+    }
 
+    public function post_migration(Blueprint $table): void
+    {
+        $table->foreign('gateway_id')->references('id')->on('account_gateway')->onDelete('set null');
+        $table->foreign('rate_id')->references('id')->on('account_rate')->onDelete('set null');
     }
 }

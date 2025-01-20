@@ -84,15 +84,23 @@ class Journal extends BaseModel
 
         $table->string('title');
         $table->char('grouping_id');
-        $table->foreignId('partner_id')->nullable()->constrained(table: 'partner_partner')->onDelete('set null');
-        $table->foreignId('ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
-        $table->foreignId('payment_id')->nullable()->constrained(table: 'account_payment')->onDelete('set null');
-        $table->foreignId('invoice_id')->nullable()->constrained(table: 'account_invoice')->onDelete('set null');
+        $table->unsignedBigInteger('partner_id')->nullable();
+        $table->unsignedBigInteger('ledger_id')->nullable();
+        $table->unsignedBigInteger('payment_id')->nullable();
+        $table->unsignedBigInteger('invoice_id')->nullable();
         $table->integer('debit')->nullable();
         $table->integer('credit')->nullable();
         $table->string('currency')->default('USD');
         $table->string('params')->nullable();
 
+    }
+
+    public function post_migration(Blueprint $table): void
+    {
+        $table->foreign('partner_id')->references('id')->on('partner_partner')->onDelete('set null');
+        $table->foreign('ledger_id')->references('id')->on('account_ledger')->onDelete('set null');
+        $table->foreign('payment_id')->references('id')->on('account_payment')->onDelete('set null');
+        $table->foreign('invoice_id')->references('id')->on('account_invoice')->onDelete('set null');
     }
 
 }

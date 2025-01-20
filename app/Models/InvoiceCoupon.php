@@ -1,12 +1,11 @@
 <?php
-
 namespace Modules\Account\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Schema\Blueprint;
 use Modules\Account\Models\Coupon;
 use Modules\Account\Models\Invoice;
 use Modules\Base\Models\BaseModel;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class InvoiceCoupon extends BaseModel
 {
@@ -46,8 +45,14 @@ class InvoiceCoupon extends BaseModel
     public function migration(Blueprint $table): void
     {
 
-        $table->foreignId('invoice_id')->nullable()->constrained(table: 'account_invoice');
-        $table->foreignId('coupon_id')->nullable()->constrained(table: 'account_coupon');
+        $table->unsignedBigInteger('invoice_id')->nullable();
+        $table->unsignedBigInteger('coupon_id')->nullable();
 
+    }
+
+    public function post_migration(Blueprint $table): void
+    {
+        $table->foreign('invoice_id')->references('id')->on('account_invoice')->onDelete('set null');
+        $table->foreign('coupon_id')->references('id')->on('account_coupon')->onDelete('set null');
     }
 }

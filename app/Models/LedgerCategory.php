@@ -59,10 +59,16 @@ class LedgerCategory extends BaseModel
 
         $table->string('name');
         $table->string('slug');
-        $table->foreignId('chart_id')->nullable()->constrained(table: 'account_chart_of_account')->onDelete('set null');
-        $table->foreignId('parent_id')->nullable()->constrained(table: 'account_ledger_category')->onDelete('set null');
+        $table->unsignedBigInteger('chart_id')->nullable();
+        $table->unsignedBigInteger('parent_id')->nullable();
         $table->tinyInteger('is_system');
 
+    }
+
+    public function post_migration(Blueprint $table): void
+    {
+        $table->foreign('chart_id')->references('id')->on('account_chart_of_account')->onDelete('set null');
+        $table->foreign('parent_id')->references('id')->on('account_ledger_category')->onDelete('set null');
     }
 
 }

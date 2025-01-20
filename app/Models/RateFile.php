@@ -1,11 +1,10 @@
 <?php
-
 namespace Modules\Account\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Schema\Blueprint;
 use Modules\Account\Models\Rate;
 use Modules\Base\Models\BaseModel;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RateFile extends BaseModel
 {
@@ -37,8 +36,7 @@ class RateFile extends BaseModel
 
     public function migration(Blueprint $table): void
     {
-
-        $table->foreignId('rate_id')->nullable()->constrained(table: 'account_rate')->onDelete('set null');
+        $table->unsignedBigInteger('rate_id')->nullable();
         $table->string('year')->nullable();
         $table->string('month')->nullable();
         $table->string('token')->nullable();
@@ -47,6 +45,11 @@ class RateFile extends BaseModel
         $table->string('file')->nullable();
         $table->tinyInteger('is_processed')->nullable();
 
+    }
+
+    public function post_migration(Blueprint $table): void
+    {
+        $table->foreign('rate_id')->references('id')->on('account_rate')->onDelete('set null');
     }
 
 }

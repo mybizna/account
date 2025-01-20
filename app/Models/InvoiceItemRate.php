@@ -60,8 +60,8 @@ class InvoiceItemRate extends BaseModel
 
         $table->string('title');
         $table->string('slug');
-        $table->foreignId('rate_id')->nullable()->constrained(table: 'account_rate')->onDelete('set null');
-        $table->foreignId('invoice_item_id')->nullable()->constrained(table: 'account_invoice_item')->onDelete('set null');
+        $table->unsignedBigInteger('rate_id')->nullable();
+        $table->unsignedBigInteger('invoice_item_id')->nullable();
         $table->enum('method', ['+', '+%', '-', '-%'])->default('+');
         $table->integer('value')->default(0);
         $table->string('currency')->default('USD');
@@ -70,4 +70,11 @@ class InvoiceItemRate extends BaseModel
         $table->tinyInteger('on_total')->default(false);
 
     }
+
+    public function post_migration(Blueprint $table): void
+    {
+        $table->foreign('rate_id')->references('id')->on('account_rate')->onDelete('set null');
+        $table->foreign('invoice_item_id')->references('id')->on('account_invoice_item')->onDelete('set null');
+    }
+
 }

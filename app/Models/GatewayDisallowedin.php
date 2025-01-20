@@ -45,7 +45,16 @@ class GatewayDisallowedin extends BaseModel
 
     public function migration(Blueprint $table): void
     {
-        $table->foreignId('country_id')->nullable()->constrained(table: 'core_country');
-        $table->foreignId('gateway_id')->nullable()->constrained(table: 'account_gateway');
+
+        $table->unsignedBigInteger('country_id')->nullable();
+        $table->unsignedBigInteger('gateway_id')->nullable();
     }
+
+    public function post_migration(Blueprint $table): void
+    {
+        $table->foreign('country_id')->references('id')->on('core_country')->onDelete('set null');
+        $table->foreign('gateway_id')->references('id')->on('account_gateway')->onDelete('set null');
+    }
+
+
 }

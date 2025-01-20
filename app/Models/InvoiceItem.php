@@ -61,8 +61,8 @@ class InvoiceItem extends BaseModel
     {
 
         $table->string('title');
-        $table->foreignId('invoice_id')->nullable()->constrained(table: 'account_invoice')->onDelete('set null');
-        $table->foreignId('ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
+        $table->unsignedBigInteger('invoice_id')->nullable();
+        $table->unsignedBigInteger('ledger_id')->nullable();
         $table->integer('price')->default(0);
         $table->integer('amount')->default(0);
         $table->string('module')->nullable();
@@ -70,6 +70,12 @@ class InvoiceItem extends BaseModel
         $table->bigInteger('item_id')->nullable();
         $table->integer('quantity')->nullable();
 
+    }
+
+    public function post_migration(Blueprint $table): void
+    {
+        $table->foreign('invoice_id')->references('id')->on('account_invoice')->onDelete('set null');
+        $table->foreign('ledger_id')->references('id')->on('account_ledger')->onDelete('set null');
     }
 
 }

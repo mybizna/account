@@ -1,13 +1,12 @@
 <?php
-
 namespace Modules\Account\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Schema\Blueprint;
 use Modules\Account\Models\Ledger;
 use Modules\Base\Models\BaseModel;
 use Modules\Core\Models\Currency;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Gateway extends BaseModel
 {
@@ -88,8 +87,8 @@ class Gateway extends BaseModel
     {
         $table->string('title');
         $table->string('slug');
-        $table->foreignId('ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
-        $table->foreignId('currency_id')->nullable()->constrained(table: 'core_currency')->onDelete('set null');
+        $table->unsignedBigInteger('ledger_id')->nullable();
+        $table->unsignedBigInteger('currency_id')->nullable();
         $table->string('image')->nullable();
         $table->string('url')->nullable();
         $table->string('module')->nullable();
@@ -100,5 +99,11 @@ class Gateway extends BaseModel
         $table->tinyInteger('is_hide_in_invoice')->default(1);
         $table->tinyInteger('published')->default(0);
 
+    }
+
+    public function post_migration(Blueprint $table): void
+    {
+        $table->foreign('ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
+        $table->foreign('currency_id')->nullable()->constrained(table: 'core_currency')->onDelete('set null');
     }
 }

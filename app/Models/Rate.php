@@ -81,7 +81,7 @@ class Rate extends BaseModel
 
         $table->string('title');
         $table->string('slug');
-        $table->foreignId('ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
+        $table->unsignedBigInteger('ledger_id')->nullable();
         $table->integer('value');
         $table->string('currency')->default('USD');
         $table->enum('method', ['+', '+%', '-', '-%'])->default('+');
@@ -90,5 +90,10 @@ class Rate extends BaseModel
         $table->tinyInteger('on_total')->default(false);
         $table->tinyInteger('published')->default(false);
 
+    }
+
+    public function post_migration(Blueprint $table): void
+    {
+        $table->foreign('ledger_id')->references('id')->on('account_ledger')->onDelete('set null');
     }
 }

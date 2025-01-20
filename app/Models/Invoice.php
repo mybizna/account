@@ -72,7 +72,7 @@ class Invoice extends BaseModel
     {
         $table->string('title');
         $table->char('invoice_no', 100);
-        $table->foreignId('partner_id')->nullable()->constrained(table: 'partner_partner');
+        $table->unsignedBigInteger('partner_id')->nullable();
         $table->date('due_date');
         $table->string('module')->default('Account');
         $table->string('model')->default('Invoice');
@@ -81,5 +81,10 @@ class Invoice extends BaseModel
         $table->tinyInteger('is_posted')->default(0);
         $table->integer('total')->nullable();
         $table->string('currency')->default('USD');
+    }
+
+    public function post_migration(Blueprint $table): void
+    {
+        $table->foreign('partner_id')->references('id')->on('partner_partner')->onDelete('set null');
     }
 }

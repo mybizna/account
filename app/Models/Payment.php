@@ -95,9 +95,9 @@ class Payment extends BaseModel
         $table->string('title');
         $table->integer('amount');
         $table->string('currency')->default('USD');
-        $table->foreignId('ledger_id')->nullable()->constrained(table: 'account_ledger')->onDelete('set null');
-        $table->foreignId('partner_id')->nullable()->constrained(table: 'partner_partner')->onDelete('set null');
-        $table->foreignId('gateway_id')->nullable()->constrained(table: 'account_gateway')->onDelete('set null');
+        $table->unsignedBigInteger('ledger_id')->nullable();
+        $table->unsignedBigInteger('partner_id')->nullable();
+        $table->unsignedBigInteger('gateway_id')->nullable();
         $table->string('receipt_no')->nullable();
         $table->string('code')->nullable();
         $table->string('others')->nullable();
@@ -106,6 +106,13 @@ class Payment extends BaseModel
         $table->enum('type', ['in', 'out'])->default('in');
         $table->tinyInteger('is_posted')->default(false);
 
+    }
+
+    public function post_migration(Blueprint $table): void
+    {
+        $table->foreign('ledger_id')->references('id')->on('account_ledger')->onDelete('set null');
+        $table->foreign('partner_id')->references('id')->on('partner_partner')->onDelete('set null');
+        $table->foreign('gateway_id')->references('id')->on('account_gateway')->onDelete('set null');
     }
 
 }
