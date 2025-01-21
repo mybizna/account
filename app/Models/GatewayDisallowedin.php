@@ -45,7 +45,6 @@ class GatewayDisallowedin extends BaseModel
 
     public function migration(Blueprint $table): void
     {
-
         $table->unsignedBigInteger('country_id')->nullable();
         $table->unsignedBigInteger('gateway_id')->nullable();
     }
