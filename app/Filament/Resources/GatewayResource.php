@@ -1,14 +1,10 @@
 <?php
-
 namespace Modules\Account\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Form;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Modules\Account\Filament\Resources\GatewayResource\Pages;
 use Modules\Account\Models\Gateway;
 use Modules\Base\Filament\Resources\BaseResource;
 
@@ -109,75 +105,6 @@ class GatewayResource extends BaseResource
                         ])->columns(2),
                 ]),
             ]);
-    }
-
-    public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('ledger_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('currency_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\ImageColumn::make('image'),
-                Tables\Columns\TextColumn::make('url')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('module')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('instruction')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('ordering')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('is_default')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('is_hidden')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('is_hide_in_invoice')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('published')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                Tables\Filters\TrashedFilter::make(),
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                ]),
-            ]);
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\Listing::route('/'),
-            'create' => Pages\Creating::route('/create'),
-            'edit' => Pages\Editing::route('/{record}/edit'),
-        ];
     }
 
 }

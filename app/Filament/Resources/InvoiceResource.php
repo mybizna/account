@@ -10,11 +10,6 @@ use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Modules\Account\Filament\Resources\InvoiceResource\Pages;
 use Modules\Account\Models\Invoice;
 use Modules\Base\Filament\Resources\BaseResource;
 
@@ -176,70 +171,7 @@ class InvoiceResource extends BaseResource
             ])->columns(1);
     }
 
-    public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('invoice_no')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('partner_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('due_date')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('module')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('model')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('status'),
-                Tables\Columns\TextColumn::make('is_posted')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('total')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                Tables\Filters\TrashedFilter::make(),
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                ]),
-            ]);
-    }
 
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
-    }
 
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\Listing::route('/'),
-            'create' => Pages\Creating::route('/create'),
-            'edit' => Pages\Editing::route('/{record}/edit'),
-        ];
-    }
 
 }

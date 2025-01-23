@@ -4,9 +4,6 @@ namespace Modules\Account\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Modules\Account\Filament\Resources\TransactionResource\Pages;
 use Modules\Account\Models\Transaction;
 use Modules\Base\Filament\Resources\BaseResource;
 
@@ -55,64 +52,5 @@ class TransactionResource extends BaseResource
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('amount')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('description')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('partner_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('left_chart_of_account_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('left_ledger_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('right_chart_of_account_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('right_ledger_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('is_processed')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                Tables\Filters\TrashedFilter::make(),
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                ]),
-            ]);
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\Listing::route('/'),
-            'create' => Pages\Creating::route('/create'),
-            'edit' => Pages\Editing::route('/{record}/edit'),
-        ];
-    }
 
 }

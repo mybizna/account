@@ -1,15 +1,11 @@
 <?php
 namespace Modules\Account\Filament\Clusters\Settings\Resources;
 
-
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Tables;
-use Filament\Tables\Table;
+use Modules\Account\Filament\Clusters\Settings\Settings;
 use Modules\Account\Models\OpeningBalance;
 use Modules\Base\Filament\Resources\BaseResource;
-use Modules\Account\Filament\Clusters\Settings\Resources\OpeningBalanceResource\Pages;
-use Modules\Account\Filament\Clusters\Settings\Settings;
 
 class OpeningBalanceResource extends BaseResource
 {
@@ -50,59 +46,5 @@ class OpeningBalanceResource extends BaseResource
                     ->numeric()
                     ->default(0.00),
             ]);
-    }
-
-    public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('financial_year_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('chart_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('ledger_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('type')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('debit')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('credit')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                Tables\Filters\TrashedFilter::make(),
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                ]),
-            ]);
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\Listing::route('/'),
-            'create' => Pages\Creating::route('/create'),
-            'edit' => Pages\Editing::route('/{record}/edit'),
-        ];
     }
 }

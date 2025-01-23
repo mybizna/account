@@ -6,11 +6,8 @@ use Filament\Forms;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Form;
-use Filament\Tables;
-use Filament\Tables\Table;
 use Modules\Account\Models\Rate;
 use Modules\Base\Filament\Resources\BaseResource;
-use Modules\Account\Filament\Clusters\Settings\Resources\RateResource\Pages;
 use Modules\Account\Filament\Clusters\Settings\Settings;
 
 class RateResource extends BaseResource
@@ -97,63 +94,6 @@ class RateResource extends BaseResource
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('ledger_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('value')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('method'),
-                Tables\Columns\TextColumn::make('params')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('ordering')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('on_total')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('published')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                Tables\Filters\TrashedFilter::make(),
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                ]),
-            ]);
-    }
 
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\Listing::route('/'),
-            'create' => Pages\Creating::route('/create'),
-            'edit' => Pages\Editing::route('/{record}/edit'),
-        ];
-    }
 
 }
