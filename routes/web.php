@@ -1,5 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
+use Modules\Account\Http\Controllers\PaymentController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,4 +15,4 @@
 |
 */
 
-Route::get('/payment/{invoice_id}', 'PaymentController@payment')->name('account_payment');
+Route::get('/payment/{invoice_id}', [PaymentController::class, 'payment'])->name('account_payment');
