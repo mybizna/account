@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Cache;
 use Modules\Account\Models\ChartOfAccount as DBChartOfAccount;
 use Modules\Account\Models\Journal as DBJournal;
 
+
 class ChartOfAccount
 {
     /**
