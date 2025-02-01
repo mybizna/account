@@ -11,7 +11,6 @@ class ChartOfAccount extends BaseModel
 
 
 
-
     /**
      * The fields that can be filled
      *
