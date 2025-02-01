@@ -8,11 +8,13 @@ use Illuminate\Database\Schema\Blueprint;
 class ChartOfAccount extends BaseModel
 {
 
+
     /**
      * The fields that can be filled
      *
      * @var array<string>
      */
+
     protected $fillable = ['name', 'slug'];
 
     /**
