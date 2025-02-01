@@ -8,7 +8,6 @@ use Illuminate\Database\Schema\Blueprint;
 class ChartOfAccount extends BaseModel
 {
 
-
     /**
      * The fields that can be filled
      *
