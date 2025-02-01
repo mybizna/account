@@ -15,8 +15,6 @@ class ChartOfAccount
      * @return DBChartOfAccount
      */
 
-
-
     public function getChart($chart_id)
     {
 
